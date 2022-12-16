@@ -1,6 +1,1311 @@
-(function(){if(window.Reflect===void 0||window.customElements===void 0||window.customElements.polyfillWrapFlushCallback)return;const s=HTMLElement,e={HTMLElement:function(){return Reflect.construct(s,[],this.constructor)}};window.HTMLElement=e.HTMLElement,HTMLElement.prototype=s.prototype,HTMLElement.prototype.constructor=HTMLElement,Object.setPrototypeOf(HTMLElement,s)})(),function(s){if(typeof s.requestSubmit=="function")return;s.requestSubmit=function(i){i?(e(i,this),i.click()):(i=document.createElement("input"),i.type="submit",i.hidden=!0,this.appendChild(i),i.click(),this.removeChild(i))};function e(i,r){i instanceof HTMLElement||t(TypeError,"parameter 1 is not of type 'HTMLElement'"),i.type=="submit"||t(TypeError,"The specified element is not a submit button"),i.form==r||t(DOMException,"The specified element is not owned by this form element","NotFoundError")}function t(i,r,n){throw new i("Failed to execute 'requestSubmit' on 'HTMLFormElement': "+r+".",n)}}(HTMLFormElement.prototype);const Z=new WeakMap;function ke(s){const e=s instanceof Element?s:s instanceof Node?s.parentElement:null,t=e?e.closest("input, button"):null;return(t==null?void 0:t.type)=="submit"?t:null}function Ie(s){const e=ke(s.target);e&&e.form&&Z.set(e.form,e)}(function(){if("submitter"in Event.prototype)return;let s;if("SubmitEvent"in window&&/Apple Computer/.test(navigator.vendor))s=window.SubmitEvent.prototype;else{if("SubmitEvent"in window)return;s=window.Event.prototype}addEventListener("click",Ie,!0),Object.defineProperty(s,"submitter",{get(){if(this.type=="submit"&&this.target instanceof HTMLFormElement)return Z.get(this.target)}})})();var g;(function(s){s.eager="eager",s.lazy="lazy"})(g||(g={}));class f extends HTMLElement{constructor(){super();this.loaded=Promise.resolve(),this.delegate=new f.delegateConstructor(this)}static get observedAttributes(){return["disabled","complete","loading","src"]}connectedCallback(){this.delegate.connect()}disconnectedCallback(){this.delegate.disconnect()}reload(){return this.delegate.sourceURLReloaded()}attributeChangedCallback(e){e=="loading"?this.delegate.loadingStyleChanged():e=="complete"?this.delegate.completeChanged():e=="src"?this.delegate.sourceURLChanged():this.delegate.disabledChanged()}get src(){return this.getAttribute("src")}set src(e){e?this.setAttribute("src",e):this.removeAttribute("src")}get loading(){return Me(this.getAttribute("loading")||"")}set loading(e){e?this.setAttribute("loading",e):this.removeAttribute("loading")}get disabled(){return this.hasAttribute("disabled")}set disabled(e){e?this.setAttribute("disabled",""):this.removeAttribute("disabled")}get autoscroll(){return this.hasAttribute("autoscroll")}set autoscroll(e){e?this.setAttribute("autoscroll",""):this.removeAttribute("autoscroll")}get complete(){return!this.delegate.isLoading}get isActive(){return this.ownerDocument===document&&!this.isPreview}get isPreview(){var e,t;return(t=(e=this.ownerDocument)===null||e===void 0?void 0:e.documentElement)===null||t===void 0?void 0:t.hasAttribute("data-turbo-preview")}}function Me(s){switch(s.toLowerCase()){case"lazy":return g.lazy;default:return g.eager}}function h(s){return new URL(s.toString(),document.baseURI)}function y(s){let e;if(s.hash)return s.hash.slice(1);if(e=s.href.match(/#(.*)$/))return e[1]}function V(s,e){const t=(e==null?void 0:e.getAttribute("formaction"))||s.getAttribute("action")||s.action;return h(t)}function He(s){return(_e(s).match(/\.[^.]*$/)||[])[0]||""}function qe(s){return!!He(s).match(/^(?:|\.(?:htm|html|xhtml|php))$/)}function Be(s,e){const t=De(e);return s.href===h(t).href||s.href.startsWith(t)}function R(s,e){return Be(s,e)&&qe(s)}function x(s){const e=y(s);return e!=null?s.href.slice(0,-(e.length+1)):s.href}function M(s){return x(s)}function Oe(s,e){return h(s).href==h(e).href}function Ne(s){return s.pathname.split("/").slice(1)}function _e(s){return Ne(s).slice(-1)[0]}function De(s){return Ve(s.origin+s.pathname)}function Ve(s){return s.endsWith("/")?s:s+"/"}class W{constructor(e){this.response=e}get succeeded(){return this.response.ok}get failed(){return!this.succeeded}get clientError(){return this.statusCode>=400&&this.statusCode<=499}get serverError(){return this.statusCode>=500&&this.statusCode<=599}get redirected(){return this.response.redirected}get location(){return h(this.response.url)}get isHTML(){return this.contentType&&this.contentType.match(/^(?:text\/([^\s;,]+\b)?html|application\/xhtml\+xml)\b/)}get statusCode(){return this.response.status}get contentType(){return this.header("Content-Type")}get responseText(){return this.response.clone().text()}get responseHTML(){return this.isHTML?this.response.clone().text():Promise.resolve(void 0)}header(e){return this.response.headers.get(e)}}function H(s){return s=="advance"||s=="replace"||s=="restore"}function P(s){if(s.getAttribute("data-turbo-eval")=="false")return s;{const e=document.createElement("script"),t=B("csp-nonce");return t&&(e.nonce=t),e.textContent=s.textContent,e.async=!1,xe(e,s),e}}function xe(s,e){for(const{name:t,value:i}of e.attributes)s.setAttribute(t,i)}function We(s){const e=document.createElement("template");return e.innerHTML=s,e.content}function l(s,{target:e,cancelable:t,detail:i}={}){const r=new CustomEvent(s,{cancelable:t,bubbles:!0,detail:i});return e&&e.isConnected?e.dispatchEvent(r):document.documentElement.dispatchEvent(r),r}function q(){return new Promise(s=>requestAnimationFrame(()=>s()))}function Ue(){return new Promise(s=>setTimeout(()=>s(),0))}function je(){return Promise.resolve()}function ee(s=""){return new DOMParser().parseFromString(s,"text/html")}function te(s,...e){const t=$e(s,e).replace(/^\n/,"").split(`
-`),i=t[0].match(/^\s+/),r=i?i[0].length:0;return t.map(n=>n.slice(r)).join(`
-`)}function $e(s,e){return s.reduce((t,i,r)=>{const n=e[r]==null?"":e[r];return t+i+n},"")}function C(){return Array.from({length:36}).map((s,e)=>e==8||e==13||e==18||e==23?"-":e==14?"4":e==19?(Math.floor(Math.random()*4)+8).toString(16):Math.floor(Math.random()*15).toString(16)).join("")}function F(s,...e){for(const t of e.map(i=>i==null?void 0:i.getAttribute(s)))if(typeof t=="string")return t;return null}function ze(s,...e){return e.some(t=>t&&t.hasAttribute(s))}function U(...s){for(const e of s)e.localName=="turbo-frame"&&e.setAttribute("busy",""),e.setAttribute("aria-busy","true")}function j(...s){for(const e of s)e.localName=="turbo-frame"&&e.removeAttribute("busy"),e.removeAttribute("aria-busy")}function Ke(s,e=2e3){return new Promise(t=>{const i=()=>{s.removeEventListener("error",i),s.removeEventListener("load",i),t()};s.addEventListener("load",i,{once:!0}),s.addEventListener("error",i,{once:!0}),setTimeout(t,e)})}function se(s){switch(s){case"replace":return history.replaceState;case"advance":case"restore":return history.pushState}}function Qe(...s){const e=F("data-turbo-action",...s);return H(e)?e:null}function ie(s){return document.querySelector(`meta[name="${s}"]`)}function B(s){const e=ie(s);return e&&e.content}function Xe(s,e){let t=ie(s);return t||(t=document.createElement("meta"),t.setAttribute("name",s),document.head.appendChild(t)),t.setAttribute("content",e),t}var d;(function(s){s[s.get=0]="get",s[s.post=1]="post",s[s.put=2]="put",s[s.patch=3]="patch",s[s.delete=4]="delete"})(d||(d={}));function Ye(s){switch(s.toLowerCase()){case"get":return d.get;case"post":return d.post;case"put":return d.put;case"patch":return d.patch;case"delete":return d.delete}}class ${constructor(e,t,i,r=new URLSearchParams,n=null){this.abortController=new AbortController,this.resolveRequestPromise=o=>{},this.delegate=e,this.method=t,this.headers=this.defaultHeaders,this.body=r,this.url=i,this.target=n}get location(){return this.url}get params(){return this.url.searchParams}get entries(){return this.body?Array.from(this.body.entries()):[]}cancel(){this.abortController.abort()}async perform(){var e,t;const{fetchOptions:i}=this;(t=(e=this.delegate).prepareHeadersForRequest)===null||t===void 0||t.call(e,this.headers,this),await this.allowRequestToBeIntercepted(i);try{this.delegate.requestStarted(this);const r=await fetch(this.url.href,i);return await this.receive(r)}catch(r){if(r.name!=="AbortError")throw this.willDelegateErrorHandling(r)&&this.delegate.requestErrored(this,r),r}finally{this.delegate.requestFinished(this)}}async receive(e){const t=new W(e),i=l("turbo:before-fetch-response",{cancelable:!0,detail:{fetchResponse:t},target:this.target});return i.defaultPrevented?this.delegate.requestPreventedHandlingResponse(this,t):t.succeeded?this.delegate.requestSucceededWithResponse(this,t):this.delegate.requestFailedWithResponse(this,t),t}get fetchOptions(){var e;return{method:d[this.method].toUpperCase(),credentials:"same-origin",headers:this.headers,redirect:"follow",body:this.isIdempotent?null:this.body,signal:this.abortSignal,referrer:(e=this.delegate.referrer)===null||e===void 0?void 0:e.href}}get defaultHeaders(){return{Accept:"text/html, application/xhtml+xml"}}get isIdempotent(){return this.method==d.get}get abortSignal(){return this.abortController.signal}acceptResponseType(e){this.headers.Accept=[e,this.headers.Accept].join(", ")}async allowRequestToBeIntercepted(e){const t=new Promise(r=>this.resolveRequestPromise=r),i=l("turbo:before-fetch-request",{cancelable:!0,detail:{fetchOptions:e,url:this.url,resume:this.resolveRequestPromise},target:this.target});i.defaultPrevented&&await t}willDelegateErrorHandling(e){const t=l("turbo:fetch-request-error",{target:this.target,cancelable:!0,detail:{request:this,error:e}});return!t.defaultPrevented}}class Je{constructor(e,t){this.started=!1,this.intersect=i=>{const r=i.slice(-1)[0];(r==null?void 0:r.isIntersecting)&&this.delegate.elementAppearedInViewport(this.element)},this.delegate=e,this.element=t,this.intersectionObserver=new IntersectionObserver(this.intersect)}start(){this.started||(this.started=!0,this.intersectionObserver.observe(this.element))}stop(){this.started&&(this.started=!1,this.intersectionObserver.unobserve(this.element))}}class L{constructor(e){this.fragment=Ge(e)}static wrap(e){return typeof e=="string"?new this(We(e)):e}}L.contentType="text/vnd.turbo-stream.html";function Ge(s){for(const e of s.querySelectorAll("turbo-stream")){const t=document.importNode(e,!0);for(const i of t.templateElement.content.querySelectorAll("script"))i.replaceWith(P(i));e.replaceWith(t)}return s}var w;(function(s){s[s.initialized=0]="initialized",s[s.requesting=1]="requesting",s[s.waiting=2]="waiting",s[s.receiving=3]="receiving",s[s.stopping=4]="stopping",s[s.stopped=5]="stopped"})(w||(w={}));var E;(function(s){s.urlEncoded="application/x-www-form-urlencoded",s.multipart="multipart/form-data",s.plain="text/plain"})(E||(E={}));function Ze(s){switch(s.toLowerCase()){case E.multipart:return E.multipart;case E.plain:return E.plain;default:return E.urlEncoded}}class k{constructor(e,t,i,r=!1){this.state=w.initialized,this.delegate=e,this.formElement=t,this.submitter=i,this.formData=et(t,i),this.location=h(this.action),this.method==d.get&&it(this.location,[...this.body.entries()]),this.fetchRequest=new $(this,this.method,this.location,this.body,this.formElement),this.mustRedirect=r}static confirmMethod(e,t,i){return Promise.resolve(confirm(e))}get method(){var e;const t=((e=this.submitter)===null||e===void 0?void 0:e.getAttribute("formmethod"))||this.formElement.getAttribute("method")||"";return Ye(t.toLowerCase())||d.get}get action(){var e;const t=typeof this.formElement.action=="string"?this.formElement.action:null;return((e=this.submitter)===null||e===void 0?void 0:e.hasAttribute("formaction"))?this.submitter.getAttribute("formaction")||"":this.formElement.getAttribute("action")||t||""}get body(){return this.enctype==E.urlEncoded||this.method==d.get?new URLSearchParams(this.stringFormData):this.formData}get enctype(){var e;return Ze(((e=this.submitter)===null||e===void 0?void 0:e.getAttribute("formenctype"))||this.formElement.enctype)}get isIdempotent(){return this.fetchRequest.isIdempotent}get stringFormData(){return[...this.formData].reduce((e,[t,i])=>e.concat(typeof i=="string"?[[t,i]]:[]),[])}async start(){const{initialized:e,requesting:t}=w,i=F("data-turbo-confirm",this.submitter,this.formElement);if(typeof i=="string"){const r=await k.confirmMethod(i,this.formElement,this.submitter);if(!r)return}if(this.state==e)return this.state=t,this.fetchRequest.perform()}stop(){const{stopping:e,stopped:t}=w;if(this.state!=e&&this.state!=t)return this.state=e,this.fetchRequest.cancel(),!0}prepareHeadersForRequest(e,t){if(!t.isIdempotent){const i=tt(B("csrf-param"))||B("csrf-token");i&&(e["X-CSRF-Token"]=i)}this.requestAcceptsTurboStreamResponse(t)&&t.acceptResponseType(L.contentType)}requestStarted(e){var t;this.state=w.waiting,(t=this.submitter)===null||t===void 0||t.setAttribute("disabled",""),l("turbo:submit-start",{target:this.formElement,detail:{formSubmission:this}}),this.delegate.formSubmissionStarted(this)}requestPreventedHandlingResponse(e,t){this.result={success:t.succeeded,fetchResponse:t}}requestSucceededWithResponse(e,t){if(t.clientError||t.serverError)this.delegate.formSubmissionFailedWithResponse(this,t);else if(this.requestMustRedirect(e)&&st(t)){const i=new Error("Form responses must redirect to another location");this.delegate.formSubmissionErrored(this,i)}else this.state=w.receiving,this.result={success:!0,fetchResponse:t},this.delegate.formSubmissionSucceededWithResponse(this,t)}requestFailedWithResponse(e,t){this.result={success:!1,fetchResponse:t},this.delegate.formSubmissionFailedWithResponse(this,t)}requestErrored(e,t){this.result={success:!1,error:t},this.delegate.formSubmissionErrored(this,t)}requestFinished(e){var t;this.state=w.stopped,(t=this.submitter)===null||t===void 0||t.removeAttribute("disabled"),l("turbo:submit-end",{target:this.formElement,detail:Object.assign({formSubmission:this},this.result)}),this.delegate.formSubmissionFinished(this)}requestMustRedirect(e){return!e.isIdempotent&&this.mustRedirect}requestAcceptsTurboStreamResponse(e){return!e.isIdempotent||ze("data-turbo-stream",this.submitter,this.formElement)}}function et(s,e){const t=new FormData(s),i=e==null?void 0:e.getAttribute("name"),r=e==null?void 0:e.getAttribute("value");return i&&t.append(i,r||""),t}function tt(s){if(s!=null){const e=document.cookie?document.cookie.split("; "):[],t=e.find(i=>i.startsWith(s));if(t){const i=t.split("=").slice(1).join("=");return i?decodeURIComponent(i):void 0}}}function st(s){return s.statusCode==200&&!s.redirected}function it(s,e){const t=new URLSearchParams;for(const[i,r]of e){if(r instanceof File)continue;t.append(i,r)}return s.search=t.toString(),s}class O{constructor(e){this.element=e}get activeElement(){return this.element.ownerDocument.activeElement}get children(){return[...this.element.children]}hasAnchor(e){return this.getElementForAnchor(e)!=null}getElementForAnchor(e){return e?this.element.querySelector(`[id='${e}'], a[name='${e}']`):null}get isConnected(){return this.element.isConnected}get firstAutofocusableElement(){const e="[inert], :disabled, [hidden], details:not([open]), dialog:not([open])";for(const t of this.element.querySelectorAll("[autofocus]")){if(t.closest(e)==null)return t;continue}return null}get permanentElements(){return ne(this.element)}getPermanentElementById(e){return re(this.element,e)}getPermanentElementMapForSnapshot(e){const t={};for(const i of this.permanentElements){const{id:r}=i,n=e.getPermanentElementById(r);n&&(t[r]=[i,n])}return t}}function re(s,e){return s.querySelector(`#${e}[data-turbo-permanent]`)}function ne(s){return s.querySelectorAll("[id][data-turbo-permanent]")}class z{constructor(e,t){this.started=!1,this.submitCaptured=()=>{this.eventTarget.removeEventListener("submit",this.submitBubbled,!1),this.eventTarget.addEventListener("submit",this.submitBubbled,!1)},this.submitBubbled=i=>{if(!i.defaultPrevented){const r=i.target instanceof HTMLFormElement?i.target:void 0,n=i.submitter||void 0;r&&rt(r,n)&&nt(r,n)&&this.delegate.willSubmitForm(r,n)&&(i.preventDefault(),i.stopImmediatePropagation(),this.delegate.formSubmitted(r,n))}},this.delegate=e,this.eventTarget=t}start(){this.started||(this.eventTarget.addEventListener("submit",this.submitCaptured,!0),this.started=!0)}stop(){this.started&&(this.eventTarget.removeEventListener("submit",this.submitCaptured,!0),this.started=!1)}}function rt(s,e){const t=(e==null?void 0:e.getAttribute("formmethod"))||s.getAttribute("method");return t!="dialog"}function nt(s,e){const t=(e==null?void 0:e.getAttribute("formtarget"))||s.target;for(const i of document.getElementsByName(t))if(i instanceof HTMLIFrameElement)return!1;return!0}class oe{constructor(e,t){this.resolveRenderPromise=i=>{},this.resolveInterceptionPromise=i=>{},this.delegate=e,this.element=t}scrollToAnchor(e){const t=this.snapshot.getElementForAnchor(e);t?(this.scrollToElement(t),this.focusElement(t)):this.scrollToPosition({x:0,y:0})}scrollToAnchorFromLocation(e){this.scrollToAnchor(y(e))}scrollToElement(e){e.scrollIntoView()}focusElement(e){e instanceof HTMLElement&&(e.hasAttribute("tabindex")?e.focus():(e.setAttribute("tabindex","-1"),e.focus(),e.removeAttribute("tabindex")))}scrollToPosition({x:e,y:t}){this.scrollRoot.scrollTo(e,t)}scrollToTop(){this.scrollToPosition({x:0,y:0})}get scrollRoot(){return window}async render(e){const{isPreview:t,shouldRender:i,newSnapshot:r}=e;if(i)try{this.renderPromise=new Promise(u=>this.resolveRenderPromise=u),this.renderer=e,await this.prepareToRenderSnapshot(e);const n=new Promise(u=>this.resolveInterceptionPromise=u),o={resume:this.resolveInterceptionPromise,render:this.renderer.renderElement},c=this.delegate.allowsImmediateRender(r,o);c||await n,await this.renderSnapshot(e),this.delegate.viewRenderedSnapshot(r,t),this.delegate.preloadOnLoadLinksForView(this.element),this.finishRenderingSnapshot(e)}finally{delete this.renderer,this.resolveRenderPromise(void 0),delete this.renderPromise}else this.invalidate(e.reloadReason)}invalidate(e){this.delegate.viewInvalidated(e)}async prepareToRenderSnapshot(e){this.markAsPreview(e.isPreview),await e.prepareToRender()}markAsPreview(e){e?this.element.setAttribute("data-turbo-preview",""):this.element.removeAttribute("data-turbo-preview")}async renderSnapshot(e){await e.render()}finishRenderingSnapshot(e){e.finishRendering()}}class ot extends oe{invalidate(){this.element.innerHTML=""}get snapshot(){return new O(this.element)}}class ae{constructor(e,t){this.clickBubbled=i=>{this.respondsToEventTarget(i.target)?this.clickEvent=i:delete this.clickEvent},this.linkClicked=i=>{this.clickEvent&&this.respondsToEventTarget(i.target)&&i.target instanceof Element&&(this.delegate.shouldInterceptLinkClick(i.target,i.detail.url,i.detail.originalEvent)&&(this.clickEvent.preventDefault(),i.preventDefault(),this.delegate.linkClickIntercepted(i.target,i.detail.url,i.detail.originalEvent))),delete this.clickEvent},this.willVisit=i=>{delete this.clickEvent},this.delegate=e,this.element=t}start(){this.element.addEventListener("click",this.clickBubbled),document.addEventListener("turbo:click",this.linkClicked),document.addEventListener("turbo:before-visit",this.willVisit)}stop(){this.element.removeEventListener("click",this.clickBubbled),document.removeEventListener("turbo:click",this.linkClicked),document.removeEventListener("turbo:before-visit",this.willVisit)}respondsToEventTarget(e){const t=e instanceof Element?e:e instanceof Node?e.parentElement:null;return t&&t.closest("turbo-frame, html")==this.element}}class le{constructor(e,t){this.started=!1,this.clickCaptured=()=>{this.eventTarget.removeEventListener("click",this.clickBubbled,!1),this.eventTarget.addEventListener("click",this.clickBubbled,!1)},this.clickBubbled=i=>{if(i instanceof MouseEvent&&this.clickEventIsSignificant(i)){const r=i.composedPath&&i.composedPath()[0]||i.target,n=this.findLinkFromClickTarget(r);if(n&&at(n)){const o=this.getLocationForLink(n);this.delegate.willFollowLinkToLocation(n,o,i)&&(i.preventDefault(),this.delegate.followedLinkToLocation(n,o))}}},this.delegate=e,this.eventTarget=t}start(){this.started||(this.eventTarget.addEventListener("click",this.clickCaptured,!0),this.started=!0)}stop(){this.started&&(this.eventTarget.removeEventListener("click",this.clickCaptured,!0),this.started=!1)}clickEventIsSignificant(e){return!(e.target&&e.target.isContentEditable||e.defaultPrevented||e.which>1||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey)}findLinkFromClickTarget(e){if(e instanceof Element)return e.closest("a[href]:not([target^=_]):not([download])")}getLocationForLink(e){return h(e.getAttribute("href")||"")}}function at(s){for(const e of document.getElementsByName(s.target))if(e instanceof HTMLIFrameElement)return!1;return!0}class ce{constructor(e,t){this.delegate=e,this.linkInterceptor=new le(this,t)}start(){this.linkInterceptor.start()}stop(){this.linkInterceptor.stop()}willFollowLinkToLocation(e,t,i){return this.delegate.willSubmitFormLinkToLocation(e,t,i)&&e.hasAttribute("data-turbo-method")}followedLinkToLocation(e,t){const i=t.href,r=document.createElement("form");r.setAttribute("data-turbo","true"),r.setAttribute("action",i),r.setAttribute("hidden","");const n=e.getAttribute("data-turbo-method");n&&r.setAttribute("method",n);const o=e.getAttribute("data-turbo-frame");o&&r.setAttribute("data-turbo-frame",o);const c=e.getAttribute("data-turbo-action");c&&r.setAttribute("data-turbo-action",c);const u=e.getAttribute("data-turbo-confirm");u&&r.setAttribute("data-turbo-confirm",u);const T=e.hasAttribute("data-turbo-stream");T&&r.setAttribute("data-turbo-stream",""),this.delegate.submittedFormLinkToLocation(e,t,r),document.body.appendChild(r),r.addEventListener("turbo:submit-end",()=>r.remove(),{once:!0}),requestAnimationFrame(()=>r.requestSubmit())}}class he{constructor(e,t){this.delegate=e,this.permanentElementMap=t}static preservingPermanentElements(e,t,i){const r=new this(e,t);r.enter(),i(),r.leave()}enter(){for(const e in this.permanentElementMap){const[t,i]=this.permanentElementMap[e];this.delegate.enteringBardo(t,i),this.replaceNewPermanentElementWithPlaceholder(i)}}leave(){for(const e in this.permanentElementMap){const[t]=this.permanentElementMap[e];this.replaceCurrentPermanentElementWithClone(t),this.replacePlaceholderWithPermanentElement(t),this.delegate.leavingBardo(t)}}replaceNewPermanentElementWithPlaceholder(e){const t=lt(e);e.replaceWith(t)}replaceCurrentPermanentElementWithClone(e){const t=e.cloneNode(!0);e.replaceWith(t)}replacePlaceholderWithPermanentElement(e){const t=this.getPlaceholderById(e.id);t==null||t.replaceWith(e)}getPlaceholderById(e){return this.placeholders.find(t=>t.content==e)}get placeholders(){return[...document.querySelectorAll("meta[name=turbo-permanent-placeholder][content]")]}}function lt(s){const e=document.createElement("meta");return e.setAttribute("name","turbo-permanent-placeholder"),e.setAttribute("content",s.id),e}class K{constructor(e,t,i,r,n=!0){this.activeElement=null,this.currentSnapshot=e,this.newSnapshot=t,this.isPreview=r,this.willRender=n,this.renderElement=i,this.promise=new Promise((o,c)=>this.resolvingFunctions={resolve:o,reject:c})}get shouldRender(){return!0}get reloadReason(){return}prepareToRender(){return}finishRendering(){this.resolvingFunctions&&(this.resolvingFunctions.resolve(),delete this.resolvingFunctions)}preservingPermanentElements(e){he.preservingPermanentElements(this,this.permanentElementMap,e)}focusFirstAutofocusableElement(){const e=this.connectedSnapshot.firstAutofocusableElement;ct(e)&&e.focus()}enteringBardo(e){if(this.activeElement)return;e.contains(this.currentSnapshot.activeElement)&&(this.activeElement=this.currentSnapshot.activeElement)}leavingBardo(e){e.contains(this.activeElement)&&this.activeElement instanceof HTMLElement&&(this.activeElement.focus(),this.activeElement=null)}get connectedSnapshot(){return this.newSnapshot.isConnected?this.newSnapshot:this.currentSnapshot}get currentElement(){return this.currentSnapshot.element}get newElement(){return this.newSnapshot.element}get permanentElementMap(){return this.currentSnapshot.getPermanentElementMapForSnapshot(this.newSnapshot)}}function ct(s){return s&&typeof s.focus=="function"}class N extends K{constructor(e,t,i,r,n,o=!0){super(t,i,r,n,o);this.delegate=e}static renderElement(e,t){var i;const r=document.createRange();r.selectNodeContents(e),r.deleteContents();const n=t,o=(i=n.ownerDocument)===null||i===void 0?void 0:i.createRange();o&&(o.selectNodeContents(n),e.appendChild(o.extractContents()))}get shouldRender(){return!0}async render(){await q(),this.preservingPermanentElements(()=>{this.loadFrameElement()}),this.scrollFrameIntoView(),await q(),this.focusFirstAutofocusableElement(),await q(),this.activateScriptElements()}loadFrameElement(){this.delegate.willRenderFrame(this.currentElement,this.newElement),this.renderElement(this.currentElement,this.newElement)}scrollFrameIntoView(){if(this.currentElement.autoscroll||this.newElement.autoscroll){const e=this.currentElement.firstElementChild,t=ht(this.currentElement.getAttribute("data-autoscroll-block"),"end"),i=dt(this.currentElement.getAttribute("data-autoscroll-behavior"),"auto");if(e)return e.scrollIntoView({block:t,behavior:i}),!0}return!1}activateScriptElements(){for(const e of this.newScriptElements){const t=P(e);e.replaceWith(t)}}get newScriptElements(){return this.currentElement.querySelectorAll("script")}}function ht(s,e){return s=="end"||s=="start"||s=="center"||s=="nearest"?s:e}function dt(s,e){return s=="auto"||s=="smooth"?s:e}class v{constructor(){this.hiding=!1,this.value=0,this.visible=!1,this.trickle=()=>{this.setValue(this.value+Math.random()/100)},this.stylesheetElement=this.createStylesheetElement(),this.progressElement=this.createProgressElement(),this.installStylesheetElement(),this.setValue(0)}static get defaultCSS(){return te`
+(function() {
+    if (window.Reflect === void 0 || window.customElements === void 0 || window.customElements.polyfillWrapFlushCallback) {
+        return;
+    }
+    const BuiltInHTMLElement = HTMLElement;
+    const wrapperForTheName = {
+        HTMLElement: function HTMLElement2() {
+            return Reflect.construct(BuiltInHTMLElement, [], this.constructor);
+        }
+    };
+    window.HTMLElement = wrapperForTheName["HTMLElement"];
+    HTMLElement.prototype = BuiltInHTMLElement.prototype;
+    HTMLElement.prototype.constructor = HTMLElement;
+    Object.setPrototypeOf(HTMLElement, BuiltInHTMLElement);
+})();
+(function(prototype) {
+    if (typeof prototype.requestSubmit == "function")
+        return;
+    prototype.requestSubmit = function(submitter) {
+        if (submitter) {
+            validateSubmitter(submitter, this);
+            submitter.click();
+        } else {
+            submitter = document.createElement("input");
+            submitter.type = "submit";
+            submitter.hidden = true;
+            this.appendChild(submitter);
+            submitter.click();
+            this.removeChild(submitter);
+        }
+    };
+    function validateSubmitter(submitter, form) {
+        submitter instanceof HTMLElement || raise(TypeError, "parameter 1 is not of type 'HTMLElement'");
+        submitter.type == "submit" || raise(TypeError, "The specified element is not a submit button");
+        submitter.form == form || raise(DOMException, "The specified element is not owned by this form element", "NotFoundError");
+    }
+    function raise(errorConstructor, message, name) {
+        throw new errorConstructor("Failed to execute 'requestSubmit' on 'HTMLFormElement': " + message + ".", name);
+    }
+})(HTMLFormElement.prototype);
+const submittersByForm = new WeakMap();
+function findSubmitterFromClickTarget(target) {
+    const element = target instanceof Element ? target : target instanceof Node ? target.parentElement : null;
+    const candidate = element ? element.closest("input, button") : null;
+    return (candidate === null || candidate === void 0 ? void 0 : candidate.type) == "submit" ? candidate : null;
+}
+function clickCaptured(event) {
+    const submitter = findSubmitterFromClickTarget(event.target);
+    if (submitter && submitter.form) {
+        submittersByForm.set(submitter.form, submitter);
+    }
+}
+(function() {
+    if ("submitter" in Event.prototype)
+        return;
+    let prototype;
+    if ("SubmitEvent" in window && /Apple Computer/.test(navigator.vendor)) {
+        prototype = window.SubmitEvent.prototype;
+    } else if ("SubmitEvent" in window) {
+        return;
+    } else {
+        prototype = window.Event.prototype;
+    }
+    addEventListener("click", clickCaptured, true);
+    Object.defineProperty(prototype, "submitter", {
+        get() {
+            if (this.type == "submit" && this.target instanceof HTMLFormElement) {
+                return submittersByForm.get(this.target);
+            }
+        }
+    });
+})();
+var FrameLoadingStyle;
+(function(FrameLoadingStyle2) {
+    FrameLoadingStyle2["eager"] = "eager";
+    FrameLoadingStyle2["lazy"] = "lazy";
+})(FrameLoadingStyle || (FrameLoadingStyle = {}));
+class FrameElement extends HTMLElement {
+    constructor() {
+        super();
+        this.loaded = Promise.resolve();
+        this.delegate = new FrameElement.delegateConstructor(this);
+    }
+    static get observedAttributes() {
+        return ["disabled", "complete", "loading", "src"];
+    }
+    connectedCallback() {
+        this.delegate.connect();
+    }
+    disconnectedCallback() {
+        this.delegate.disconnect();
+    }
+    reload() {
+        return this.delegate.sourceURLReloaded();
+    }
+    attributeChangedCallback(name) {
+        if (name == "loading") {
+            this.delegate.loadingStyleChanged();
+        } else if (name == "complete") {
+            this.delegate.completeChanged();
+        } else if (name == "src") {
+            this.delegate.sourceURLChanged();
+        } else {
+            this.delegate.disabledChanged();
+        }
+    }
+    get src() {
+        return this.getAttribute("src");
+    }
+    set src(value) {
+        if (value) {
+            this.setAttribute("src", value);
+        } else {
+            this.removeAttribute("src");
+        }
+    }
+    get loading() {
+        return frameLoadingStyleFromString(this.getAttribute("loading") || "");
+    }
+    set loading(value) {
+        if (value) {
+            this.setAttribute("loading", value);
+        } else {
+            this.removeAttribute("loading");
+        }
+    }
+    get disabled() {
+        return this.hasAttribute("disabled");
+    }
+    set disabled(value) {
+        if (value) {
+            this.setAttribute("disabled", "");
+        } else {
+            this.removeAttribute("disabled");
+        }
+    }
+    get autoscroll() {
+        return this.hasAttribute("autoscroll");
+    }
+    set autoscroll(value) {
+        if (value) {
+            this.setAttribute("autoscroll", "");
+        } else {
+            this.removeAttribute("autoscroll");
+        }
+    }
+    get complete() {
+        return !this.delegate.isLoading;
+    }
+    get isActive() {
+        return this.ownerDocument === document && !this.isPreview;
+    }
+    get isPreview() {
+        var _a, _b;
+        return (_b = (_a = this.ownerDocument) === null || _a === void 0 ? void 0 : _a.documentElement) === null || _b === void 0 ? void 0 : _b.hasAttribute("data-turbo-preview");
+    }
+}
+function frameLoadingStyleFromString(style) {
+    switch (style.toLowerCase()) {
+        case "lazy":
+            return FrameLoadingStyle.lazy;
+        default:
+            return FrameLoadingStyle.eager;
+    }
+}
+function expandURL(locatable) {
+    return new URL(locatable.toString(), document.baseURI);
+}
+function getAnchor(url) {
+    let anchorMatch;
+    if (url.hash) {
+        return url.hash.slice(1);
+    } else if (anchorMatch = url.href.match(/#(.*)$/)) {
+        return anchorMatch[1];
+    }
+}
+function getAction(form, submitter) {
+    const action = (submitter === null || submitter === void 0 ? void 0 : submitter.getAttribute("formaction")) || form.getAttribute("action") || form.action;
+    return expandURL(action);
+}
+function getExtension(url) {
+    return (getLastPathComponent(url).match(/\.[^.]*$/) || [])[0] || "";
+}
+function isHTML(url) {
+    return !!getExtension(url).match(/^(?:|\.(?:htm|html|xhtml|php))$/);
+}
+function isPrefixedBy(baseURL, url) {
+    const prefix = getPrefix(url);
+    return baseURL.href === expandURL(prefix).href || baseURL.href.startsWith(prefix);
+}
+function locationIsVisitable(location2, rootLocation) {
+    return isPrefixedBy(location2, rootLocation) && isHTML(location2);
+}
+function getRequestURL(url) {
+    const anchor = getAnchor(url);
+    return anchor != null ? url.href.slice(0, -(anchor.length + 1)) : url.href;
+}
+function toCacheKey(url) {
+    return getRequestURL(url);
+}
+function urlsAreEqual(left, right) {
+    return expandURL(left).href == expandURL(right).href;
+}
+function getPathComponents(url) {
+    return url.pathname.split("/").slice(1);
+}
+function getLastPathComponent(url) {
+    return getPathComponents(url).slice(-1)[0];
+}
+function getPrefix(url) {
+    return addTrailingSlash(url.origin + url.pathname);
+}
+function addTrailingSlash(value) {
+    return value.endsWith("/") ? value : value + "/";
+}
+class FetchResponse {
+    constructor(response) {
+        this.response = response;
+    }
+    get succeeded() {
+        return this.response.ok;
+    }
+    get failed() {
+        return !this.succeeded;
+    }
+    get clientError() {
+        return this.statusCode >= 400 && this.statusCode <= 499;
+    }
+    get serverError() {
+        return this.statusCode >= 500 && this.statusCode <= 599;
+    }
+    get redirected() {
+        return this.response.redirected;
+    }
+    get location() {
+        return expandURL(this.response.url);
+    }
+    get isHTML() {
+        return this.contentType && this.contentType.match(/^(?:text\/([^\s;,]+\b)?html|application\/xhtml\+xml)\b/);
+    }
+    get statusCode() {
+        return this.response.status;
+    }
+    get contentType() {
+        return this.header("Content-Type");
+    }
+    get responseText() {
+        return this.response.clone().text();
+    }
+    get responseHTML() {
+        if (this.isHTML) {
+            return this.response.clone().text();
+        } else {
+            return Promise.resolve(void 0);
+        }
+    }
+    header(name) {
+        return this.response.headers.get(name);
+    }
+}
+function isAction(action) {
+    return action == "advance" || action == "replace" || action == "restore";
+}
+function activateScriptElement(element) {
+    if (element.getAttribute("data-turbo-eval") == "false") {
+        return element;
+    } else {
+        const createdScriptElement = document.createElement("script");
+        const cspNonce = getMetaContent("csp-nonce");
+        if (cspNonce) {
+            createdScriptElement.nonce = cspNonce;
+        }
+        createdScriptElement.textContent = element.textContent;
+        createdScriptElement.async = false;
+        copyElementAttributes(createdScriptElement, element);
+        return createdScriptElement;
+    }
+}
+function copyElementAttributes(destinationElement, sourceElement) {
+    for (const {name, value} of sourceElement.attributes) {
+        destinationElement.setAttribute(name, value);
+    }
+}
+function createDocumentFragment(html) {
+    const template = document.createElement("template");
+    template.innerHTML = html;
+    return template.content;
+}
+function dispatch(eventName, {target, cancelable, detail} = {}) {
+    const event = new CustomEvent(eventName, {
+        cancelable,
+        bubbles: true,
+        detail
+    });
+    if (target && target.isConnected) {
+        target.dispatchEvent(event);
+    } else {
+        document.documentElement.dispatchEvent(event);
+    }
+    return event;
+}
+function nextAnimationFrame() {
+    return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+}
+function nextEventLoopTick() {
+    return new Promise((resolve) => setTimeout(() => resolve(), 0));
+}
+function nextMicrotask() {
+    return Promise.resolve();
+}
+function parseHTMLDocument(html = "") {
+    return new DOMParser().parseFromString(html, "text/html");
+}
+function unindent(strings, ...values) {
+    const lines = interpolate(strings, values).replace(/^\n/, "").split("\n");
+    const match = lines[0].match(/^\s+/);
+    const indent = match ? match[0].length : 0;
+    return lines.map((line) => line.slice(indent)).join("\n");
+}
+function interpolate(strings, values) {
+    return strings.reduce((result, string, i) => {
+        const value = values[i] == void 0 ? "" : values[i];
+        return result + string + value;
+    }, "");
+}
+function uuid() {
+    return Array.from({length: 36}).map((_, i) => {
+        if (i == 8 || i == 13 || i == 18 || i == 23) {
+            return "-";
+        } else if (i == 14) {
+            return "4";
+        } else if (i == 19) {
+            return (Math.floor(Math.random() * 4) + 8).toString(16);
+        } else {
+            return Math.floor(Math.random() * 15).toString(16);
+        }
+    }).join("");
+}
+function getAttribute(attributeName, ...elements) {
+    for (const value of elements.map((element) => element === null || element === void 0 ? void 0 : element.getAttribute(attributeName))) {
+        if (typeof value == "string")
+            return value;
+    }
+    return null;
+}
+function hasAttribute(attributeName, ...elements) {
+    return elements.some((element) => element && element.hasAttribute(attributeName));
+}
+function markAsBusy(...elements) {
+    for (const element of elements) {
+        if (element.localName == "turbo-frame") {
+            element.setAttribute("busy", "");
+        }
+        element.setAttribute("aria-busy", "true");
+    }
+}
+function clearBusyState(...elements) {
+    for (const element of elements) {
+        if (element.localName == "turbo-frame") {
+            element.removeAttribute("busy");
+        }
+        element.removeAttribute("aria-busy");
+    }
+}
+function waitForLoad(element, timeoutInMilliseconds = 2e3) {
+    return new Promise((resolve) => {
+        const onComplete = () => {
+            element.removeEventListener("error", onComplete);
+            element.removeEventListener("load", onComplete);
+            resolve();
+        };
+        element.addEventListener("load", onComplete, {once: true});
+        element.addEventListener("error", onComplete, {once: true});
+        setTimeout(resolve, timeoutInMilliseconds);
+    });
+}
+function getHistoryMethodForAction(action) {
+    switch (action) {
+        case "replace":
+            return history.replaceState;
+        case "advance":
+        case "restore":
+            return history.pushState;
+    }
+}
+function getVisitAction(...elements) {
+    const action = getAttribute("data-turbo-action", ...elements);
+    return isAction(action) ? action : null;
+}
+function getMetaElement(name) {
+    return document.querySelector(`meta[name="${name}"]`);
+}
+function getMetaContent(name) {
+    const element = getMetaElement(name);
+    return element && element.content;
+}
+function setMetaContent(name, content) {
+    let element = getMetaElement(name);
+    if (!element) {
+        element = document.createElement("meta");
+        element.setAttribute("name", name);
+        document.head.appendChild(element);
+    }
+    element.setAttribute("content", content);
+    return element;
+}
+var FetchMethod;
+(function(FetchMethod2) {
+    FetchMethod2[FetchMethod2["get"] = 0] = "get";
+    FetchMethod2[FetchMethod2["post"] = 1] = "post";
+    FetchMethod2[FetchMethod2["put"] = 2] = "put";
+    FetchMethod2[FetchMethod2["patch"] = 3] = "patch";
+    FetchMethod2[FetchMethod2["delete"] = 4] = "delete";
+})(FetchMethod || (FetchMethod = {}));
+function fetchMethodFromString(method) {
+    switch (method.toLowerCase()) {
+        case "get":
+            return FetchMethod.get;
+        case "post":
+            return FetchMethod.post;
+        case "put":
+            return FetchMethod.put;
+        case "patch":
+            return FetchMethod.patch;
+        case "delete":
+            return FetchMethod.delete;
+    }
+}
+class FetchRequest {
+    constructor(delegate, method, location2, body = new URLSearchParams(), target = null) {
+        this.abortController = new AbortController();
+        this.resolveRequestPromise = (_value) => {
+        };
+        this.delegate = delegate;
+        this.method = method;
+        this.headers = this.defaultHeaders;
+        this.body = body;
+        this.url = location2;
+        this.target = target;
+    }
+    get location() {
+        return this.url;
+    }
+    get params() {
+        return this.url.searchParams;
+    }
+    get entries() {
+        return this.body ? Array.from(this.body.entries()) : [];
+    }
+    cancel() {
+        this.abortController.abort();
+    }
+    async perform() {
+        var _a, _b;
+        const {fetchOptions} = this;
+        (_b = (_a = this.delegate).prepareHeadersForRequest) === null || _b === void 0 ? void 0 : _b.call(_a, this.headers, this);
+        await this.allowRequestToBeIntercepted(fetchOptions);
+        try {
+            this.delegate.requestStarted(this);
+            const response = await fetch(this.url.href, fetchOptions);
+            return await this.receive(response);
+        } catch (error) {
+            if (error.name !== "AbortError") {
+                if (this.willDelegateErrorHandling(error)) {
+                    this.delegate.requestErrored(this, error);
+                }
+                throw error;
+            }
+        } finally {
+            this.delegate.requestFinished(this);
+        }
+    }
+    async receive(response) {
+        const fetchResponse = new FetchResponse(response);
+        const event = dispatch("turbo:before-fetch-response", {
+            cancelable: true,
+            detail: {fetchResponse},
+            target: this.target
+        });
+        if (event.defaultPrevented) {
+            this.delegate.requestPreventedHandlingResponse(this, fetchResponse);
+        } else if (fetchResponse.succeeded) {
+            this.delegate.requestSucceededWithResponse(this, fetchResponse);
+        } else {
+            this.delegate.requestFailedWithResponse(this, fetchResponse);
+        }
+        return fetchResponse;
+    }
+    get fetchOptions() {
+        var _a;
+        return {
+            method: FetchMethod[this.method].toUpperCase(),
+            credentials: "same-origin",
+            headers: this.headers,
+            redirect: "follow",
+            body: this.isIdempotent ? null : this.body,
+            signal: this.abortSignal,
+            referrer: (_a = this.delegate.referrer) === null || _a === void 0 ? void 0 : _a.href
+        };
+    }
+    get defaultHeaders() {
+        return {
+            Accept: "text/html, application/xhtml+xml"
+        };
+    }
+    get isIdempotent() {
+        return this.method == FetchMethod.get;
+    }
+    get abortSignal() {
+        return this.abortController.signal;
+    }
+    acceptResponseType(mimeType) {
+        this.headers["Accept"] = [mimeType, this.headers["Accept"]].join(", ");
+    }
+    async allowRequestToBeIntercepted(fetchOptions) {
+        const requestInterception = new Promise((resolve) => this.resolveRequestPromise = resolve);
+        const event = dispatch("turbo:before-fetch-request", {
+            cancelable: true,
+            detail: {
+                fetchOptions,
+                url: this.url,
+                resume: this.resolveRequestPromise
+            },
+            target: this.target
+        });
+        if (event.defaultPrevented)
+            await requestInterception;
+    }
+    willDelegateErrorHandling(error) {
+        const event = dispatch("turbo:fetch-request-error", {
+            target: this.target,
+            cancelable: true,
+            detail: {request: this, error}
+        });
+        return !event.defaultPrevented;
+    }
+}
+class AppearanceObserver {
+    constructor(delegate, element) {
+        this.started = false;
+        this.intersect = (entries) => {
+            const lastEntry = entries.slice(-1)[0];
+            if (lastEntry === null || lastEntry === void 0 ? void 0 : lastEntry.isIntersecting) {
+                this.delegate.elementAppearedInViewport(this.element);
+            }
+        };
+        this.delegate = delegate;
+        this.element = element;
+        this.intersectionObserver = new IntersectionObserver(this.intersect);
+    }
+    start() {
+        if (!this.started) {
+            this.started = true;
+            this.intersectionObserver.observe(this.element);
+        }
+    }
+    stop() {
+        if (this.started) {
+            this.started = false;
+            this.intersectionObserver.unobserve(this.element);
+        }
+    }
+}
+class StreamMessage {
+    constructor(fragment) {
+        this.fragment = importStreamElements(fragment);
+    }
+    static wrap(message) {
+        if (typeof message == "string") {
+            return new this(createDocumentFragment(message));
+        } else {
+            return message;
+        }
+    }
+}
+StreamMessage.contentType = "text/vnd.turbo-stream.html";
+function importStreamElements(fragment) {
+    for (const element of fragment.querySelectorAll("turbo-stream")) {
+        const streamElement = document.importNode(element, true);
+        for (const inertScriptElement of streamElement.templateElement.content.querySelectorAll("script")) {
+            inertScriptElement.replaceWith(activateScriptElement(inertScriptElement));
+        }
+        element.replaceWith(streamElement);
+    }
+    return fragment;
+}
+var FormSubmissionState;
+(function(FormSubmissionState2) {
+    FormSubmissionState2[FormSubmissionState2["initialized"] = 0] = "initialized";
+    FormSubmissionState2[FormSubmissionState2["requesting"] = 1] = "requesting";
+    FormSubmissionState2[FormSubmissionState2["waiting"] = 2] = "waiting";
+    FormSubmissionState2[FormSubmissionState2["receiving"] = 3] = "receiving";
+    FormSubmissionState2[FormSubmissionState2["stopping"] = 4] = "stopping";
+    FormSubmissionState2[FormSubmissionState2["stopped"] = 5] = "stopped";
+})(FormSubmissionState || (FormSubmissionState = {}));
+var FormEnctype;
+(function(FormEnctype2) {
+    FormEnctype2["urlEncoded"] = "application/x-www-form-urlencoded";
+    FormEnctype2["multipart"] = "multipart/form-data";
+    FormEnctype2["plain"] = "text/plain";
+})(FormEnctype || (FormEnctype = {}));
+function formEnctypeFromString(encoding) {
+    switch (encoding.toLowerCase()) {
+        case FormEnctype.multipart:
+            return FormEnctype.multipart;
+        case FormEnctype.plain:
+            return FormEnctype.plain;
+        default:
+            return FormEnctype.urlEncoded;
+    }
+}
+class FormSubmission {
+    constructor(delegate, formElement, submitter, mustRedirect = false) {
+        this.state = FormSubmissionState.initialized;
+        this.delegate = delegate;
+        this.formElement = formElement;
+        this.submitter = submitter;
+        this.formData = buildFormData(formElement, submitter);
+        this.location = expandURL(this.action);
+        if (this.method == FetchMethod.get) {
+            mergeFormDataEntries(this.location, [...this.body.entries()]);
+        }
+        this.fetchRequest = new FetchRequest(this, this.method, this.location, this.body, this.formElement);
+        this.mustRedirect = mustRedirect;
+    }
+    static confirmMethod(message, _element, _submitter) {
+        return Promise.resolve(confirm(message));
+    }
+    get method() {
+        var _a;
+        const method = ((_a = this.submitter) === null || _a === void 0 ? void 0 : _a.getAttribute("formmethod")) || this.formElement.getAttribute("method") || "";
+        return fetchMethodFromString(method.toLowerCase()) || FetchMethod.get;
+    }
+    get action() {
+        var _a;
+        const formElementAction = typeof this.formElement.action === "string" ? this.formElement.action : null;
+        if ((_a = this.submitter) === null || _a === void 0 ? void 0 : _a.hasAttribute("formaction")) {
+            return this.submitter.getAttribute("formaction") || "";
+        } else {
+            return this.formElement.getAttribute("action") || formElementAction || "";
+        }
+    }
+    get body() {
+        if (this.enctype == FormEnctype.urlEncoded || this.method == FetchMethod.get) {
+            return new URLSearchParams(this.stringFormData);
+        } else {
+            return this.formData;
+        }
+    }
+    get enctype() {
+        var _a;
+        return formEnctypeFromString(((_a = this.submitter) === null || _a === void 0 ? void 0 : _a.getAttribute("formenctype")) || this.formElement.enctype);
+    }
+    get isIdempotent() {
+        return this.fetchRequest.isIdempotent;
+    }
+    get stringFormData() {
+        return [...this.formData].reduce((entries, [name, value]) => {
+            return entries.concat(typeof value == "string" ? [[name, value]] : []);
+        }, []);
+    }
+    async start() {
+        const {initialized, requesting} = FormSubmissionState;
+        const confirmationMessage = getAttribute("data-turbo-confirm", this.submitter, this.formElement);
+        if (typeof confirmationMessage === "string") {
+            const answer = await FormSubmission.confirmMethod(confirmationMessage, this.formElement, this.submitter);
+            if (!answer) {
+                return;
+            }
+        }
+        if (this.state == initialized) {
+            this.state = requesting;
+            return this.fetchRequest.perform();
+        }
+    }
+    stop() {
+        const {stopping, stopped} = FormSubmissionState;
+        if (this.state != stopping && this.state != stopped) {
+            this.state = stopping;
+            this.fetchRequest.cancel();
+            return true;
+        }
+    }
+    prepareHeadersForRequest(headers, request) {
+        if (!request.isIdempotent) {
+            const token = getCookieValue(getMetaContent("csrf-param")) || getMetaContent("csrf-token");
+            if (token) {
+                headers["X-CSRF-Token"] = token;
+            }
+        }
+        if (this.requestAcceptsTurboStreamResponse(request)) {
+            request.acceptResponseType(StreamMessage.contentType);
+        }
+    }
+    requestStarted(_request) {
+        var _a;
+        this.state = FormSubmissionState.waiting;
+        (_a = this.submitter) === null || _a === void 0 ? void 0 : _a.setAttribute("disabled", "");
+        dispatch("turbo:submit-start", {
+            target: this.formElement,
+            detail: {formSubmission: this}
+        });
+        this.delegate.formSubmissionStarted(this);
+    }
+    requestPreventedHandlingResponse(request, response) {
+        this.result = {success: response.succeeded, fetchResponse: response};
+    }
+    requestSucceededWithResponse(request, response) {
+        if (response.clientError || response.serverError) {
+            this.delegate.formSubmissionFailedWithResponse(this, response);
+        } else if (this.requestMustRedirect(request) && responseSucceededWithoutRedirect(response)) {
+            const error = new Error("Form responses must redirect to another location");
+            this.delegate.formSubmissionErrored(this, error);
+        } else {
+            this.state = FormSubmissionState.receiving;
+            this.result = {success: true, fetchResponse: response};
+            this.delegate.formSubmissionSucceededWithResponse(this, response);
+        }
+    }
+    requestFailedWithResponse(request, response) {
+        this.result = {success: false, fetchResponse: response};
+        this.delegate.formSubmissionFailedWithResponse(this, response);
+    }
+    requestErrored(request, error) {
+        this.result = {success: false, error};
+        this.delegate.formSubmissionErrored(this, error);
+    }
+    requestFinished(_request) {
+        var _a;
+        this.state = FormSubmissionState.stopped;
+        (_a = this.submitter) === null || _a === void 0 ? void 0 : _a.removeAttribute("disabled");
+        dispatch("turbo:submit-end", {
+            target: this.formElement,
+            detail: Object.assign({formSubmission: this}, this.result)
+        });
+        this.delegate.formSubmissionFinished(this);
+    }
+    requestMustRedirect(request) {
+        return !request.isIdempotent && this.mustRedirect;
+    }
+    requestAcceptsTurboStreamResponse(request) {
+        return !request.isIdempotent || hasAttribute("data-turbo-stream", this.submitter, this.formElement);
+    }
+}
+function buildFormData(formElement, submitter) {
+    const formData = new FormData(formElement);
+    const name = submitter === null || submitter === void 0 ? void 0 : submitter.getAttribute("name");
+    const value = submitter === null || submitter === void 0 ? void 0 : submitter.getAttribute("value");
+    if (name) {
+        formData.append(name, value || "");
+    }
+    return formData;
+}
+function getCookieValue(cookieName) {
+    if (cookieName != null) {
+        const cookies = document.cookie ? document.cookie.split("; ") : [];
+        const cookie = cookies.find((cookie2) => cookie2.startsWith(cookieName));
+        if (cookie) {
+            const value = cookie.split("=").slice(1).join("=");
+            return value ? decodeURIComponent(value) : void 0;
+        }
+    }
+}
+function responseSucceededWithoutRedirect(response) {
+    return response.statusCode == 200 && !response.redirected;
+}
+function mergeFormDataEntries(url, entries) {
+    const searchParams = new URLSearchParams();
+    for (const [name, value] of entries) {
+        if (value instanceof File)
+            continue;
+        searchParams.append(name, value);
+    }
+    url.search = searchParams.toString();
+    return url;
+}
+class Snapshot {
+    constructor(element) {
+        this.element = element;
+    }
+    get activeElement() {
+        return this.element.ownerDocument.activeElement;
+    }
+    get children() {
+        return [...this.element.children];
+    }
+    hasAnchor(anchor) {
+        return this.getElementForAnchor(anchor) != null;
+    }
+    getElementForAnchor(anchor) {
+        return anchor ? this.element.querySelector(`[id='${anchor}'], a[name='${anchor}']`) : null;
+    }
+    get isConnected() {
+        return this.element.isConnected;
+    }
+    get firstAutofocusableElement() {
+        const inertDisabledOrHidden = "[inert], :disabled, [hidden], details:not([open]), dialog:not([open])";
+        for (const element of this.element.querySelectorAll("[autofocus]")) {
+            if (element.closest(inertDisabledOrHidden) == null)
+                return element;
+            else
+                continue;
+        }
+        return null;
+    }
+    get permanentElements() {
+        return queryPermanentElementsAll(this.element);
+    }
+    getPermanentElementById(id) {
+        return getPermanentElementById(this.element, id);
+    }
+    getPermanentElementMapForSnapshot(snapshot) {
+        const permanentElementMap = {};
+        for (const currentPermanentElement of this.permanentElements) {
+            const {id} = currentPermanentElement;
+            const newPermanentElement = snapshot.getPermanentElementById(id);
+            if (newPermanentElement) {
+                permanentElementMap[id] = [currentPermanentElement, newPermanentElement];
+            }
+        }
+        return permanentElementMap;
+    }
+}
+function getPermanentElementById(node, id) {
+    return node.querySelector(`#${id}[data-turbo-permanent]`);
+}
+function queryPermanentElementsAll(node) {
+    return node.querySelectorAll("[id][data-turbo-permanent]");
+}
+class FormSubmitObserver {
+    constructor(delegate, eventTarget) {
+        this.started = false;
+        this.submitCaptured = () => {
+            this.eventTarget.removeEventListener("submit", this.submitBubbled, false);
+            this.eventTarget.addEventListener("submit", this.submitBubbled, false);
+        };
+        this.submitBubbled = (event) => {
+            if (!event.defaultPrevented) {
+                const form = event.target instanceof HTMLFormElement ? event.target : void 0;
+                const submitter = event.submitter || void 0;
+                if (form && submissionDoesNotDismissDialog(form, submitter) && submissionDoesNotTargetIFrame(form, submitter) && this.delegate.willSubmitForm(form, submitter)) {
+                    event.preventDefault();
+                    event.stopImmediatePropagation();
+                    this.delegate.formSubmitted(form, submitter);
+                }
+            }
+        };
+        this.delegate = delegate;
+        this.eventTarget = eventTarget;
+    }
+    start() {
+        if (!this.started) {
+            this.eventTarget.addEventListener("submit", this.submitCaptured, true);
+            this.started = true;
+        }
+    }
+    stop() {
+        if (this.started) {
+            this.eventTarget.removeEventListener("submit", this.submitCaptured, true);
+            this.started = false;
+        }
+    }
+}
+function submissionDoesNotDismissDialog(form, submitter) {
+    const method = (submitter === null || submitter === void 0 ? void 0 : submitter.getAttribute("formmethod")) || form.getAttribute("method");
+    return method != "dialog";
+}
+function submissionDoesNotTargetIFrame(form, submitter) {
+    const target = (submitter === null || submitter === void 0 ? void 0 : submitter.getAttribute("formtarget")) || form.target;
+    for (const element of document.getElementsByName(target)) {
+        if (element instanceof HTMLIFrameElement)
+            return false;
+    }
+    return true;
+}
+class View {
+    constructor(delegate, element) {
+        this.resolveRenderPromise = (_value) => {
+        };
+        this.resolveInterceptionPromise = (_value) => {
+        };
+        this.delegate = delegate;
+        this.element = element;
+    }
+    scrollToAnchor(anchor) {
+        const element = this.snapshot.getElementForAnchor(anchor);
+        if (element) {
+            this.scrollToElement(element);
+            this.focusElement(element);
+        } else {
+            this.scrollToPosition({x: 0, y: 0});
+        }
+    }
+    scrollToAnchorFromLocation(location2) {
+        this.scrollToAnchor(getAnchor(location2));
+    }
+    scrollToElement(element) {
+        element.scrollIntoView();
+    }
+    focusElement(element) {
+        if (element instanceof HTMLElement) {
+            if (element.hasAttribute("tabindex")) {
+                element.focus();
+            } else {
+                element.setAttribute("tabindex", "-1");
+                element.focus();
+                element.removeAttribute("tabindex");
+            }
+        }
+    }
+    scrollToPosition({x, y}) {
+        this.scrollRoot.scrollTo(x, y);
+    }
+    scrollToTop() {
+        this.scrollToPosition({x: 0, y: 0});
+    }
+    get scrollRoot() {
+        return window;
+    }
+    async render(renderer) {
+        const {isPreview, shouldRender, newSnapshot: snapshot} = renderer;
+        if (shouldRender) {
+            try {
+                this.renderPromise = new Promise((resolve) => this.resolveRenderPromise = resolve);
+                this.renderer = renderer;
+                await this.prepareToRenderSnapshot(renderer);
+                const renderInterception = new Promise((resolve) => this.resolveInterceptionPromise = resolve);
+                const options = {resume: this.resolveInterceptionPromise, render: this.renderer.renderElement};
+                const immediateRender = this.delegate.allowsImmediateRender(snapshot, options);
+                if (!immediateRender)
+                    await renderInterception;
+                await this.renderSnapshot(renderer);
+                this.delegate.viewRenderedSnapshot(snapshot, isPreview);
+                this.delegate.preloadOnLoadLinksForView(this.element);
+                this.finishRenderingSnapshot(renderer);
+            } finally {
+                delete this.renderer;
+                this.resolveRenderPromise(void 0);
+                delete this.renderPromise;
+            }
+        } else {
+            this.invalidate(renderer.reloadReason);
+        }
+    }
+    invalidate(reason) {
+        this.delegate.viewInvalidated(reason);
+    }
+    async prepareToRenderSnapshot(renderer) {
+        this.markAsPreview(renderer.isPreview);
+        await renderer.prepareToRender();
+    }
+    markAsPreview(isPreview) {
+        if (isPreview) {
+            this.element.setAttribute("data-turbo-preview", "");
+        } else {
+            this.element.removeAttribute("data-turbo-preview");
+        }
+    }
+    async renderSnapshot(renderer) {
+        await renderer.render();
+    }
+    finishRenderingSnapshot(renderer) {
+        renderer.finishRendering();
+    }
+}
+class FrameView extends View {
+    invalidate() {
+        this.element.innerHTML = "";
+    }
+    get snapshot() {
+        return new Snapshot(this.element);
+    }
+}
+class LinkInterceptor {
+    constructor(delegate, element) {
+        this.clickBubbled = (event) => {
+            if (this.respondsToEventTarget(event.target)) {
+                this.clickEvent = event;
+            } else {
+                delete this.clickEvent;
+            }
+        };
+        this.linkClicked = (event) => {
+            if (this.clickEvent && this.respondsToEventTarget(event.target) && event.target instanceof Element) {
+                if (this.delegate.shouldInterceptLinkClick(event.target, event.detail.url, event.detail.originalEvent)) {
+                    this.clickEvent.preventDefault();
+                    event.preventDefault();
+                    this.delegate.linkClickIntercepted(event.target, event.detail.url, event.detail.originalEvent);
+                }
+            }
+            delete this.clickEvent;
+        };
+        this.willVisit = (_event) => {
+            delete this.clickEvent;
+        };
+        this.delegate = delegate;
+        this.element = element;
+    }
+    start() {
+        this.element.addEventListener("click", this.clickBubbled);
+        document.addEventListener("turbo:click", this.linkClicked);
+        document.addEventListener("turbo:before-visit", this.willVisit);
+    }
+    stop() {
+        this.element.removeEventListener("click", this.clickBubbled);
+        document.removeEventListener("turbo:click", this.linkClicked);
+        document.removeEventListener("turbo:before-visit", this.willVisit);
+    }
+    respondsToEventTarget(target) {
+        const element = target instanceof Element ? target : target instanceof Node ? target.parentElement : null;
+        return element && element.closest("turbo-frame, html") == this.element;
+    }
+}
+class LinkClickObserver {
+    constructor(delegate, eventTarget) {
+        this.started = false;
+        this.clickCaptured = () => {
+            this.eventTarget.removeEventListener("click", this.clickBubbled, false);
+            this.eventTarget.addEventListener("click", this.clickBubbled, false);
+        };
+        this.clickBubbled = (event) => {
+            if (event instanceof MouseEvent && this.clickEventIsSignificant(event)) {
+                const target = event.composedPath && event.composedPath()[0] || event.target;
+                const link = this.findLinkFromClickTarget(target);
+                if (link && doesNotTargetIFrame(link)) {
+                    const location2 = this.getLocationForLink(link);
+                    if (this.delegate.willFollowLinkToLocation(link, location2, event)) {
+                        event.preventDefault();
+                        this.delegate.followedLinkToLocation(link, location2);
+                    }
+                }
+            }
+        };
+        this.delegate = delegate;
+        this.eventTarget = eventTarget;
+    }
+    start() {
+        if (!this.started) {
+            this.eventTarget.addEventListener("click", this.clickCaptured, true);
+            this.started = true;
+        }
+    }
+    stop() {
+        if (this.started) {
+            this.eventTarget.removeEventListener("click", this.clickCaptured, true);
+            this.started = false;
+        }
+    }
+    clickEventIsSignificant(event) {
+        return !(event.target && event.target.isContentEditable || event.defaultPrevented || event.which > 1 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey);
+    }
+    findLinkFromClickTarget(target) {
+        if (target instanceof Element) {
+            return target.closest("a[href]:not([target^=_]):not([download])");
+        }
+    }
+    getLocationForLink(link) {
+        return expandURL(link.getAttribute("href") || "");
+    }
+}
+function doesNotTargetIFrame(anchor) {
+    for (const element of document.getElementsByName(anchor.target)) {
+        if (element instanceof HTMLIFrameElement)
+            return false;
+    }
+    return true;
+}
+class FormLinkClickObserver {
+    constructor(delegate, element) {
+        this.delegate = delegate;
+        this.linkInterceptor = new LinkClickObserver(this, element);
+    }
+    start() {
+        this.linkInterceptor.start();
+    }
+    stop() {
+        this.linkInterceptor.stop();
+    }
+    willFollowLinkToLocation(link, location2, originalEvent) {
+        return this.delegate.willSubmitFormLinkToLocation(link, location2, originalEvent) && link.hasAttribute("data-turbo-method");
+    }
+    followedLinkToLocation(link, location2) {
+        const action = location2.href;
+        const form = document.createElement("form");
+        form.setAttribute("data-turbo", "true");
+        form.setAttribute("action", action);
+        form.setAttribute("hidden", "");
+        const method = link.getAttribute("data-turbo-method");
+        if (method)
+            form.setAttribute("method", method);
+        const turboFrame = link.getAttribute("data-turbo-frame");
+        if (turboFrame)
+            form.setAttribute("data-turbo-frame", turboFrame);
+        const turboAction = link.getAttribute("data-turbo-action");
+        if (turboAction)
+            form.setAttribute("data-turbo-action", turboAction);
+        const turboConfirm = link.getAttribute("data-turbo-confirm");
+        if (turboConfirm)
+            form.setAttribute("data-turbo-confirm", turboConfirm);
+        const turboStream = link.hasAttribute("data-turbo-stream");
+        if (turboStream)
+            form.setAttribute("data-turbo-stream", "");
+        this.delegate.submittedFormLinkToLocation(link, location2, form);
+        document.body.appendChild(form);
+        form.addEventListener("turbo:submit-end", () => form.remove(), {once: true});
+        requestAnimationFrame(() => form.requestSubmit());
+    }
+}
+class Bardo {
+    constructor(delegate, permanentElementMap) {
+        this.delegate = delegate;
+        this.permanentElementMap = permanentElementMap;
+    }
+    static preservingPermanentElements(delegate, permanentElementMap, callback) {
+        const bardo = new this(delegate, permanentElementMap);
+        bardo.enter();
+        callback();
+        bardo.leave();
+    }
+    enter() {
+        for (const id in this.permanentElementMap) {
+            const [currentPermanentElement, newPermanentElement] = this.permanentElementMap[id];
+            this.delegate.enteringBardo(currentPermanentElement, newPermanentElement);
+            this.replaceNewPermanentElementWithPlaceholder(newPermanentElement);
+        }
+    }
+    leave() {
+        for (const id in this.permanentElementMap) {
+            const [currentPermanentElement] = this.permanentElementMap[id];
+            this.replaceCurrentPermanentElementWithClone(currentPermanentElement);
+            this.replacePlaceholderWithPermanentElement(currentPermanentElement);
+            this.delegate.leavingBardo(currentPermanentElement);
+        }
+    }
+    replaceNewPermanentElementWithPlaceholder(permanentElement) {
+        const placeholder = createPlaceholderForPermanentElement(permanentElement);
+        permanentElement.replaceWith(placeholder);
+    }
+    replaceCurrentPermanentElementWithClone(permanentElement) {
+        const clone = permanentElement.cloneNode(true);
+        permanentElement.replaceWith(clone);
+    }
+    replacePlaceholderWithPermanentElement(permanentElement) {
+        const placeholder = this.getPlaceholderById(permanentElement.id);
+        placeholder === null || placeholder === void 0 ? void 0 : placeholder.replaceWith(permanentElement);
+    }
+    getPlaceholderById(id) {
+        return this.placeholders.find((element) => element.content == id);
+    }
+    get placeholders() {
+        return [...document.querySelectorAll("meta[name=turbo-permanent-placeholder][content]")];
+    }
+}
+function createPlaceholderForPermanentElement(permanentElement) {
+    const element = document.createElement("meta");
+    element.setAttribute("name", "turbo-permanent-placeholder");
+    element.setAttribute("content", permanentElement.id);
+    return element;
+}
+class Renderer {
+    constructor(currentSnapshot, newSnapshot, renderElement, isPreview, willRender = true) {
+        this.activeElement = null;
+        this.currentSnapshot = currentSnapshot;
+        this.newSnapshot = newSnapshot;
+        this.isPreview = isPreview;
+        this.willRender = willRender;
+        this.renderElement = renderElement;
+        this.promise = new Promise((resolve, reject) => this.resolvingFunctions = {resolve, reject});
+    }
+    get shouldRender() {
+        return true;
+    }
+    get reloadReason() {
+        return;
+    }
+    prepareToRender() {
+        return;
+    }
+    finishRendering() {
+        if (this.resolvingFunctions) {
+            this.resolvingFunctions.resolve();
+            delete this.resolvingFunctions;
+        }
+    }
+    preservingPermanentElements(callback) {
+        Bardo.preservingPermanentElements(this, this.permanentElementMap, callback);
+    }
+    focusFirstAutofocusableElement() {
+        const element = this.connectedSnapshot.firstAutofocusableElement;
+        if (elementIsFocusable(element)) {
+            element.focus();
+        }
+    }
+    enteringBardo(currentPermanentElement) {
+        if (this.activeElement)
+            return;
+        if (currentPermanentElement.contains(this.currentSnapshot.activeElement)) {
+            this.activeElement = this.currentSnapshot.activeElement;
+        }
+    }
+    leavingBardo(currentPermanentElement) {
+        if (currentPermanentElement.contains(this.activeElement) && this.activeElement instanceof HTMLElement) {
+            this.activeElement.focus();
+            this.activeElement = null;
+        }
+    }
+    get connectedSnapshot() {
+        return this.newSnapshot.isConnected ? this.newSnapshot : this.currentSnapshot;
+    }
+    get currentElement() {
+        return this.currentSnapshot.element;
+    }
+    get newElement() {
+        return this.newSnapshot.element;
+    }
+    get permanentElementMap() {
+        return this.currentSnapshot.getPermanentElementMapForSnapshot(this.newSnapshot);
+    }
+}
+function elementIsFocusable(element) {
+    return element && typeof element.focus == "function";
+}
+class FrameRenderer extends Renderer {
+    constructor(delegate, currentSnapshot, newSnapshot, renderElement, isPreview, willRender = true) {
+        super(currentSnapshot, newSnapshot, renderElement, isPreview, willRender);
+        this.delegate = delegate;
+    }
+    static renderElement(currentElement, newElement) {
+        var _a;
+        const destinationRange = document.createRange();
+        destinationRange.selectNodeContents(currentElement);
+        destinationRange.deleteContents();
+        const frameElement = newElement;
+        const sourceRange = (_a = frameElement.ownerDocument) === null || _a === void 0 ? void 0 : _a.createRange();
+        if (sourceRange) {
+            sourceRange.selectNodeContents(frameElement);
+            currentElement.appendChild(sourceRange.extractContents());
+        }
+    }
+    get shouldRender() {
+        return true;
+    }
+    async render() {
+        await nextAnimationFrame();
+        this.preservingPermanentElements(() => {
+            this.loadFrameElement();
+        });
+        this.scrollFrameIntoView();
+        await nextAnimationFrame();
+        this.focusFirstAutofocusableElement();
+        await nextAnimationFrame();
+        this.activateScriptElements();
+    }
+    loadFrameElement() {
+        this.delegate.willRenderFrame(this.currentElement, this.newElement);
+        this.renderElement(this.currentElement, this.newElement);
+    }
+    scrollFrameIntoView() {
+        if (this.currentElement.autoscroll || this.newElement.autoscroll) {
+            const element = this.currentElement.firstElementChild;
+            const block = readScrollLogicalPosition(this.currentElement.getAttribute("data-autoscroll-block"), "end");
+            const behavior = readScrollBehavior(this.currentElement.getAttribute("data-autoscroll-behavior"), "auto");
+            if (element) {
+                element.scrollIntoView({block, behavior});
+                return true;
+            }
+        }
+        return false;
+    }
+    activateScriptElements() {
+        for (const inertScriptElement of this.newScriptElements) {
+            const activatedScriptElement = activateScriptElement(inertScriptElement);
+            inertScriptElement.replaceWith(activatedScriptElement);
+        }
+    }
+    get newScriptElements() {
+        return this.currentElement.querySelectorAll("script");
+    }
+}
+function readScrollLogicalPosition(value, defaultValue) {
+    if (value == "end" || value == "start" || value == "center" || value == "nearest") {
+        return value;
+    } else {
+        return defaultValue;
+    }
+}
+function readScrollBehavior(value, defaultValue) {
+    if (value == "auto" || value == "smooth") {
+        return value;
+    } else {
+        return defaultValue;
+    }
+}
+class ProgressBar {
+    constructor() {
+        this.hiding = false;
+        this.value = 0;
+        this.visible = false;
+        this.trickle = () => {
+            this.setValue(this.value + Math.random() / 100);
+        };
+        this.stylesheetElement = this.createStylesheetElement();
+        this.progressElement = this.createProgressElement();
+        this.installStylesheetElement();
+        this.setValue(0);
+    }
+    static get defaultCSS() {
+        return unindent`
       .turbo-progress-bar {
         position: fixed;
         display: block;
@@ -10,11 +1315,2363 @@
         background: #0076ff;
         z-index: 2147483647;
         transition:
-          width ${v.animationDuration}ms ease-out,
-          opacity ${v.animationDuration/2}ms ${v.animationDuration/2}ms ease-in;
+          width ${ProgressBar.animationDuration}ms ease-out,
+          opacity ${ProgressBar.animationDuration / 2}ms ${ProgressBar.animationDuration / 2}ms ease-in;
         transform: translate3d(0, 0, 0);
       }
-    `}show(){this.visible||(this.visible=!0,this.installProgressElement(),this.startTrickling())}hide(){this.visible&&!this.hiding&&(this.hiding=!0,this.fadeProgressElement(()=>{this.uninstallProgressElement(),this.stopTrickling(),this.visible=!1,this.hiding=!1}))}setValue(e){this.value=e,this.refresh()}installStylesheetElement(){document.head.insertBefore(this.stylesheetElement,document.head.firstChild)}installProgressElement(){this.progressElement.style.width="0",this.progressElement.style.opacity="1",document.documentElement.insertBefore(this.progressElement,document.body),this.refresh()}fadeProgressElement(e){this.progressElement.style.opacity="0",setTimeout(e,v.animationDuration*1.5)}uninstallProgressElement(){this.progressElement.parentNode&&document.documentElement.removeChild(this.progressElement)}startTrickling(){this.trickleInterval||(this.trickleInterval=window.setInterval(this.trickle,v.animationDuration))}stopTrickling(){window.clearInterval(this.trickleInterval),delete this.trickleInterval}refresh(){requestAnimationFrame(()=>{this.progressElement.style.width=`${10+this.value*90}%`})}createStylesheetElement(){const e=document.createElement("style");return e.type="text/css",e.textContent=v.defaultCSS,this.cspNonce&&(e.nonce=this.cspNonce),e}createProgressElement(){const e=document.createElement("div");return e.className="turbo-progress-bar",e}get cspNonce(){return B("csp-nonce")}}v.animationDuration=300;class ut extends O{constructor(){super(...arguments);this.detailsByOuterHTML=this.children.filter(e=>!gt(e)).map(e=>wt(e)).reduce((e,t)=>{const{outerHTML:i}=t,r=i in e?e[i]:{type:mt(t),tracked:pt(t),elements:[]};return Object.assign(Object.assign({},e),{[i]:Object.assign(Object.assign({},r),{elements:[...r.elements,t]})})},{})}get trackedElementSignature(){return Object.keys(this.detailsByOuterHTML).filter(e=>this.detailsByOuterHTML[e].tracked).join("")}getScriptElementsNotInSnapshot(e){return this.getElementsMatchingTypeNotInSnapshot("script",e)}getStylesheetElementsNotInSnapshot(e){return this.getElementsMatchingTypeNotInSnapshot("stylesheet",e)}getElementsMatchingTypeNotInSnapshot(e,t){return Object.keys(this.detailsByOuterHTML).filter(i=>!(i in t.detailsByOuterHTML)).map(i=>this.detailsByOuterHTML[i]).filter(({type:i})=>i==e).map(({elements:[i]})=>i)}get provisionalElements(){return Object.keys(this.detailsByOuterHTML).reduce((e,t)=>{const{type:i,tracked:r,elements:n}=this.detailsByOuterHTML[t];return i==null&&!r?[...e,...n]:n.length>1?[...e,...n.slice(1)]:e},[])}getMetaValue(e){const t=this.findMetaElementByName(e);return t?t.getAttribute("content"):null}findMetaElementByName(e){return Object.keys(this.detailsByOuterHTML).reduce((t,i)=>{const{elements:[r]}=this.detailsByOuterHTML[i];return bt(r,e)?r:t},void 0)}}function mt(s){if(ft(s))return"script";if(vt(s))return"stylesheet"}function pt(s){return s.getAttribute("data-turbo-track")=="reload"}function ft(s){const e=s.localName;return e=="script"}function gt(s){const e=s.localName;return e=="noscript"}function vt(s){const e=s.localName;return e=="style"||e=="link"&&s.getAttribute("rel")=="stylesheet"}function bt(s,e){const t=s.localName;return t=="meta"&&s.getAttribute("name")==e}function wt(s){return s.hasAttribute("nonce")&&s.setAttribute("nonce",""),s}class m extends O{constructor(e,t){super(e);this.headSnapshot=t}static fromHTMLString(e=""){return this.fromDocument(ee(e))}static fromElement(e){return this.fromDocument(e.ownerDocument)}static fromDocument({head:e,body:t}){return new this(t,new ut(e))}clone(){const e=this.element.cloneNode(!0),t=this.element.querySelectorAll("select"),i=e.querySelectorAll("select");for(const[r,n]of t.entries()){const o=i[r];for(const c of o.selectedOptions)c.selected=!1;for(const c of n.selectedOptions)o.options[c.index].selected=!0}for(const r of e.querySelectorAll('input[type="password"]'))r.value="";return new m(e,this.headSnapshot)}get headElement(){return this.headSnapshot.element}get rootLocation(){var e;const t=(e=this.getSetting("root"))!==null&&e!==void 0?e:"/";return h(t)}get cacheControlValue(){return this.getSetting("cache-control")}get isPreviewable(){return this.cacheControlValue!="no-preview"}get isCacheable(){return this.cacheControlValue!="no-cache"}get isVisitable(){return this.getSetting("visit-control")!="reload"}getSetting(e){return this.headSnapshot.getMetaValue(`turbo-${e}`)}}var A;(function(s){s.visitStart="visitStart",s.requestStart="requestStart",s.requestEnd="requestEnd",s.visitEnd="visitEnd"})(A||(A={}));var p;(function(s){s.initialized="initialized",s.started="started",s.canceled="canceled",s.failed="failed",s.completed="completed"})(p||(p={}));const Et={action:"advance",historyChanged:!1,visitCachedSnapshot:()=>{},willRender:!0,updateHistory:!0,shouldCacheSnapshot:!0,acceptsStreamResponse:!1};var S;(function(s){s[s.networkFailure=0]="networkFailure",s[s.timeoutFailure=-1]="timeoutFailure",s[s.contentTypeMismatch=-2]="contentTypeMismatch"})(S||(S={}));class St{constructor(e,t,i,r={}){this.identifier=C(),this.timingMetrics={},this.followedRedirect=!1,this.historyChanged=!1,this.scrolled=!1,this.shouldCacheSnapshot=!0,this.acceptsStreamResponse=!1,this.snapshotCached=!1,this.state=p.initialized,this.delegate=e,this.location=t,this.restorationIdentifier=i||C();const{action:n,historyChanged:o,referrer:c,snapshot:u,snapshotHTML:T,response:I,visitCachedSnapshot:Ae,willRender:G,updateHistory:Te,shouldCacheSnapshot:Pe,acceptsStreamResponse:Fe}=Object.assign(Object.assign({},Et),r);this.action=n,this.historyChanged=o,this.referrer=c,this.snapshot=u,this.snapshotHTML=T,this.response=I,this.isSamePage=this.delegate.locationWithActionIsSamePage(this.location,this.action),this.visitCachedSnapshot=Ae,this.willRender=G,this.updateHistory=Te,this.scrolled=!G,this.shouldCacheSnapshot=Pe,this.acceptsStreamResponse=Fe}get adapter(){return this.delegate.adapter}get view(){return this.delegate.view}get history(){return this.delegate.history}get restorationData(){return this.history.getRestorationDataForIdentifier(this.restorationIdentifier)}get silent(){return this.isSamePage}start(){this.state==p.initialized&&(this.recordTimingMetric(A.visitStart),this.state=p.started,this.adapter.visitStarted(this),this.delegate.visitStarted(this))}cancel(){this.state==p.started&&(this.request&&this.request.cancel(),this.cancelRender(),this.state=p.canceled)}complete(){this.state==p.started&&(this.recordTimingMetric(A.visitEnd),this.state=p.completed,this.followRedirect(),this.followedRedirect||(this.adapter.visitCompleted(this),this.delegate.visitCompleted(this)))}fail(){this.state==p.started&&(this.state=p.failed,this.adapter.visitFailed(this))}changeHistory(){var e;if(!this.historyChanged&&this.updateHistory){const t=this.location.href===((e=this.referrer)===null||e===void 0?void 0:e.href)?"replace":this.action,i=se(t);this.history.update(i,this.location,this.restorationIdentifier),this.historyChanged=!0}}issueRequest(){this.hasPreloadedResponse()?this.simulateRequest():this.shouldIssueRequest()&&!this.request&&(this.request=new $(this,d.get,this.location),this.request.perform())}simulateRequest(){this.response&&(this.startRequest(),this.recordResponse(),this.finishRequest())}startRequest(){this.recordTimingMetric(A.requestStart),this.adapter.visitRequestStarted(this)}recordResponse(e=this.response){if(this.response=e,e){const{statusCode:t}=e;de(t)?this.adapter.visitRequestCompleted(this):this.adapter.visitRequestFailedWithStatusCode(this,t)}}finishRequest(){this.recordTimingMetric(A.requestEnd),this.adapter.visitRequestFinished(this)}loadResponse(){if(this.response){const{statusCode:e,responseHTML:t}=this.response;this.render(async()=>{this.shouldCacheSnapshot&&this.cacheSnapshot(),this.view.renderPromise&&await this.view.renderPromise,de(e)&&t!=null?(await this.view.renderPage(m.fromHTMLString(t),!1,this.willRender,this),this.performScroll(),this.adapter.visitRendered(this),this.complete()):(await this.view.renderError(m.fromHTMLString(t),this),this.adapter.visitRendered(this),this.fail())})}}getCachedSnapshot(){const e=this.view.getCachedSnapshotForLocation(this.location)||this.getPreloadedSnapshot();if(e&&(!y(this.location)||e.hasAnchor(y(this.location)))&&(this.action=="restore"||e.isPreviewable))return e}getPreloadedSnapshot(){if(this.snapshotHTML)return m.fromHTMLString(this.snapshotHTML)}hasCachedSnapshot(){return this.getCachedSnapshot()!=null}loadCachedSnapshot(){const e=this.getCachedSnapshot();if(e){const t=this.shouldIssueRequest();this.render(async()=>{this.cacheSnapshot(),this.isSamePage?this.adapter.visitRendered(this):(this.view.renderPromise&&await this.view.renderPromise,await this.view.renderPage(e,t,this.willRender,this),this.performScroll(),this.adapter.visitRendered(this),t||this.complete())})}}followRedirect(){var e;this.redirectedToLocation&&!this.followedRedirect&&((e=this.response)===null||e===void 0?void 0:e.redirected)&&(this.adapter.visitProposedToLocation(this.redirectedToLocation,{action:"replace",response:this.response}),this.followedRedirect=!0)}goToSamePageAnchor(){this.isSamePage&&this.render(async()=>{this.cacheSnapshot(),this.performScroll(),this.changeHistory(),this.adapter.visitRendered(this)})}prepareHeadersForRequest(e,t){this.acceptsStreamResponse&&t.acceptResponseType(L.contentType)}requestStarted(){this.startRequest()}requestPreventedHandlingResponse(e,t){}async requestSucceededWithResponse(e,t){const i=await t.responseHTML,{redirected:r,statusCode:n}=t;i==null?this.recordResponse({statusCode:S.contentTypeMismatch,redirected:r}):(this.redirectedToLocation=t.redirected?t.location:void 0,this.recordResponse({statusCode:n,responseHTML:i,redirected:r}))}async requestFailedWithResponse(e,t){const i=await t.responseHTML,{redirected:r,statusCode:n}=t;i==null?this.recordResponse({statusCode:S.contentTypeMismatch,redirected:r}):this.recordResponse({statusCode:n,responseHTML:i,redirected:r})}requestErrored(e,t){this.recordResponse({statusCode:S.networkFailure,redirected:!1})}requestFinished(){this.finishRequest()}performScroll(){!this.scrolled&&!this.view.forceReloaded&&(this.action=="restore"?this.scrollToRestoredPosition()||this.scrollToAnchor()||this.view.scrollToTop():this.scrollToAnchor()||this.view.scrollToTop(),this.isSamePage&&this.delegate.visitScrolledToSamePageLocation(this.view.lastRenderedLocation,this.location),this.scrolled=!0)}scrollToRestoredPosition(){const{scrollPosition:e}=this.restorationData;if(e)return this.view.scrollToPosition(e),!0}scrollToAnchor(){const e=y(this.location);if(e!=null)return this.view.scrollToAnchor(e),!0}recordTimingMetric(e){this.timingMetrics[e]=new Date().getTime()}getTimingMetrics(){return Object.assign({},this.timingMetrics)}getHistoryMethodForAction(e){switch(e){case"replace":return history.replaceState;case"advance":case"restore":return history.pushState}}hasPreloadedResponse(){return typeof this.response=="object"}shouldIssueRequest(){return this.isSamePage?!1:this.action=="restore"?!this.hasCachedSnapshot():this.willRender}cacheSnapshot(){this.snapshotCached||(this.view.cacheSnapshot(this.snapshot).then(e=>e&&this.visitCachedSnapshot(e)),this.snapshotCached=!0)}async render(e){this.cancelRender(),await new Promise(t=>{this.frame=requestAnimationFrame(()=>t())}),await e(),delete this.frame}cancelRender(){this.frame&&(cancelAnimationFrame(this.frame),delete this.frame)}}function de(s){return s>=200&&s<300}class yt{constructor(e){this.progressBar=new v,this.showProgressBar=()=>{this.progressBar.show()},this.session=e}visitProposedToLocation(e,t){this.navigator.startVisit(e,(t==null?void 0:t.restorationIdentifier)||C(),t)}visitStarted(e){this.location=e.location,e.loadCachedSnapshot(),e.issueRequest(),e.goToSamePageAnchor()}visitRequestStarted(e){this.progressBar.setValue(0),e.hasCachedSnapshot()||e.action!="restore"?this.showVisitProgressBarAfterDelay():this.showProgressBar()}visitRequestCompleted(e){e.loadResponse()}visitRequestFailedWithStatusCode(e,t){switch(t){case S.networkFailure:case S.timeoutFailure:case S.contentTypeMismatch:return this.reload({reason:"request_failed",context:{statusCode:t}});default:return e.loadResponse()}}visitRequestFinished(e){this.progressBar.setValue(1),this.hideVisitProgressBar()}visitCompleted(e){}pageInvalidated(e){this.reload(e)}visitFailed(e){}visitRendered(e){}formSubmissionStarted(e){this.progressBar.setValue(0),this.showFormProgressBarAfterDelay()}formSubmissionFinished(e){this.progressBar.setValue(1),this.hideFormProgressBar()}showVisitProgressBarAfterDelay(){this.visitProgressBarTimeout=window.setTimeout(this.showProgressBar,this.session.progressBarDelay)}hideVisitProgressBar(){this.progressBar.hide(),this.visitProgressBarTimeout!=null&&(window.clearTimeout(this.visitProgressBarTimeout),delete this.visitProgressBarTimeout)}showFormProgressBarAfterDelay(){this.formProgressBarTimeout==null&&(this.formProgressBarTimeout=window.setTimeout(this.showProgressBar,this.session.progressBarDelay))}hideFormProgressBar(){this.progressBar.hide(),this.formProgressBarTimeout!=null&&(window.clearTimeout(this.formProgressBarTimeout),delete this.formProgressBarTimeout)}reload(e){var t;l("turbo:reload",{detail:e}),window.location.href=((t=this.location)===null||t===void 0?void 0:t.toString())||window.location.href}get navigator(){return this.session.navigator}}class Lt{constructor(){this.started=!1,this.removeStaleElements=e=>{const t=[...document.querySelectorAll('[data-turbo-cache="false"]')];for(const i of t)i.remove()}}start(){this.started||(this.started=!0,addEventListener("turbo:before-cache",this.removeStaleElements,!1))}stop(){this.started&&(this.started=!1,removeEventListener("turbo:before-cache",this.removeStaleElements,!1))}}class Rt{constructor(e,t){this.session=e,this.element=t,this.linkInterceptor=new ae(this,t),this.formSubmitObserver=new z(this,t)}start(){this.linkInterceptor.start(),this.formSubmitObserver.start()}stop(){this.linkInterceptor.stop(),this.formSubmitObserver.stop()}shouldInterceptLinkClick(e,t,i){return this.shouldRedirect(e)}linkClickIntercepted(e,t,i){const r=this.findFrameElement(e);r&&r.delegate.linkClickIntercepted(e,t,i)}willSubmitForm(e,t){return e.closest("turbo-frame")==null&&this.shouldSubmit(e,t)&&this.shouldRedirect(e,t)}formSubmitted(e,t){const i=this.findFrameElement(e,t);i&&i.delegate.formSubmitted(e,t)}shouldSubmit(e,t){var i;const r=V(e,t),n=this.element.ownerDocument.querySelector('meta[name="turbo-root"]'),o=h((i=n==null?void 0:n.content)!==null&&i!==void 0?i:"/");return this.shouldRedirect(e,t)&&R(r,o)}shouldRedirect(e,t){const i=e instanceof HTMLFormElement?this.session.submissionIsNavigatable(e,t):this.session.elementIsNavigatable(e);if(i){const r=this.findFrameElement(e,t);return r?r!=e.closest("turbo-frame"):!1}else return!1}findFrameElement(e,t){const i=(t==null?void 0:t.getAttribute("data-turbo-frame"))||e.getAttribute("data-turbo-frame");if(i&&i!="_top"){const r=this.element.querySelector(`#${i}:not([disabled])`);if(r instanceof f)return r}}}class Ct{constructor(e){this.restorationIdentifier=C(),this.restorationData={},this.started=!1,this.pageLoaded=!1,this.onPopState=t=>{if(this.shouldHandlePopState()){const{turbo:i}=t.state||{};if(i){this.location=new URL(window.location.href);const{restorationIdentifier:r}=i;this.restorationIdentifier=r,this.delegate.historyPoppedToLocationWithRestorationIdentifier(this.location,r)}}},this.onPageLoad=async t=>{await je(),this.pageLoaded=!0},this.delegate=e}start(){this.started||(addEventListener("popstate",this.onPopState,!1),addEventListener("load",this.onPageLoad,!1),this.started=!0,this.replace(new URL(window.location.href)))}stop(){this.started&&(removeEventListener("popstate",this.onPopState,!1),removeEventListener("load",this.onPageLoad,!1),this.started=!1)}push(e,t){this.update(history.pushState,e,t)}replace(e,t){this.update(history.replaceState,e,t)}update(e,t,i=C()){const r={turbo:{restorationIdentifier:i}};e.call(history,r,"",t.href),this.location=t,this.restorationIdentifier=i}getRestorationDataForIdentifier(e){return this.restorationData[e]||{}}updateRestorationData(e){const{restorationIdentifier:t}=this,i=this.restorationData[t];this.restorationData[t]=Object.assign(Object.assign({},i),e)}assumeControlOfScrollRestoration(){var e;this.previousScrollRestoration||(this.previousScrollRestoration=(e=history.scrollRestoration)!==null&&e!==void 0?e:"auto",history.scrollRestoration="manual")}relinquishControlOfScrollRestoration(){this.previousScrollRestoration&&(history.scrollRestoration=this.previousScrollRestoration,delete this.previousScrollRestoration)}shouldHandlePopState(){return this.pageIsLoaded()}pageIsLoaded(){return this.pageLoaded||document.readyState=="complete"}}class At{constructor(e){this.delegate=e}proposeVisit(e,t={}){this.delegate.allowsVisitingLocationWithAction(e,t.action)&&(R(e,this.view.snapshot.rootLocation)?this.delegate.visitProposedToLocation(e,t):window.location.href=e.toString())}startVisit(e,t,i={}){this.stop(),this.currentVisit=new St(this,h(e),t,Object.assign({referrer:this.location},i)),this.currentVisit.start()}submitForm(e,t){this.stop(),this.formSubmission=new k(this,e,t,!0),this.formSubmission.start()}stop(){this.formSubmission&&(this.formSubmission.stop(),delete this.formSubmission),this.currentVisit&&(this.currentVisit.cancel(),delete this.currentVisit)}get adapter(){return this.delegate.adapter}get view(){return this.delegate.view}get history(){return this.delegate.history}formSubmissionStarted(e){typeof this.adapter.formSubmissionStarted=="function"&&this.adapter.formSubmissionStarted(e)}async formSubmissionSucceededWithResponse(e,t){if(e==this.formSubmission){const i=await t.responseHTML;if(i){const r=e.method==d.get;r||this.view.clearSnapshotCache();const{statusCode:n,redirected:o}=t,c=this.getActionForFormSubmission(e),u={action:c,shouldCacheSnapshot:r,response:{statusCode:n,responseHTML:i,redirected:o}};this.proposeVisit(t.location,u)}}}async formSubmissionFailedWithResponse(e,t){const i=await t.responseHTML;if(i){const r=m.fromHTMLString(i);t.serverError?await this.view.renderError(r,this.currentVisit):await this.view.renderPage(r,!1,!0,this.currentVisit),this.view.scrollToTop(),this.view.clearSnapshotCache()}}formSubmissionErrored(e,t){console.error(t)}formSubmissionFinished(e){typeof this.adapter.formSubmissionFinished=="function"&&this.adapter.formSubmissionFinished(e)}visitStarted(e){this.delegate.visitStarted(e)}visitCompleted(e){this.delegate.visitCompleted(e)}locationWithActionIsSamePage(e,t){const i=y(e),r=y(this.view.lastRenderedLocation),n=t==="restore"&&typeof i=="undefined";return t!=="replace"&&x(e)===x(this.view.lastRenderedLocation)&&(n||i!=null&&i!==r)}visitScrolledToSamePageLocation(e,t){this.delegate.visitScrolledToSamePageLocation(e,t)}get location(){return this.history.location}get restorationIdentifier(){return this.history.restorationIdentifier}getActionForFormSubmission(e){const{formElement:t,submitter:i}=e,r=F("data-turbo-action",i,t);return H(r)?r:"advance"}}var b;(function(s){s[s.initial=0]="initial",s[s.loading=1]="loading",s[s.interactive=2]="interactive",s[s.complete=3]="complete"})(b||(b={}));class Tt{constructor(e){this.stage=b.initial,this.started=!1,this.interpretReadyState=()=>{const{readyState:t}=this;t=="interactive"?this.pageIsInteractive():t=="complete"&&this.pageIsComplete()},this.pageWillUnload=()=>{this.delegate.pageWillUnload()},this.delegate=e}start(){this.started||(this.stage==b.initial&&(this.stage=b.loading),document.addEventListener("readystatechange",this.interpretReadyState,!1),addEventListener("pagehide",this.pageWillUnload,!1),this.started=!0)}stop(){this.started&&(document.removeEventListener("readystatechange",this.interpretReadyState,!1),removeEventListener("pagehide",this.pageWillUnload,!1),this.started=!1)}pageIsInteractive(){this.stage==b.loading&&(this.stage=b.interactive,this.delegate.pageBecameInteractive())}pageIsComplete(){this.pageIsInteractive(),this.stage==b.interactive&&(this.stage=b.complete,this.delegate.pageLoaded())}get readyState(){return document.readyState}}class Pt{constructor(e){this.started=!1,this.onScroll=()=>{this.updatePosition({x:window.pageXOffset,y:window.pageYOffset})},this.delegate=e}start(){this.started||(addEventListener("scroll",this.onScroll,!1),this.onScroll(),this.started=!0)}stop(){this.started&&(removeEventListener("scroll",this.onScroll,!1),this.started=!1)}updatePosition(e){this.delegate.scrollPositionChanged(e)}}class Ft{render({fragment:e}){he.preservingPermanentElements(this,kt(e),()=>document.documentElement.appendChild(e))}enteringBardo(e,t){t.replaceWith(e.cloneNode(!0))}leavingBardo(){}}function kt(s){const e=ne(document.documentElement),t={};for(const i of e){const{id:r}=i;for(const n of s.querySelectorAll("turbo-stream")){const o=re(n.templateElement.content,r);o&&(t[r]=[i,o])}}return t}class It{constructor(e){this.sources=new Set,this.started=!1,this.inspectFetchResponse=t=>{const i=Mt(t);i&&Ht(i)&&(t.preventDefault(),this.receiveMessageResponse(i))},this.receiveMessageEvent=t=>{this.started&&typeof t.data=="string"&&this.receiveMessageHTML(t.data)},this.delegate=e}start(){this.started||(this.started=!0,addEventListener("turbo:before-fetch-response",this.inspectFetchResponse,!1))}stop(){this.started&&(this.started=!1,removeEventListener("turbo:before-fetch-response",this.inspectFetchResponse,!1))}connectStreamSource(e){this.streamSourceIsConnected(e)||(this.sources.add(e),e.addEventListener("message",this.receiveMessageEvent,!1))}disconnectStreamSource(e){this.streamSourceIsConnected(e)&&(this.sources.delete(e),e.removeEventListener("message",this.receiveMessageEvent,!1))}streamSourceIsConnected(e){return this.sources.has(e)}async receiveMessageResponse(e){const t=await e.responseHTML;t&&this.receiveMessageHTML(t)}receiveMessageHTML(e){this.delegate.receivedMessageFromStream(L.wrap(e))}}function Mt(s){var e;const t=(e=s.detail)===null||e===void 0?void 0:e.fetchResponse;if(t instanceof W)return t}function Ht(s){var e;const t=(e=s.contentType)!==null&&e!==void 0?e:"";return t.startsWith(L.contentType)}class ue extends K{static renderElement(e,t){const{documentElement:i,body:r}=document;i.replaceChild(t,r)}async render(){this.replaceHeadAndBody(),this.activateScriptElements()}replaceHeadAndBody(){const{documentElement:e,head:t}=document;e.replaceChild(this.newHead,t),this.renderElement(this.currentElement,this.newElement)}activateScriptElements(){for(const e of this.scriptElements){const t=e.parentNode;if(t){const i=P(e);t.replaceChild(i,e)}}}get newHead(){return this.newSnapshot.headSnapshot.element}get scriptElements(){return document.documentElement.querySelectorAll("script")}}class _ extends K{static renderElement(e,t){document.body&&t instanceof HTMLBodyElement?document.body.replaceWith(t):document.documentElement.appendChild(t)}get shouldRender(){return this.newSnapshot.isVisitable&&this.trackedElementsAreIdentical}get reloadReason(){if(!this.newSnapshot.isVisitable)return{reason:"turbo_visit_control_is_reload"};if(!this.trackedElementsAreIdentical)return{reason:"tracked_element_mismatch"}}async prepareToRender(){await this.mergeHead()}async render(){this.willRender&&this.replaceBody()}finishRendering(){super.finishRendering(),this.isPreview||this.focusFirstAutofocusableElement()}get currentHeadSnapshot(){return this.currentSnapshot.headSnapshot}get newHeadSnapshot(){return this.newSnapshot.headSnapshot}get newElement(){return this.newSnapshot.element}async mergeHead(){const e=this.copyNewHeadStylesheetElements();this.copyNewHeadScriptElements(),this.removeCurrentHeadProvisionalElements(),this.copyNewHeadProvisionalElements(),await e}replaceBody(){this.preservingPermanentElements(()=>{this.activateNewBody(),this.assignNewBody()})}get trackedElementsAreIdentical(){return this.currentHeadSnapshot.trackedElementSignature==this.newHeadSnapshot.trackedElementSignature}async copyNewHeadStylesheetElements(){const e=[];for(const t of this.newHeadStylesheetElements)e.push(Ke(t)),document.head.appendChild(t);await Promise.all(e)}copyNewHeadScriptElements(){for(const e of this.newHeadScriptElements)document.head.appendChild(P(e))}removeCurrentHeadProvisionalElements(){for(const e of this.currentHeadProvisionalElements)document.head.removeChild(e)}copyNewHeadProvisionalElements(){for(const e of this.newHeadProvisionalElements)document.head.appendChild(e)}activateNewBody(){document.adoptNode(this.newElement),this.activateNewBodyScriptElements()}activateNewBodyScriptElements(){for(const e of this.newBodyScriptElements){const t=P(e);e.replaceWith(t)}}assignNewBody(){this.renderElement(this.currentElement,this.newElement)}get newHeadStylesheetElements(){return this.newHeadSnapshot.getStylesheetElementsNotInSnapshot(this.currentHeadSnapshot)}get newHeadScriptElements(){return this.newHeadSnapshot.getScriptElementsNotInSnapshot(this.currentHeadSnapshot)}get currentHeadProvisionalElements(){return this.currentHeadSnapshot.provisionalElements}get newHeadProvisionalElements(){return this.newHeadSnapshot.provisionalElements}get newBodyScriptElements(){return this.newElement.querySelectorAll("script")}}class qt{constructor(e){this.keys=[],this.snapshots={},this.size=e}has(e){return M(e)in this.snapshots}get(e){if(this.has(e)){const t=this.read(e);return this.touch(e),t}}put(e,t){return this.write(e,t),this.touch(e),t}clear(){this.snapshots={}}read(e){return this.snapshots[M(e)]}write(e,t){this.snapshots[M(e)]=t}touch(e){const t=M(e),i=this.keys.indexOf(t);i>-1&&this.keys.splice(i,1),this.keys.unshift(t),this.trim()}trim(){for(const e of this.keys.splice(this.size))delete this.snapshots[e]}}class Bt extends oe{constructor(){super(...arguments);this.snapshotCache=new qt(10),this.lastRenderedLocation=new URL(location.href),this.forceReloaded=!1}renderPage(e,t=!1,i=!0,r){const n=new _(this.snapshot,e,_.renderElement,t,i);return n.shouldRender?r==null||r.changeHistory():this.forceReloaded=!0,this.render(n)}renderError(e,t){t==null||t.changeHistory();const i=new ue(this.snapshot,e,ue.renderElement,!1);return this.render(i)}clearSnapshotCache(){this.snapshotCache.clear()}async cacheSnapshot(e=this.snapshot){if(e.isCacheable){this.delegate.viewWillCacheSnapshot();const{lastRenderedLocation:t}=this;await Ue();const i=e.clone();return this.snapshotCache.put(t,i),i}}getCachedSnapshotForLocation(e){return this.snapshotCache.get(e)}get snapshot(){return m.fromElement(this.element)}}class Ot{constructor(e){this.selector="a[data-turbo-preload]",this.delegate=e}get snapshotCache(){return this.delegate.navigator.view.snapshotCache}start(){if(document.readyState==="loading")return document.addEventListener("DOMContentLoaded",()=>{this.preloadOnLoadLinksForView(document.body)});this.preloadOnLoadLinksForView(document.body)}preloadOnLoadLinksForView(e){for(const t of e.querySelectorAll(this.selector))this.preloadURL(t)}async preloadURL(e){const t=new URL(e.href);if(this.snapshotCache.has(t))return;try{const i=await fetch(t.toString(),{headers:{"VND.PREFETCH":"true",Accept:"text/html"}}),r=await i.text(),n=m.fromHTMLString(r);this.snapshotCache.put(t,n)}catch(i){}}}class Nt{constructor(){this.navigator=new At(this),this.history=new Ct(this),this.preloader=new Ot(this),this.view=new Bt(this,document.documentElement),this.adapter=new yt(this),this.pageObserver=new Tt(this),this.cacheObserver=new Lt,this.linkClickObserver=new le(this,window),this.formSubmitObserver=new z(this,document),this.scrollObserver=new Pt(this),this.streamObserver=new It(this),this.formLinkClickObserver=new ce(this,document.documentElement),this.frameRedirector=new Rt(this,document.documentElement),this.streamMessageRenderer=new Ft,this.drive=!0,this.enabled=!0,this.progressBarDelay=500,this.started=!1,this.formMode="on"}start(){this.started||(this.pageObserver.start(),this.cacheObserver.start(),this.formLinkClickObserver.start(),this.linkClickObserver.start(),this.formSubmitObserver.start(),this.scrollObserver.start(),this.streamObserver.start(),this.frameRedirector.start(),this.history.start(),this.preloader.start(),this.started=!0,this.enabled=!0)}disable(){this.enabled=!1}stop(){this.started&&(this.pageObserver.stop(),this.cacheObserver.stop(),this.formLinkClickObserver.stop(),this.linkClickObserver.stop(),this.formSubmitObserver.stop(),this.scrollObserver.stop(),this.streamObserver.stop(),this.frameRedirector.stop(),this.history.stop(),this.started=!1)}registerAdapter(e){this.adapter=e}visit(e,t={}){const i=t.frame?document.getElementById(t.frame):null;i instanceof f?(i.src=e.toString(),i.loaded):this.navigator.proposeVisit(h(e),t)}connectStreamSource(e){this.streamObserver.connectStreamSource(e)}disconnectStreamSource(e){this.streamObserver.disconnectStreamSource(e)}renderStreamMessage(e){this.streamMessageRenderer.render(L.wrap(e))}clearCache(){this.view.clearSnapshotCache()}setProgressBarDelay(e){this.progressBarDelay=e}setFormMode(e){this.formMode=e}get location(){return this.history.location}get restorationIdentifier(){return this.history.restorationIdentifier}historyPoppedToLocationWithRestorationIdentifier(e,t){this.enabled?this.navigator.startVisit(e,t,{action:"restore",historyChanged:!0}):this.adapter.pageInvalidated({reason:"turbo_disabled"})}scrollPositionChanged(e){this.history.updateRestorationData({scrollPosition:e})}willSubmitFormLinkToLocation(e,t){return this.elementIsNavigatable(e)&&R(t,this.snapshot.rootLocation)}submittedFormLinkToLocation(){}willFollowLinkToLocation(e,t,i){return this.elementIsNavigatable(e)&&R(t,this.snapshot.rootLocation)&&this.applicationAllowsFollowingLinkToLocation(e,t,i)}followedLinkToLocation(e,t){const i=this.getActionForLink(e),r=e.hasAttribute("data-turbo-stream");this.visit(t.href,{action:i,acceptsStreamResponse:r})}allowsVisitingLocationWithAction(e,t){return this.locationWithActionIsSamePage(e,t)||this.applicationAllowsVisitingLocation(e)}visitProposedToLocation(e,t){me(e),this.adapter.visitProposedToLocation(e,t)}visitStarted(e){e.acceptsStreamResponse||U(document.documentElement),me(e.location),e.silent||this.notifyApplicationAfterVisitingLocation(e.location,e.action)}visitCompleted(e){j(document.documentElement),this.notifyApplicationAfterPageLoad(e.getTimingMetrics())}locationWithActionIsSamePage(e,t){return this.navigator.locationWithActionIsSamePage(e,t)}visitScrolledToSamePageLocation(e,t){this.notifyApplicationAfterVisitingSamePageLocation(e,t)}willSubmitForm(e,t){const i=V(e,t);return this.submissionIsNavigatable(e,t)&&R(h(i),this.snapshot.rootLocation)}formSubmitted(e,t){this.navigator.submitForm(e,t)}pageBecameInteractive(){this.view.lastRenderedLocation=this.location,this.notifyApplicationAfterPageLoad()}pageLoaded(){this.history.assumeControlOfScrollRestoration()}pageWillUnload(){this.history.relinquishControlOfScrollRestoration()}receivedMessageFromStream(e){this.renderStreamMessage(e)}viewWillCacheSnapshot(){var e;((e=this.navigator.currentVisit)===null||e===void 0?void 0:e.silent)||this.notifyApplicationBeforeCachingSnapshot()}allowsImmediateRender({element:e},t){const i=this.notifyApplicationBeforeRender(e,t),{defaultPrevented:r,detail:{render:n}}=i;return this.view.renderer&&n&&(this.view.renderer.renderElement=n),!r}viewRenderedSnapshot(e,t){this.view.lastRenderedLocation=this.history.location,this.notifyApplicationAfterRender()}preloadOnLoadLinksForView(e){this.preloader.preloadOnLoadLinksForView(e)}viewInvalidated(e){this.adapter.pageInvalidated(e)}frameLoaded(e){this.notifyApplicationAfterFrameLoad(e)}frameRendered(e,t){this.notifyApplicationAfterFrameRender(e,t)}applicationAllowsFollowingLinkToLocation(e,t,i){const r=this.notifyApplicationAfterClickingLinkToLocation(e,t,i);return!r.defaultPrevented}applicationAllowsVisitingLocation(e){const t=this.notifyApplicationBeforeVisitingLocation(e);return!t.defaultPrevented}notifyApplicationAfterClickingLinkToLocation(e,t,i){return l("turbo:click",{target:e,detail:{url:t.href,originalEvent:i},cancelable:!0})}notifyApplicationBeforeVisitingLocation(e){return l("turbo:before-visit",{detail:{url:e.href},cancelable:!0})}notifyApplicationAfterVisitingLocation(e,t){return l("turbo:visit",{detail:{url:e.href,action:t}})}notifyApplicationBeforeCachingSnapshot(){return l("turbo:before-cache")}notifyApplicationBeforeRender(e,t){return l("turbo:before-render",{detail:Object.assign({newBody:e},t),cancelable:!0})}notifyApplicationAfterRender(){return l("turbo:render")}notifyApplicationAfterPageLoad(e={}){return l("turbo:load",{detail:{url:this.location.href,timing:e}})}notifyApplicationAfterVisitingSamePageLocation(e,t){dispatchEvent(new HashChangeEvent("hashchange",{oldURL:e.toString(),newURL:t.toString()}))}notifyApplicationAfterFrameLoad(e){return l("turbo:frame-load",{target:e})}notifyApplicationAfterFrameRender(e,t){return l("turbo:frame-render",{detail:{fetchResponse:e},target:t,cancelable:!0})}submissionIsNavigatable(e,t){if(this.formMode=="off")return!1;{const i=t?this.elementIsNavigatable(t):!0;return this.formMode=="optin"?i&&e.closest('[data-turbo="true"]')!=null:i&&this.elementIsNavigatable(e)}}elementIsNavigatable(e){const t=e.closest("[data-turbo]"),i=e.closest("turbo-frame");return this.drive||i?t?t.getAttribute("data-turbo")!="false":!0:t?t.getAttribute("data-turbo")=="true":!1}getActionForLink(e){const t=e.getAttribute("data-turbo-action");return H(t)?t:"advance"}get snapshot(){return this.view.snapshot}}function me(s){Object.defineProperties(s,_t)}const _t={absoluteURL:{get(){return this.toString()}}};class Dt{constructor(e){this.session=e}clear(){this.session.clearCache()}resetCacheControl(){this.setCacheControl("")}exemptPageFromCache(){this.setCacheControl("no-cache")}exemptPageFromPreview(){this.setCacheControl("no-preview")}setCacheControl(e){Xe("turbo-cache-control",e)}}const Q={after(){this.targetElements.forEach(s=>{var e;return(e=s.parentElement)===null||e===void 0?void 0:e.insertBefore(this.templateContent,s.nextSibling)})},append(){this.removeDuplicateTargetChildren(),this.targetElements.forEach(s=>s.append(this.templateContent))},before(){this.targetElements.forEach(s=>{var e;return(e=s.parentElement)===null||e===void 0?void 0:e.insertBefore(this.templateContent,s)})},prepend(){this.removeDuplicateTargetChildren(),this.targetElements.forEach(s=>s.prepend(this.templateContent))},remove(){this.targetElements.forEach(s=>s.remove())},replace(){this.targetElements.forEach(s=>s.replaceWith(this.templateContent))},update(){this.targetElements.forEach(s=>s.replaceChildren(this.templateContent))}},a=new Nt,pe=new Dt(a),{navigator:fe}=a;function X(){a.start()}function ge(s){a.registerAdapter(s)}function ve(s,e){a.visit(s,e)}function Y(s){a.connectStreamSource(s)}function J(s){a.disconnectStreamSource(s)}function be(s){a.renderStreamMessage(s)}function we(){console.warn("Please replace `Turbo.clearCache()` with `Turbo.cache.clear()`. The top-level function is deprecated and will be removed in a future version of Turbo.`"),a.clearCache()}function Ee(s){a.setProgressBarDelay(s)}function Se(s){k.confirmMethod=s}function ye(s){a.setFormMode(s)}var Vt=Object.freeze({__proto__:null,navigator:fe,session:a,cache:pe,PageRenderer:_,PageSnapshot:m,FrameRenderer:N,start:X,registerAdapter:ge,visit:ve,connectStreamSource:Y,disconnectStreamSource:J,renderStreamMessage:be,clearCache:we,setProgressBarDelay:Ee,setConfirmMethod:Se,setFormMode:ye,StreamActions:Q});class xt{constructor(e){this.fetchResponseLoaded=t=>{},this.currentFetchRequest=null,this.resolveVisitPromise=()=>{},this.connected=!1,this.hasBeenLoaded=!1,this.ignoredAttributes=new Set,this.action=null,this.visitCachedSnapshot=({element:t})=>{const i=t.querySelector("#"+this.element.id);i&&this.previousFrameElement&&i.replaceChildren(...this.previousFrameElement.children),delete this.previousFrameElement},this.element=e,this.view=new ot(this,this.element),this.appearanceObserver=new Je(this,this.element),this.formLinkClickObserver=new ce(this,this.element),this.linkInterceptor=new ae(this,this.element),this.restorationIdentifier=C(),this.formSubmitObserver=new z(this,this.element)}connect(){this.connected||(this.connected=!0,this.loadingStyle==g.lazy?this.appearanceObserver.start():this.loadSourceURL(),this.formLinkClickObserver.start(),this.linkInterceptor.start(),this.formSubmitObserver.start())}disconnect(){this.connected&&(this.connected=!1,this.appearanceObserver.stop(),this.formLinkClickObserver.stop(),this.linkInterceptor.stop(),this.formSubmitObserver.stop())}disabledChanged(){this.loadingStyle==g.eager&&this.loadSourceURL()}sourceURLChanged(){if(this.isIgnoringChangesTo("src"))return;this.element.isConnected&&(this.complete=!1),(this.loadingStyle==g.eager||this.hasBeenLoaded)&&this.loadSourceURL()}sourceURLReloaded(){const{src:e}=this.element;return this.ignoringChangesToAttribute("complete",()=>{this.element.removeAttribute("complete")}),this.element.src=null,this.element.src=e,this.element.loaded}completeChanged(){if(this.isIgnoringChangesTo("complete"))return;this.loadSourceURL()}loadingStyleChanged(){this.loadingStyle==g.lazy?this.appearanceObserver.start():(this.appearanceObserver.stop(),this.loadSourceURL())}async loadSourceURL(){this.enabled&&this.isActive&&!this.complete&&this.sourceURL&&(this.element.loaded=this.visit(h(this.sourceURL)),this.appearanceObserver.stop(),await this.element.loaded,this.hasBeenLoaded=!0)}async loadResponse(e){(e.redirected||e.succeeded&&e.isHTML)&&(this.sourceURL=e.response.url);try{const t=await e.responseHTML;if(t){const{body:i}=ee(t),r=await this.extractForeignFrameElement(i);if(r){const n=new O(r),o=new N(this,this.view.snapshot,n,N.renderElement,!1,!1);this.view.renderPromise&&await this.view.renderPromise,this.changeHistory(),await this.view.render(o),this.complete=!0,a.frameRendered(e,this.element),a.frameLoaded(this.element),this.fetchResponseLoaded(e)}else this.willHandleFrameMissingFromResponse(e)&&(console.warn(`A matching frame for #${this.element.id} was missing from the response, transforming into full-page Visit.`),this.visitResponse(e.response))}}catch(t){console.error(t),this.view.invalidate()}finally{this.fetchResponseLoaded=()=>{}}}elementAppearedInViewport(e){this.loadSourceURL()}willSubmitFormLinkToLocation(e){return this.shouldInterceptNavigation(e)}submittedFormLinkToLocation(e,t,i){const r=this.findFrameElement(e);r&&i.setAttribute("data-turbo-frame",r.id)}shouldInterceptLinkClick(e,t,i){return this.shouldInterceptNavigation(e)}linkClickIntercepted(e,t){this.navigateFrame(e,t)}willSubmitForm(e,t){return e.closest("turbo-frame")==this.element&&this.shouldInterceptNavigation(e,t)}formSubmitted(e,t){this.formSubmission&&this.formSubmission.stop(),this.formSubmission=new k(this,e,t);const{fetchRequest:i}=this.formSubmission;this.prepareHeadersForRequest(i.headers,i),this.formSubmission.start()}prepareHeadersForRequest(e,t){var i;e["Turbo-Frame"]=this.id,((i=this.currentNavigationElement)===null||i===void 0?void 0:i.hasAttribute("data-turbo-stream"))&&t.acceptResponseType(L.contentType)}requestStarted(e){U(this.element)}requestPreventedHandlingResponse(e,t){this.resolveVisitPromise()}async requestSucceededWithResponse(e,t){await this.loadResponse(t),this.resolveVisitPromise()}async requestFailedWithResponse(e,t){console.error(t),await this.loadResponse(t),this.resolveVisitPromise()}requestErrored(e,t){console.error(t),this.resolveVisitPromise()}requestFinished(e){j(this.element)}formSubmissionStarted({formElement:e}){U(e,this.findFrameElement(e))}formSubmissionSucceededWithResponse(e,t){const i=this.findFrameElement(e.formElement,e.submitter);i.delegate.proposeVisitIfNavigatedWithAction(i,e.formElement,e.submitter),i.delegate.loadResponse(t)}formSubmissionFailedWithResponse(e,t){this.element.delegate.loadResponse(t)}formSubmissionErrored(e,t){console.error(t)}formSubmissionFinished({formElement:e}){j(e,this.findFrameElement(e))}allowsImmediateRender({element:e},t){const i=l("turbo:before-frame-render",{target:this.element,detail:Object.assign({newFrame:e},t),cancelable:!0}),{defaultPrevented:r,detail:{render:n}}=i;return this.view.renderer&&n&&(this.view.renderer.renderElement=n),!r}viewRenderedSnapshot(e,t){}preloadOnLoadLinksForView(e){a.preloadOnLoadLinksForView(e)}viewInvalidated(){}willRenderFrame(e,t){this.previousFrameElement=e.cloneNode(!0)}async visit(e){var t;const i=new $(this,d.get,e,new URLSearchParams,this.element);return(t=this.currentFetchRequest)===null||t===void 0||t.cancel(),this.currentFetchRequest=i,new Promise(r=>{this.resolveVisitPromise=()=>{this.resolveVisitPromise=()=>{},this.currentFetchRequest=null,r()},i.perform()})}navigateFrame(e,t,i){const r=this.findFrameElement(e,i);this.pageSnapshot=m.fromElement(r).clone(),r.delegate.proposeVisitIfNavigatedWithAction(r,e,i),this.withCurrentNavigationElement(e,()=>{r.src=t})}proposeVisitIfNavigatedWithAction(e,t,i){if(this.action=Qe(i,t,e),H(this.action)){const{visitCachedSnapshot:r}=e.delegate;e.delegate.fetchResponseLoaded=n=>{if(e.src){const{statusCode:o,redirected:c}=n,u=e.ownerDocument.documentElement.outerHTML,T={statusCode:o,redirected:c,responseHTML:u},I={response:T,visitCachedSnapshot:r,willRender:!1,updateHistory:!1,restorationIdentifier:this.restorationIdentifier,snapshot:this.pageSnapshot};this.action&&(I.action=this.action),a.visit(e.src,I)}}}}changeHistory(){if(this.action){const e=se(this.action);a.history.update(e,h(this.element.src||""),this.restorationIdentifier)}}willHandleFrameMissingFromResponse(e){this.element.setAttribute("complete","");const t=e.response,i=async(n,o={})=>{n instanceof Response?this.visitResponse(n):a.visit(n,o)},r=l("turbo:frame-missing",{target:this.element,detail:{response:t,visit:i},cancelable:!0});return!r.defaultPrevented}async visitResponse(e){const t=new W(e),i=await t.responseHTML,{location:r,redirected:n,statusCode:o}=t;return a.visit(r,{response:{redirected:n,statusCode:o,responseHTML:i}})}findFrameElement(e,t){var i;const r=F("data-turbo-frame",t,e)||this.element.getAttribute("target");return(i=Le(r))!==null&&i!==void 0?i:this.element}async extractForeignFrameElement(e){let t;const i=CSS.escape(this.id);try{if(t=Re(e.querySelector(`turbo-frame#${i}`),this.sourceURL),t)return t;if(t=Re(e.querySelector(`turbo-frame[src][recurse~=${i}]`),this.sourceURL),t)return await t.loaded,await this.extractForeignFrameElement(t)}catch(r){return console.error(r),new f}return null}formActionIsVisitable(e,t){const i=V(e,t);return R(h(i),this.rootLocation)}shouldInterceptNavigation(e,t){const i=F("data-turbo-frame",t,e)||this.element.getAttribute("target");if(e instanceof HTMLFormElement&&!this.formActionIsVisitable(e,t))return!1;if(!this.enabled||i=="_top")return!1;if(i){const r=Le(i);if(r)return!r.disabled}return a.elementIsNavigatable(e)?!(t&&!a.elementIsNavigatable(t)):!1}get id(){return this.element.id}get enabled(){return!this.element.disabled}get sourceURL(){if(this.element.src)return this.element.src}set sourceURL(e){this.ignoringChangesToAttribute("src",()=>{this.element.src=e??null})}get loadingStyle(){return this.element.loading}get isLoading(){return this.formSubmission!==void 0||this.resolveVisitPromise()!==void 0}get complete(){return this.element.hasAttribute("complete")}set complete(e){this.ignoringChangesToAttribute("complete",()=>{e?this.element.setAttribute("complete",""):this.element.removeAttribute("complete")})}get isActive(){return this.element.isActive&&this.connected}get rootLocation(){var e;const t=this.element.ownerDocument.querySelector('meta[name="turbo-root"]'),i=(e=t==null?void 0:t.content)!==null&&e!==void 0?e:"/";return h(i)}isIgnoringChangesTo(e){return this.ignoredAttributes.has(e)}ignoringChangesToAttribute(e,t){this.ignoredAttributes.add(e),t(),this.ignoredAttributes.delete(e)}withCurrentNavigationElement(e,t){this.currentNavigationElement=e,t(),delete this.currentNavigationElement}}function Le(s){if(s!=null){const e=document.getElementById(s);if(e instanceof f)return e}}function Re(s,e){if(s){const t=s.getAttribute("src");if(t!=null&&e!=null&&Oe(t,e))throw new Error(`Matching <turbo-frame id="${s.id}"> element has a source URL which references itself`);if(s.ownerDocument!==document&&(s=document.importNode(s,!0)),s instanceof f)return s.connectedCallback(),s.disconnectedCallback(),s}}class D extends HTMLElement{static async renderElement(e){await e.performAction()}async connectedCallback(){try{await this.render()}catch(e){console.error(e)}finally{this.disconnect()}}async render(){var e;return(e=this.renderPromise)!==null&&e!==void 0?e:this.renderPromise=(async()=>{const t=this.beforeRenderEvent;this.dispatchEvent(t)&&(await q(),await t.detail.render(this))})()}disconnect(){try{this.remove()}catch(e){}}removeDuplicateTargetChildren(){this.duplicateChildren.forEach(e=>e.remove())}get duplicateChildren(){var e;const t=this.targetElements.flatMap(r=>[...r.children]).filter(r=>!!r.id),i=[...((e=this.templateContent)===null||e===void 0?void 0:e.children)||[]].filter(r=>!!r.id).map(r=>r.id);return t.filter(r=>i.includes(r.id))}get performAction(){if(this.action){const e=Q[this.action];if(e)return e;this.raise("unknown action")}this.raise("action attribute is missing")}get targetElements(){if(this.target)return this.targetElementsById;if(this.targets)return this.targetElementsByQuery;this.raise("target or targets attribute is missing")}get templateContent(){return this.templateElement.content.cloneNode(!0)}get templateElement(){if(this.firstElementChild===null){const e=this.ownerDocument.createElement("template");return this.appendChild(e),e}else if(this.firstElementChild instanceof HTMLTemplateElement)return this.firstElementChild;this.raise("first child element must be a <template> element")}get action(){return this.getAttribute("action")}get target(){return this.getAttribute("target")}get targets(){return this.getAttribute("targets")}raise(e){throw new Error(`${this.description}: ${e}`)}get description(){var e,t;return(t=((e=this.outerHTML.match(/<[^>]+>/))!==null&&e!==void 0?e:[])[0])!==null&&t!==void 0?t:"<turbo-stream>"}get beforeRenderEvent(){return new CustomEvent("turbo:before-stream-render",{bubbles:!0,cancelable:!0,detail:{newStream:this,render:D.renderElement}})}get targetElementsById(){var e;const t=(e=this.ownerDocument)===null||e===void 0?void 0:e.getElementById(this.target);return t!==null?[t]:[]}get targetElementsByQuery(){var e;const t=(e=this.ownerDocument)===null||e===void 0?void 0:e.querySelectorAll(this.targets);return t.length!==0?Array.prototype.slice.call(t):[]}}class Ce extends HTMLElement{constructor(){super(...arguments);this.streamSource=null}connectedCallback(){this.streamSource=this.src.match(/^ws{1,2}:/)?new WebSocket(this.src):new EventSource(this.src),Y(this.streamSource)}disconnectedCallback(){this.streamSource&&J(this.streamSource)}get src(){return this.getAttribute("src")||""}}f.delegateConstructor=xt,customElements.get("turbo-frame")===void 0&&customElements.define("turbo-frame",f),customElements.get("turbo-stream")===void 0&&customElements.define("turbo-stream",D),customElements.get("turbo-stream-source")===void 0&&customElements.define("turbo-stream-source",Ce),(()=>{let s=document.currentScript;if(!s)return;if(s.hasAttribute("data-turbo-suppress-warning"))return;for(s=s.parentElement;s;){if(s==document.body)return console.warn(te`
+    `;
+    }
+    show() {
+        if (!this.visible) {
+            this.visible = true;
+            this.installProgressElement();
+            this.startTrickling();
+        }
+    }
+    hide() {
+        if (this.visible && !this.hiding) {
+            this.hiding = true;
+            this.fadeProgressElement(() => {
+                this.uninstallProgressElement();
+                this.stopTrickling();
+                this.visible = false;
+                this.hiding = false;
+            });
+        }
+    }
+    setValue(value) {
+        this.value = value;
+        this.refresh();
+    }
+    installStylesheetElement() {
+        document.head.insertBefore(this.stylesheetElement, document.head.firstChild);
+    }
+    installProgressElement() {
+        this.progressElement.style.width = "0";
+        this.progressElement.style.opacity = "1";
+        document.documentElement.insertBefore(this.progressElement, document.body);
+        this.refresh();
+    }
+    fadeProgressElement(callback) {
+        this.progressElement.style.opacity = "0";
+        setTimeout(callback, ProgressBar.animationDuration * 1.5);
+    }
+    uninstallProgressElement() {
+        if (this.progressElement.parentNode) {
+            document.documentElement.removeChild(this.progressElement);
+        }
+    }
+    startTrickling() {
+        if (!this.trickleInterval) {
+            this.trickleInterval = window.setInterval(this.trickle, ProgressBar.animationDuration);
+        }
+    }
+    stopTrickling() {
+        window.clearInterval(this.trickleInterval);
+        delete this.trickleInterval;
+    }
+    refresh() {
+        requestAnimationFrame(() => {
+            this.progressElement.style.width = `${10 + this.value * 90}%`;
+        });
+    }
+    createStylesheetElement() {
+        const element = document.createElement("style");
+        element.type = "text/css";
+        element.textContent = ProgressBar.defaultCSS;
+        if (this.cspNonce) {
+            element.nonce = this.cspNonce;
+        }
+        return element;
+    }
+    createProgressElement() {
+        const element = document.createElement("div");
+        element.className = "turbo-progress-bar";
+        return element;
+    }
+    get cspNonce() {
+        return getMetaContent("csp-nonce");
+    }
+}
+ProgressBar.animationDuration = 300;
+class HeadSnapshot extends Snapshot {
+    constructor() {
+        super(...arguments);
+        this.detailsByOuterHTML = this.children.filter((element) => !elementIsNoscript(element)).map((element) => elementWithoutNonce(element)).reduce((result, element) => {
+            const {outerHTML} = element;
+            const details = outerHTML in result ? result[outerHTML] : {
+                type: elementType(element),
+                tracked: elementIsTracked(element),
+                elements: []
+            };
+            return Object.assign(Object.assign({}, result), {[outerHTML]: Object.assign(Object.assign({}, details), {elements: [...details.elements, element]})});
+        }, {});
+    }
+    get trackedElementSignature() {
+        return Object.keys(this.detailsByOuterHTML).filter((outerHTML) => this.detailsByOuterHTML[outerHTML].tracked).join("");
+    }
+    getScriptElementsNotInSnapshot(snapshot) {
+        return this.getElementsMatchingTypeNotInSnapshot("script", snapshot);
+    }
+    getStylesheetElementsNotInSnapshot(snapshot) {
+        return this.getElementsMatchingTypeNotInSnapshot("stylesheet", snapshot);
+    }
+    getElementsMatchingTypeNotInSnapshot(matchedType, snapshot) {
+        return Object.keys(this.detailsByOuterHTML).filter((outerHTML) => !(outerHTML in snapshot.detailsByOuterHTML)).map((outerHTML) => this.detailsByOuterHTML[outerHTML]).filter(({type}) => type == matchedType).map(({elements: [element]}) => element);
+    }
+    get provisionalElements() {
+        return Object.keys(this.detailsByOuterHTML).reduce((result, outerHTML) => {
+            const {type, tracked, elements} = this.detailsByOuterHTML[outerHTML];
+            if (type == null && !tracked) {
+                return [...result, ...elements];
+            } else if (elements.length > 1) {
+                return [...result, ...elements.slice(1)];
+            } else {
+                return result;
+            }
+        }, []);
+    }
+    getMetaValue(name) {
+        const element = this.findMetaElementByName(name);
+        return element ? element.getAttribute("content") : null;
+    }
+    findMetaElementByName(name) {
+        return Object.keys(this.detailsByOuterHTML).reduce((result, outerHTML) => {
+            const {elements: [element]} = this.detailsByOuterHTML[outerHTML];
+            return elementIsMetaElementWithName(element, name) ? element : result;
+        }, void 0);
+    }
+}
+function elementType(element) {
+    if (elementIsScript(element)) {
+        return "script";
+    } else if (elementIsStylesheet(element)) {
+        return "stylesheet";
+    }
+}
+function elementIsTracked(element) {
+    return element.getAttribute("data-turbo-track") == "reload";
+}
+function elementIsScript(element) {
+    const tagName = element.localName;
+    return tagName == "script";
+}
+function elementIsNoscript(element) {
+    const tagName = element.localName;
+    return tagName == "noscript";
+}
+function elementIsStylesheet(element) {
+    const tagName = element.localName;
+    return tagName == "style" || tagName == "link" && element.getAttribute("rel") == "stylesheet";
+}
+function elementIsMetaElementWithName(element, name) {
+    const tagName = element.localName;
+    return tagName == "meta" && element.getAttribute("name") == name;
+}
+function elementWithoutNonce(element) {
+    if (element.hasAttribute("nonce")) {
+        element.setAttribute("nonce", "");
+    }
+    return element;
+}
+class PageSnapshot extends Snapshot {
+    constructor(element, headSnapshot) {
+        super(element);
+        this.headSnapshot = headSnapshot;
+    }
+    static fromHTMLString(html = "") {
+        return this.fromDocument(parseHTMLDocument(html));
+    }
+    static fromElement(element) {
+        return this.fromDocument(element.ownerDocument);
+    }
+    static fromDocument({head, body}) {
+        return new this(body, new HeadSnapshot(head));
+    }
+    clone() {
+        const clonedElement = this.element.cloneNode(true);
+        const selectElements = this.element.querySelectorAll("select");
+        const clonedSelectElements = clonedElement.querySelectorAll("select");
+        for (const [index, source] of selectElements.entries()) {
+            const clone = clonedSelectElements[index];
+            for (const option of clone.selectedOptions)
+                option.selected = false;
+            for (const option of source.selectedOptions)
+                clone.options[option.index].selected = true;
+        }
+        for (const clonedPasswordInput of clonedElement.querySelectorAll('input[type="password"]')) {
+            clonedPasswordInput.value = "";
+        }
+        return new PageSnapshot(clonedElement, this.headSnapshot);
+    }
+    get headElement() {
+        return this.headSnapshot.element;
+    }
+    get rootLocation() {
+        var _a;
+        const root = (_a = this.getSetting("root")) !== null && _a !== void 0 ? _a : "/";
+        return expandURL(root);
+    }
+    get cacheControlValue() {
+        return this.getSetting("cache-control");
+    }
+    get isPreviewable() {
+        return this.cacheControlValue != "no-preview";
+    }
+    get isCacheable() {
+        return this.cacheControlValue != "no-cache";
+    }
+    get isVisitable() {
+        return this.getSetting("visit-control") != "reload";
+    }
+    getSetting(name) {
+        return this.headSnapshot.getMetaValue(`turbo-${name}`);
+    }
+}
+var TimingMetric;
+(function(TimingMetric2) {
+    TimingMetric2["visitStart"] = "visitStart";
+    TimingMetric2["requestStart"] = "requestStart";
+    TimingMetric2["requestEnd"] = "requestEnd";
+    TimingMetric2["visitEnd"] = "visitEnd";
+})(TimingMetric || (TimingMetric = {}));
+var VisitState;
+(function(VisitState2) {
+    VisitState2["initialized"] = "initialized";
+    VisitState2["started"] = "started";
+    VisitState2["canceled"] = "canceled";
+    VisitState2["failed"] = "failed";
+    VisitState2["completed"] = "completed";
+})(VisitState || (VisitState = {}));
+const defaultOptions = {
+    action: "advance",
+    historyChanged: false,
+    visitCachedSnapshot: () => {
+    },
+    willRender: true,
+    updateHistory: true,
+    shouldCacheSnapshot: true,
+    acceptsStreamResponse: false
+};
+var SystemStatusCode;
+(function(SystemStatusCode2) {
+    SystemStatusCode2[SystemStatusCode2["networkFailure"] = 0] = "networkFailure";
+    SystemStatusCode2[SystemStatusCode2["timeoutFailure"] = -1] = "timeoutFailure";
+    SystemStatusCode2[SystemStatusCode2["contentTypeMismatch"] = -2] = "contentTypeMismatch";
+})(SystemStatusCode || (SystemStatusCode = {}));
+class Visit {
+    constructor(delegate, location2, restorationIdentifier, options = {}) {
+        this.identifier = uuid();
+        this.timingMetrics = {};
+        this.followedRedirect = false;
+        this.historyChanged = false;
+        this.scrolled = false;
+        this.shouldCacheSnapshot = true;
+        this.acceptsStreamResponse = false;
+        this.snapshotCached = false;
+        this.state = VisitState.initialized;
+        this.delegate = delegate;
+        this.location = location2;
+        this.restorationIdentifier = restorationIdentifier || uuid();
+        const {action, historyChanged, referrer, snapshot, snapshotHTML, response, visitCachedSnapshot, willRender, updateHistory, shouldCacheSnapshot, acceptsStreamResponse} = Object.assign(Object.assign({}, defaultOptions), options);
+        this.action = action;
+        this.historyChanged = historyChanged;
+        this.referrer = referrer;
+        this.snapshot = snapshot;
+        this.snapshotHTML = snapshotHTML;
+        this.response = response;
+        this.isSamePage = this.delegate.locationWithActionIsSamePage(this.location, this.action);
+        this.visitCachedSnapshot = visitCachedSnapshot;
+        this.willRender = willRender;
+        this.updateHistory = updateHistory;
+        this.scrolled = !willRender;
+        this.shouldCacheSnapshot = shouldCacheSnapshot;
+        this.acceptsStreamResponse = acceptsStreamResponse;
+    }
+    get adapter() {
+        return this.delegate.adapter;
+    }
+    get view() {
+        return this.delegate.view;
+    }
+    get history() {
+        return this.delegate.history;
+    }
+    get restorationData() {
+        return this.history.getRestorationDataForIdentifier(this.restorationIdentifier);
+    }
+    get silent() {
+        return this.isSamePage;
+    }
+    start() {
+        if (this.state == VisitState.initialized) {
+            this.recordTimingMetric(TimingMetric.visitStart);
+            this.state = VisitState.started;
+            this.adapter.visitStarted(this);
+            this.delegate.visitStarted(this);
+        }
+    }
+    cancel() {
+        if (this.state == VisitState.started) {
+            if (this.request) {
+                this.request.cancel();
+            }
+            this.cancelRender();
+            this.state = VisitState.canceled;
+        }
+    }
+    complete() {
+        if (this.state == VisitState.started) {
+            this.recordTimingMetric(TimingMetric.visitEnd);
+            this.state = VisitState.completed;
+            this.followRedirect();
+            if (!this.followedRedirect) {
+                this.adapter.visitCompleted(this);
+                this.delegate.visitCompleted(this);
+            }
+        }
+    }
+    fail() {
+        if (this.state == VisitState.started) {
+            this.state = VisitState.failed;
+            this.adapter.visitFailed(this);
+        }
+    }
+    changeHistory() {
+        var _a;
+        if (!this.historyChanged && this.updateHistory) {
+            const actionForHistory = this.location.href === ((_a = this.referrer) === null || _a === void 0 ? void 0 : _a.href) ? "replace" : this.action;
+            const method = getHistoryMethodForAction(actionForHistory);
+            this.history.update(method, this.location, this.restorationIdentifier);
+            this.historyChanged = true;
+        }
+    }
+    issueRequest() {
+        if (this.hasPreloadedResponse()) {
+            this.simulateRequest();
+        } else if (this.shouldIssueRequest() && !this.request) {
+            this.request = new FetchRequest(this, FetchMethod.get, this.location);
+            this.request.perform();
+        }
+    }
+    simulateRequest() {
+        if (this.response) {
+            this.startRequest();
+            this.recordResponse();
+            this.finishRequest();
+        }
+    }
+    startRequest() {
+        this.recordTimingMetric(TimingMetric.requestStart);
+        this.adapter.visitRequestStarted(this);
+    }
+    recordResponse(response = this.response) {
+        this.response = response;
+        if (response) {
+            const {statusCode} = response;
+            if (isSuccessful(statusCode)) {
+                this.adapter.visitRequestCompleted(this);
+            } else {
+                this.adapter.visitRequestFailedWithStatusCode(this, statusCode);
+            }
+        }
+    }
+    finishRequest() {
+        this.recordTimingMetric(TimingMetric.requestEnd);
+        this.adapter.visitRequestFinished(this);
+    }
+    loadResponse() {
+        if (this.response) {
+            const {statusCode, responseHTML} = this.response;
+            this.render(async () => {
+                if (this.shouldCacheSnapshot)
+                    this.cacheSnapshot();
+                if (this.view.renderPromise)
+                    await this.view.renderPromise;
+                if (isSuccessful(statusCode) && responseHTML != null) {
+                    await this.view.renderPage(PageSnapshot.fromHTMLString(responseHTML), false, this.willRender, this);
+                    this.performScroll();
+                    this.adapter.visitRendered(this);
+                    this.complete();
+                } else {
+                    await this.view.renderError(PageSnapshot.fromHTMLString(responseHTML), this);
+                    this.adapter.visitRendered(this);
+                    this.fail();
+                }
+            });
+        }
+    }
+    getCachedSnapshot() {
+        const snapshot = this.view.getCachedSnapshotForLocation(this.location) || this.getPreloadedSnapshot();
+        if (snapshot && (!getAnchor(this.location) || snapshot.hasAnchor(getAnchor(this.location)))) {
+            if (this.action == "restore" || snapshot.isPreviewable) {
+                return snapshot;
+            }
+        }
+    }
+    getPreloadedSnapshot() {
+        if (this.snapshotHTML) {
+            return PageSnapshot.fromHTMLString(this.snapshotHTML);
+        }
+    }
+    hasCachedSnapshot() {
+        return this.getCachedSnapshot() != null;
+    }
+    loadCachedSnapshot() {
+        const snapshot = this.getCachedSnapshot();
+        if (snapshot) {
+            const isPreview = this.shouldIssueRequest();
+            this.render(async () => {
+                this.cacheSnapshot();
+                if (this.isSamePage) {
+                    this.adapter.visitRendered(this);
+                } else {
+                    if (this.view.renderPromise)
+                        await this.view.renderPromise;
+                    await this.view.renderPage(snapshot, isPreview, this.willRender, this);
+                    this.performScroll();
+                    this.adapter.visitRendered(this);
+                    if (!isPreview) {
+                        this.complete();
+                    }
+                }
+            });
+        }
+    }
+    followRedirect() {
+        var _a;
+        if (this.redirectedToLocation && !this.followedRedirect && ((_a = this.response) === null || _a === void 0 ? void 0 : _a.redirected)) {
+            this.adapter.visitProposedToLocation(this.redirectedToLocation, {
+                action: "replace",
+                response: this.response
+            });
+            this.followedRedirect = true;
+        }
+    }
+    goToSamePageAnchor() {
+        if (this.isSamePage) {
+            this.render(async () => {
+                this.cacheSnapshot();
+                this.performScroll();
+                this.changeHistory();
+                this.adapter.visitRendered(this);
+            });
+        }
+    }
+    prepareHeadersForRequest(headers, request) {
+        if (this.acceptsStreamResponse) {
+            request.acceptResponseType(StreamMessage.contentType);
+        }
+    }
+    requestStarted() {
+        this.startRequest();
+    }
+    requestPreventedHandlingResponse(_request, _response) {
+    }
+    async requestSucceededWithResponse(request, response) {
+        const responseHTML = await response.responseHTML;
+        const {redirected, statusCode} = response;
+        if (responseHTML == void 0) {
+            this.recordResponse({
+                statusCode: SystemStatusCode.contentTypeMismatch,
+                redirected
+            });
+        } else {
+            this.redirectedToLocation = response.redirected ? response.location : void 0;
+            this.recordResponse({statusCode, responseHTML, redirected});
+        }
+    }
+    async requestFailedWithResponse(request, response) {
+        const responseHTML = await response.responseHTML;
+        const {redirected, statusCode} = response;
+        if (responseHTML == void 0) {
+            this.recordResponse({
+                statusCode: SystemStatusCode.contentTypeMismatch,
+                redirected
+            });
+        } else {
+            this.recordResponse({statusCode, responseHTML, redirected});
+        }
+    }
+    requestErrored(_request, _error) {
+        this.recordResponse({
+            statusCode: SystemStatusCode.networkFailure,
+            redirected: false
+        });
+    }
+    requestFinished() {
+        this.finishRequest();
+    }
+    performScroll() {
+        if (!this.scrolled && !this.view.forceReloaded) {
+            if (this.action == "restore") {
+                this.scrollToRestoredPosition() || this.scrollToAnchor() || this.view.scrollToTop();
+            } else {
+                this.scrollToAnchor() || this.view.scrollToTop();
+            }
+            if (this.isSamePage) {
+                this.delegate.visitScrolledToSamePageLocation(this.view.lastRenderedLocation, this.location);
+            }
+            this.scrolled = true;
+        }
+    }
+    scrollToRestoredPosition() {
+        const {scrollPosition} = this.restorationData;
+        if (scrollPosition) {
+            this.view.scrollToPosition(scrollPosition);
+            return true;
+        }
+    }
+    scrollToAnchor() {
+        const anchor = getAnchor(this.location);
+        if (anchor != null) {
+            this.view.scrollToAnchor(anchor);
+            return true;
+        }
+    }
+    recordTimingMetric(metric) {
+        this.timingMetrics[metric] = new Date().getTime();
+    }
+    getTimingMetrics() {
+        return Object.assign({}, this.timingMetrics);
+    }
+    getHistoryMethodForAction(action) {
+        switch (action) {
+            case "replace":
+                return history.replaceState;
+            case "advance":
+            case "restore":
+                return history.pushState;
+        }
+    }
+    hasPreloadedResponse() {
+        return typeof this.response == "object";
+    }
+    shouldIssueRequest() {
+        if (this.isSamePage) {
+            return false;
+        } else if (this.action == "restore") {
+            return !this.hasCachedSnapshot();
+        } else {
+            return this.willRender;
+        }
+    }
+    cacheSnapshot() {
+        if (!this.snapshotCached) {
+            this.view.cacheSnapshot(this.snapshot).then((snapshot) => snapshot && this.visitCachedSnapshot(snapshot));
+            this.snapshotCached = true;
+        }
+    }
+    async render(callback) {
+        this.cancelRender();
+        await new Promise((resolve) => {
+            this.frame = requestAnimationFrame(() => resolve());
+        });
+        await callback();
+        delete this.frame;
+    }
+    cancelRender() {
+        if (this.frame) {
+            cancelAnimationFrame(this.frame);
+            delete this.frame;
+        }
+    }
+}
+function isSuccessful(statusCode) {
+    return statusCode >= 200 && statusCode < 300;
+}
+class BrowserAdapter {
+    constructor(session2) {
+        this.progressBar = new ProgressBar();
+        this.showProgressBar = () => {
+            this.progressBar.show();
+        };
+        this.session = session2;
+    }
+    visitProposedToLocation(location2, options) {
+        this.navigator.startVisit(location2, (options === null || options === void 0 ? void 0 : options.restorationIdentifier) || uuid(), options);
+    }
+    visitStarted(visit2) {
+        this.location = visit2.location;
+        visit2.loadCachedSnapshot();
+        visit2.issueRequest();
+        visit2.goToSamePageAnchor();
+    }
+    visitRequestStarted(visit2) {
+        this.progressBar.setValue(0);
+        if (visit2.hasCachedSnapshot() || visit2.action != "restore") {
+            this.showVisitProgressBarAfterDelay();
+        } else {
+            this.showProgressBar();
+        }
+    }
+    visitRequestCompleted(visit2) {
+        visit2.loadResponse();
+    }
+    visitRequestFailedWithStatusCode(visit2, statusCode) {
+        switch (statusCode) {
+            case SystemStatusCode.networkFailure:
+            case SystemStatusCode.timeoutFailure:
+            case SystemStatusCode.contentTypeMismatch:
+                return this.reload({
+                    reason: "request_failed",
+                    context: {
+                        statusCode
+                    }
+                });
+            default:
+                return visit2.loadResponse();
+        }
+    }
+    visitRequestFinished(_visit) {
+        this.progressBar.setValue(1);
+        this.hideVisitProgressBar();
+    }
+    visitCompleted(_visit) {
+    }
+    pageInvalidated(reason) {
+        this.reload(reason);
+    }
+    visitFailed(_visit) {
+    }
+    visitRendered(_visit) {
+    }
+    formSubmissionStarted(_formSubmission) {
+        this.progressBar.setValue(0);
+        this.showFormProgressBarAfterDelay();
+    }
+    formSubmissionFinished(_formSubmission) {
+        this.progressBar.setValue(1);
+        this.hideFormProgressBar();
+    }
+    showVisitProgressBarAfterDelay() {
+        this.visitProgressBarTimeout = window.setTimeout(this.showProgressBar, this.session.progressBarDelay);
+    }
+    hideVisitProgressBar() {
+        this.progressBar.hide();
+        if (this.visitProgressBarTimeout != null) {
+            window.clearTimeout(this.visitProgressBarTimeout);
+            delete this.visitProgressBarTimeout;
+        }
+    }
+    showFormProgressBarAfterDelay() {
+        if (this.formProgressBarTimeout == null) {
+            this.formProgressBarTimeout = window.setTimeout(this.showProgressBar, this.session.progressBarDelay);
+        }
+    }
+    hideFormProgressBar() {
+        this.progressBar.hide();
+        if (this.formProgressBarTimeout != null) {
+            window.clearTimeout(this.formProgressBarTimeout);
+            delete this.formProgressBarTimeout;
+        }
+    }
+    reload(reason) {
+        var _a;
+        dispatch("turbo:reload", {detail: reason});
+        window.location.href = ((_a = this.location) === null || _a === void 0 ? void 0 : _a.toString()) || window.location.href;
+    }
+    get navigator() {
+        return this.session.navigator;
+    }
+}
+class CacheObserver {
+    constructor() {
+        this.started = false;
+        this.removeStaleElements = (_event) => {
+            const staleElements = [...document.querySelectorAll('[data-turbo-cache="false"]')];
+            for (const element of staleElements) {
+                element.remove();
+            }
+        };
+    }
+    start() {
+        if (!this.started) {
+            this.started = true;
+            addEventListener("turbo:before-cache", this.removeStaleElements, false);
+        }
+    }
+    stop() {
+        if (this.started) {
+            this.started = false;
+            removeEventListener("turbo:before-cache", this.removeStaleElements, false);
+        }
+    }
+}
+class FrameRedirector {
+    constructor(session2, element) {
+        this.session = session2;
+        this.element = element;
+        this.linkInterceptor = new LinkInterceptor(this, element);
+        this.formSubmitObserver = new FormSubmitObserver(this, element);
+    }
+    start() {
+        this.linkInterceptor.start();
+        this.formSubmitObserver.start();
+    }
+    stop() {
+        this.linkInterceptor.stop();
+        this.formSubmitObserver.stop();
+    }
+    shouldInterceptLinkClick(element, _location, _event) {
+        return this.shouldRedirect(element);
+    }
+    linkClickIntercepted(element, url, event) {
+        const frame = this.findFrameElement(element);
+        if (frame) {
+            frame.delegate.linkClickIntercepted(element, url, event);
+        }
+    }
+    willSubmitForm(element, submitter) {
+        return element.closest("turbo-frame") == null && this.shouldSubmit(element, submitter) && this.shouldRedirect(element, submitter);
+    }
+    formSubmitted(element, submitter) {
+        const frame = this.findFrameElement(element, submitter);
+        if (frame) {
+            frame.delegate.formSubmitted(element, submitter);
+        }
+    }
+    shouldSubmit(form, submitter) {
+        var _a;
+        const action = getAction(form, submitter);
+        const meta = this.element.ownerDocument.querySelector(`meta[name="turbo-root"]`);
+        const rootLocation = expandURL((_a = meta === null || meta === void 0 ? void 0 : meta.content) !== null && _a !== void 0 ? _a : "/");
+        return this.shouldRedirect(form, submitter) && locationIsVisitable(action, rootLocation);
+    }
+    shouldRedirect(element, submitter) {
+        const isNavigatable = element instanceof HTMLFormElement ? this.session.submissionIsNavigatable(element, submitter) : this.session.elementIsNavigatable(element);
+        if (isNavigatable) {
+            const frame = this.findFrameElement(element, submitter);
+            return frame ? frame != element.closest("turbo-frame") : false;
+        } else {
+            return false;
+        }
+    }
+    findFrameElement(element, submitter) {
+        const id = (submitter === null || submitter === void 0 ? void 0 : submitter.getAttribute("data-turbo-frame")) || element.getAttribute("data-turbo-frame");
+        if (id && id != "_top") {
+            const frame = this.element.querySelector(`#${id}:not([disabled])`);
+            if (frame instanceof FrameElement) {
+                return frame;
+            }
+        }
+    }
+}
+class History {
+    constructor(delegate) {
+        this.restorationIdentifier = uuid();
+        this.restorationData = {};
+        this.started = false;
+        this.pageLoaded = false;
+        this.onPopState = (event) => {
+            if (this.shouldHandlePopState()) {
+                const {turbo} = event.state || {};
+                if (turbo) {
+                    this.location = new URL(window.location.href);
+                    const {restorationIdentifier} = turbo;
+                    this.restorationIdentifier = restorationIdentifier;
+                    this.delegate.historyPoppedToLocationWithRestorationIdentifier(this.location, restorationIdentifier);
+                }
+            }
+        };
+        this.onPageLoad = async (_event) => {
+            await nextMicrotask();
+            this.pageLoaded = true;
+        };
+        this.delegate = delegate;
+    }
+    start() {
+        if (!this.started) {
+            addEventListener("popstate", this.onPopState, false);
+            addEventListener("load", this.onPageLoad, false);
+            this.started = true;
+            this.replace(new URL(window.location.href));
+        }
+    }
+    stop() {
+        if (this.started) {
+            removeEventListener("popstate", this.onPopState, false);
+            removeEventListener("load", this.onPageLoad, false);
+            this.started = false;
+        }
+    }
+    push(location2, restorationIdentifier) {
+        this.update(history.pushState, location2, restorationIdentifier);
+    }
+    replace(location2, restorationIdentifier) {
+        this.update(history.replaceState, location2, restorationIdentifier);
+    }
+    update(method, location2, restorationIdentifier = uuid()) {
+        const state = {turbo: {restorationIdentifier}};
+        method.call(history, state, "", location2.href);
+        this.location = location2;
+        this.restorationIdentifier = restorationIdentifier;
+    }
+    getRestorationDataForIdentifier(restorationIdentifier) {
+        return this.restorationData[restorationIdentifier] || {};
+    }
+    updateRestorationData(additionalData) {
+        const {restorationIdentifier} = this;
+        const restorationData = this.restorationData[restorationIdentifier];
+        this.restorationData[restorationIdentifier] = Object.assign(Object.assign({}, restorationData), additionalData);
+    }
+    assumeControlOfScrollRestoration() {
+        var _a;
+        if (!this.previousScrollRestoration) {
+            this.previousScrollRestoration = (_a = history.scrollRestoration) !== null && _a !== void 0 ? _a : "auto";
+            history.scrollRestoration = "manual";
+        }
+    }
+    relinquishControlOfScrollRestoration() {
+        if (this.previousScrollRestoration) {
+            history.scrollRestoration = this.previousScrollRestoration;
+            delete this.previousScrollRestoration;
+        }
+    }
+    shouldHandlePopState() {
+        return this.pageIsLoaded();
+    }
+    pageIsLoaded() {
+        return this.pageLoaded || document.readyState == "complete";
+    }
+}
+class Navigator {
+    constructor(delegate) {
+        this.delegate = delegate;
+    }
+    proposeVisit(location2, options = {}) {
+        if (this.delegate.allowsVisitingLocationWithAction(location2, options.action)) {
+            if (locationIsVisitable(location2, this.view.snapshot.rootLocation)) {
+                this.delegate.visitProposedToLocation(location2, options);
+            } else {
+                window.location.href = location2.toString();
+            }
+        }
+    }
+    startVisit(locatable, restorationIdentifier, options = {}) {
+        this.stop();
+        this.currentVisit = new Visit(this, expandURL(locatable), restorationIdentifier, Object.assign({referrer: this.location}, options));
+        this.currentVisit.start();
+    }
+    submitForm(form, submitter) {
+        this.stop();
+        this.formSubmission = new FormSubmission(this, form, submitter, true);
+        this.formSubmission.start();
+    }
+    stop() {
+        if (this.formSubmission) {
+            this.formSubmission.stop();
+            delete this.formSubmission;
+        }
+        if (this.currentVisit) {
+            this.currentVisit.cancel();
+            delete this.currentVisit;
+        }
+    }
+    get adapter() {
+        return this.delegate.adapter;
+    }
+    get view() {
+        return this.delegate.view;
+    }
+    get history() {
+        return this.delegate.history;
+    }
+    formSubmissionStarted(formSubmission) {
+        if (typeof this.adapter.formSubmissionStarted === "function") {
+            this.adapter.formSubmissionStarted(formSubmission);
+        }
+    }
+    async formSubmissionSucceededWithResponse(formSubmission, fetchResponse) {
+        if (formSubmission == this.formSubmission) {
+            const responseHTML = await fetchResponse.responseHTML;
+            if (responseHTML) {
+                const shouldCacheSnapshot = formSubmission.method == FetchMethod.get;
+                if (!shouldCacheSnapshot) {
+                    this.view.clearSnapshotCache();
+                }
+                const {statusCode, redirected} = fetchResponse;
+                const action = this.getActionForFormSubmission(formSubmission);
+                const visitOptions = {
+                    action,
+                    shouldCacheSnapshot,
+                    response: {statusCode, responseHTML, redirected}
+                };
+                this.proposeVisit(fetchResponse.location, visitOptions);
+            }
+        }
+    }
+    async formSubmissionFailedWithResponse(formSubmission, fetchResponse) {
+        const responseHTML = await fetchResponse.responseHTML;
+        if (responseHTML) {
+            const snapshot = PageSnapshot.fromHTMLString(responseHTML);
+            if (fetchResponse.serverError) {
+                await this.view.renderError(snapshot, this.currentVisit);
+            } else {
+                await this.view.renderPage(snapshot, false, true, this.currentVisit);
+            }
+            this.view.scrollToTop();
+            this.view.clearSnapshotCache();
+        }
+    }
+    formSubmissionErrored(formSubmission, error) {
+        console.error(error);
+    }
+    formSubmissionFinished(formSubmission) {
+        if (typeof this.adapter.formSubmissionFinished === "function") {
+            this.adapter.formSubmissionFinished(formSubmission);
+        }
+    }
+    visitStarted(visit2) {
+        this.delegate.visitStarted(visit2);
+    }
+    visitCompleted(visit2) {
+        this.delegate.visitCompleted(visit2);
+    }
+    locationWithActionIsSamePage(location2, action) {
+        const anchor = getAnchor(location2);
+        const currentAnchor = getAnchor(this.view.lastRenderedLocation);
+        const isRestorationToTop = action === "restore" && typeof anchor === "undefined";
+        return action !== "replace" && getRequestURL(location2) === getRequestURL(this.view.lastRenderedLocation) && (isRestorationToTop || anchor != null && anchor !== currentAnchor);
+    }
+    visitScrolledToSamePageLocation(oldURL, newURL) {
+        this.delegate.visitScrolledToSamePageLocation(oldURL, newURL);
+    }
+    get location() {
+        return this.history.location;
+    }
+    get restorationIdentifier() {
+        return this.history.restorationIdentifier;
+    }
+    getActionForFormSubmission(formSubmission) {
+        const {formElement, submitter} = formSubmission;
+        const action = getAttribute("data-turbo-action", submitter, formElement);
+        return isAction(action) ? action : "advance";
+    }
+}
+var PageStage;
+(function(PageStage2) {
+    PageStage2[PageStage2["initial"] = 0] = "initial";
+    PageStage2[PageStage2["loading"] = 1] = "loading";
+    PageStage2[PageStage2["interactive"] = 2] = "interactive";
+    PageStage2[PageStage2["complete"] = 3] = "complete";
+})(PageStage || (PageStage = {}));
+class PageObserver {
+    constructor(delegate) {
+        this.stage = PageStage.initial;
+        this.started = false;
+        this.interpretReadyState = () => {
+            const {readyState} = this;
+            if (readyState == "interactive") {
+                this.pageIsInteractive();
+            } else if (readyState == "complete") {
+                this.pageIsComplete();
+            }
+        };
+        this.pageWillUnload = () => {
+            this.delegate.pageWillUnload();
+        };
+        this.delegate = delegate;
+    }
+    start() {
+        if (!this.started) {
+            if (this.stage == PageStage.initial) {
+                this.stage = PageStage.loading;
+            }
+            document.addEventListener("readystatechange", this.interpretReadyState, false);
+            addEventListener("pagehide", this.pageWillUnload, false);
+            this.started = true;
+        }
+    }
+    stop() {
+        if (this.started) {
+            document.removeEventListener("readystatechange", this.interpretReadyState, false);
+            removeEventListener("pagehide", this.pageWillUnload, false);
+            this.started = false;
+        }
+    }
+    pageIsInteractive() {
+        if (this.stage == PageStage.loading) {
+            this.stage = PageStage.interactive;
+            this.delegate.pageBecameInteractive();
+        }
+    }
+    pageIsComplete() {
+        this.pageIsInteractive();
+        if (this.stage == PageStage.interactive) {
+            this.stage = PageStage.complete;
+            this.delegate.pageLoaded();
+        }
+    }
+    get readyState() {
+        return document.readyState;
+    }
+}
+class ScrollObserver {
+    constructor(delegate) {
+        this.started = false;
+        this.onScroll = () => {
+            this.updatePosition({x: window.pageXOffset, y: window.pageYOffset});
+        };
+        this.delegate = delegate;
+    }
+    start() {
+        if (!this.started) {
+            addEventListener("scroll", this.onScroll, false);
+            this.onScroll();
+            this.started = true;
+        }
+    }
+    stop() {
+        if (this.started) {
+            removeEventListener("scroll", this.onScroll, false);
+            this.started = false;
+        }
+    }
+    updatePosition(position) {
+        this.delegate.scrollPositionChanged(position);
+    }
+}
+class StreamMessageRenderer {
+    render({fragment}) {
+        Bardo.preservingPermanentElements(this, getPermanentElementMapForFragment(fragment), () => document.documentElement.appendChild(fragment));
+    }
+    enteringBardo(currentPermanentElement, newPermanentElement) {
+        newPermanentElement.replaceWith(currentPermanentElement.cloneNode(true));
+    }
+    leavingBardo() {
+    }
+}
+function getPermanentElementMapForFragment(fragment) {
+    const permanentElementsInDocument = queryPermanentElementsAll(document.documentElement);
+    const permanentElementMap = {};
+    for (const permanentElementInDocument of permanentElementsInDocument) {
+        const {id} = permanentElementInDocument;
+        for (const streamElement of fragment.querySelectorAll("turbo-stream")) {
+            const elementInStream = getPermanentElementById(streamElement.templateElement.content, id);
+            if (elementInStream) {
+                permanentElementMap[id] = [permanentElementInDocument, elementInStream];
+            }
+        }
+    }
+    return permanentElementMap;
+}
+class StreamObserver {
+    constructor(delegate) {
+        this.sources = new Set();
+        this.started = false;
+        this.inspectFetchResponse = (event) => {
+            const response = fetchResponseFromEvent(event);
+            if (response && fetchResponseIsStream(response)) {
+                event.preventDefault();
+                this.receiveMessageResponse(response);
+            }
+        };
+        this.receiveMessageEvent = (event) => {
+            if (this.started && typeof event.data == "string") {
+                this.receiveMessageHTML(event.data);
+            }
+        };
+        this.delegate = delegate;
+    }
+    start() {
+        if (!this.started) {
+            this.started = true;
+            addEventListener("turbo:before-fetch-response", this.inspectFetchResponse, false);
+        }
+    }
+    stop() {
+        if (this.started) {
+            this.started = false;
+            removeEventListener("turbo:before-fetch-response", this.inspectFetchResponse, false);
+        }
+    }
+    connectStreamSource(source) {
+        if (!this.streamSourceIsConnected(source)) {
+            this.sources.add(source);
+            source.addEventListener("message", this.receiveMessageEvent, false);
+        }
+    }
+    disconnectStreamSource(source) {
+        if (this.streamSourceIsConnected(source)) {
+            this.sources.delete(source);
+            source.removeEventListener("message", this.receiveMessageEvent, false);
+        }
+    }
+    streamSourceIsConnected(source) {
+        return this.sources.has(source);
+    }
+    async receiveMessageResponse(response) {
+        const html = await response.responseHTML;
+        if (html) {
+            this.receiveMessageHTML(html);
+        }
+    }
+    receiveMessageHTML(html) {
+        this.delegate.receivedMessageFromStream(StreamMessage.wrap(html));
+    }
+}
+function fetchResponseFromEvent(event) {
+    var _a;
+    const fetchResponse = (_a = event.detail) === null || _a === void 0 ? void 0 : _a.fetchResponse;
+    if (fetchResponse instanceof FetchResponse) {
+        return fetchResponse;
+    }
+}
+function fetchResponseIsStream(response) {
+    var _a;
+    const contentType = (_a = response.contentType) !== null && _a !== void 0 ? _a : "";
+    return contentType.startsWith(StreamMessage.contentType);
+}
+class ErrorRenderer extends Renderer {
+    static renderElement(currentElement, newElement) {
+        const {documentElement, body} = document;
+        documentElement.replaceChild(newElement, body);
+    }
+    async render() {
+        this.replaceHeadAndBody();
+        this.activateScriptElements();
+    }
+    replaceHeadAndBody() {
+        const {documentElement, head} = document;
+        documentElement.replaceChild(this.newHead, head);
+        this.renderElement(this.currentElement, this.newElement);
+    }
+    activateScriptElements() {
+        for (const replaceableElement of this.scriptElements) {
+            const parentNode = replaceableElement.parentNode;
+            if (parentNode) {
+                const element = activateScriptElement(replaceableElement);
+                parentNode.replaceChild(element, replaceableElement);
+            }
+        }
+    }
+    get newHead() {
+        return this.newSnapshot.headSnapshot.element;
+    }
+    get scriptElements() {
+        return document.documentElement.querySelectorAll("script");
+    }
+}
+class PageRenderer extends Renderer {
+    static renderElement(currentElement, newElement) {
+        if (document.body && newElement instanceof HTMLBodyElement) {
+            document.body.replaceWith(newElement);
+        } else {
+            document.documentElement.appendChild(newElement);
+        }
+    }
+    get shouldRender() {
+        return this.newSnapshot.isVisitable && this.trackedElementsAreIdentical;
+    }
+    get reloadReason() {
+        if (!this.newSnapshot.isVisitable) {
+            return {
+                reason: "turbo_visit_control_is_reload"
+            };
+        }
+        if (!this.trackedElementsAreIdentical) {
+            return {
+                reason: "tracked_element_mismatch"
+            };
+        }
+    }
+    async prepareToRender() {
+        await this.mergeHead();
+    }
+    async render() {
+        if (this.willRender) {
+            this.replaceBody();
+        }
+    }
+    finishRendering() {
+        super.finishRendering();
+        if (!this.isPreview) {
+            this.focusFirstAutofocusableElement();
+        }
+    }
+    get currentHeadSnapshot() {
+        return this.currentSnapshot.headSnapshot;
+    }
+    get newHeadSnapshot() {
+        return this.newSnapshot.headSnapshot;
+    }
+    get newElement() {
+        return this.newSnapshot.element;
+    }
+    async mergeHead() {
+        const newStylesheetElements = this.copyNewHeadStylesheetElements();
+        this.copyNewHeadScriptElements();
+        this.removeCurrentHeadProvisionalElements();
+        this.copyNewHeadProvisionalElements();
+        await newStylesheetElements;
+    }
+    replaceBody() {
+        this.preservingPermanentElements(() => {
+            this.activateNewBody();
+            this.assignNewBody();
+        });
+    }
+    get trackedElementsAreIdentical() {
+        return this.currentHeadSnapshot.trackedElementSignature == this.newHeadSnapshot.trackedElementSignature;
+    }
+    async copyNewHeadStylesheetElements() {
+        const loadingElements = [];
+        for (const element of this.newHeadStylesheetElements) {
+            loadingElements.push(waitForLoad(element));
+            document.head.appendChild(element);
+        }
+        await Promise.all(loadingElements);
+    }
+    copyNewHeadScriptElements() {
+        for (const element of this.newHeadScriptElements) {
+            document.head.appendChild(activateScriptElement(element));
+        }
+    }
+    removeCurrentHeadProvisionalElements() {
+        for (const element of this.currentHeadProvisionalElements) {
+            document.head.removeChild(element);
+        }
+    }
+    copyNewHeadProvisionalElements() {
+        for (const element of this.newHeadProvisionalElements) {
+            document.head.appendChild(element);
+        }
+    }
+    activateNewBody() {
+        document.adoptNode(this.newElement);
+        this.activateNewBodyScriptElements();
+    }
+    activateNewBodyScriptElements() {
+        for (const inertScriptElement of this.newBodyScriptElements) {
+            const activatedScriptElement = activateScriptElement(inertScriptElement);
+            inertScriptElement.replaceWith(activatedScriptElement);
+        }
+    }
+    assignNewBody() {
+        this.renderElement(this.currentElement, this.newElement);
+    }
+    get newHeadStylesheetElements() {
+        return this.newHeadSnapshot.getStylesheetElementsNotInSnapshot(this.currentHeadSnapshot);
+    }
+    get newHeadScriptElements() {
+        return this.newHeadSnapshot.getScriptElementsNotInSnapshot(this.currentHeadSnapshot);
+    }
+    get currentHeadProvisionalElements() {
+        return this.currentHeadSnapshot.provisionalElements;
+    }
+    get newHeadProvisionalElements() {
+        return this.newHeadSnapshot.provisionalElements;
+    }
+    get newBodyScriptElements() {
+        return this.newElement.querySelectorAll("script");
+    }
+}
+class SnapshotCache {
+    constructor(size) {
+        this.keys = [];
+        this.snapshots = {};
+        this.size = size;
+    }
+    has(location2) {
+        return toCacheKey(location2) in this.snapshots;
+    }
+    get(location2) {
+        if (this.has(location2)) {
+            const snapshot = this.read(location2);
+            this.touch(location2);
+            return snapshot;
+        }
+    }
+    put(location2, snapshot) {
+        this.write(location2, snapshot);
+        this.touch(location2);
+        return snapshot;
+    }
+    clear() {
+        this.snapshots = {};
+    }
+    read(location2) {
+        return this.snapshots[toCacheKey(location2)];
+    }
+    write(location2, snapshot) {
+        this.snapshots[toCacheKey(location2)] = snapshot;
+    }
+    touch(location2) {
+        const key = toCacheKey(location2);
+        const index = this.keys.indexOf(key);
+        if (index > -1)
+            this.keys.splice(index, 1);
+        this.keys.unshift(key);
+        this.trim();
+    }
+    trim() {
+        for (const key of this.keys.splice(this.size)) {
+            delete this.snapshots[key];
+        }
+    }
+}
+class PageView extends View {
+    constructor() {
+        super(...arguments);
+        this.snapshotCache = new SnapshotCache(10);
+        this.lastRenderedLocation = new URL(location.href);
+        this.forceReloaded = false;
+    }
+    renderPage(snapshot, isPreview = false, willRender = true, visit2) {
+        const renderer = new PageRenderer(this.snapshot, snapshot, PageRenderer.renderElement, isPreview, willRender);
+        if (!renderer.shouldRender) {
+            this.forceReloaded = true;
+        } else {
+            visit2 === null || visit2 === void 0 ? void 0 : visit2.changeHistory();
+        }
+        return this.render(renderer);
+    }
+    renderError(snapshot, visit2) {
+        visit2 === null || visit2 === void 0 ? void 0 : visit2.changeHistory();
+        const renderer = new ErrorRenderer(this.snapshot, snapshot, ErrorRenderer.renderElement, false);
+        return this.render(renderer);
+    }
+    clearSnapshotCache() {
+        this.snapshotCache.clear();
+    }
+    async cacheSnapshot(snapshot = this.snapshot) {
+        if (snapshot.isCacheable) {
+            this.delegate.viewWillCacheSnapshot();
+            const {lastRenderedLocation: location2} = this;
+            await nextEventLoopTick();
+            const cachedSnapshot = snapshot.clone();
+            this.snapshotCache.put(location2, cachedSnapshot);
+            return cachedSnapshot;
+        }
+    }
+    getCachedSnapshotForLocation(location2) {
+        return this.snapshotCache.get(location2);
+    }
+    get snapshot() {
+        return PageSnapshot.fromElement(this.element);
+    }
+}
+class Preloader {
+    constructor(delegate) {
+        this.selector = "a[data-turbo-preload]";
+        this.delegate = delegate;
+    }
+    get snapshotCache() {
+        return this.delegate.navigator.view.snapshotCache;
+    }
+    start() {
+        if (document.readyState === "loading") {
+            return document.addEventListener("DOMContentLoaded", () => {
+                this.preloadOnLoadLinksForView(document.body);
+            });
+        } else {
+            this.preloadOnLoadLinksForView(document.body);
+        }
+    }
+    preloadOnLoadLinksForView(element) {
+        for (const link of element.querySelectorAll(this.selector)) {
+            this.preloadURL(link);
+        }
+    }
+    async preloadURL(link) {
+        const location2 = new URL(link.href);
+        if (this.snapshotCache.has(location2)) {
+            return;
+        }
+        try {
+            const response = await fetch(location2.toString(), {headers: {"VND.PREFETCH": "true", Accept: "text/html"}});
+            const responseText = await response.text();
+            const snapshot = PageSnapshot.fromHTMLString(responseText);
+            this.snapshotCache.put(location2, snapshot);
+        } catch (_) {
+        }
+    }
+}
+class Session {
+    constructor() {
+        this.navigator = new Navigator(this);
+        this.history = new History(this);
+        this.preloader = new Preloader(this);
+        this.view = new PageView(this, document.documentElement);
+        this.adapter = new BrowserAdapter(this);
+        this.pageObserver = new PageObserver(this);
+        this.cacheObserver = new CacheObserver();
+        this.linkClickObserver = new LinkClickObserver(this, window);
+        this.formSubmitObserver = new FormSubmitObserver(this, document);
+        this.scrollObserver = new ScrollObserver(this);
+        this.streamObserver = new StreamObserver(this);
+        this.formLinkClickObserver = new FormLinkClickObserver(this, document.documentElement);
+        this.frameRedirector = new FrameRedirector(this, document.documentElement);
+        this.streamMessageRenderer = new StreamMessageRenderer();
+        this.drive = true;
+        this.enabled = true;
+        this.progressBarDelay = 500;
+        this.started = false;
+        this.formMode = "on";
+    }
+    start() {
+        if (!this.started) {
+            this.pageObserver.start();
+            this.cacheObserver.start();
+            this.formLinkClickObserver.start();
+            this.linkClickObserver.start();
+            this.formSubmitObserver.start();
+            this.scrollObserver.start();
+            this.streamObserver.start();
+            this.frameRedirector.start();
+            this.history.start();
+            this.preloader.start();
+            this.started = true;
+            this.enabled = true;
+        }
+    }
+    disable() {
+        this.enabled = false;
+    }
+    stop() {
+        if (this.started) {
+            this.pageObserver.stop();
+            this.cacheObserver.stop();
+            this.formLinkClickObserver.stop();
+            this.linkClickObserver.stop();
+            this.formSubmitObserver.stop();
+            this.scrollObserver.stop();
+            this.streamObserver.stop();
+            this.frameRedirector.stop();
+            this.history.stop();
+            this.started = false;
+        }
+    }
+    registerAdapter(adapter) {
+        this.adapter = adapter;
+    }
+    visit(location2, options = {}) {
+        const frameElement = options.frame ? document.getElementById(options.frame) : null;
+        if (frameElement instanceof FrameElement) {
+            frameElement.src = location2.toString();
+            frameElement.loaded;
+        } else {
+            this.navigator.proposeVisit(expandURL(location2), options);
+        }
+    }
+    connectStreamSource(source) {
+        this.streamObserver.connectStreamSource(source);
+    }
+    disconnectStreamSource(source) {
+        this.streamObserver.disconnectStreamSource(source);
+    }
+    renderStreamMessage(message) {
+        this.streamMessageRenderer.render(StreamMessage.wrap(message));
+    }
+    clearCache() {
+        this.view.clearSnapshotCache();
+    }
+    setProgressBarDelay(delay) {
+        this.progressBarDelay = delay;
+    }
+    setFormMode(mode) {
+        this.formMode = mode;
+    }
+    get location() {
+        return this.history.location;
+    }
+    get restorationIdentifier() {
+        return this.history.restorationIdentifier;
+    }
+    historyPoppedToLocationWithRestorationIdentifier(location2, restorationIdentifier) {
+        if (this.enabled) {
+            this.navigator.startVisit(location2, restorationIdentifier, {
+                action: "restore",
+                historyChanged: true
+            });
+        } else {
+            this.adapter.pageInvalidated({
+                reason: "turbo_disabled"
+            });
+        }
+    }
+    scrollPositionChanged(position) {
+        this.history.updateRestorationData({scrollPosition: position});
+    }
+    willSubmitFormLinkToLocation(link, location2) {
+        return this.elementIsNavigatable(link) && locationIsVisitable(location2, this.snapshot.rootLocation);
+    }
+    submittedFormLinkToLocation() {
+    }
+    willFollowLinkToLocation(link, location2, event) {
+        return this.elementIsNavigatable(link) && locationIsVisitable(location2, this.snapshot.rootLocation) && this.applicationAllowsFollowingLinkToLocation(link, location2, event);
+    }
+    followedLinkToLocation(link, location2) {
+        const action = this.getActionForLink(link);
+        const acceptsStreamResponse = link.hasAttribute("data-turbo-stream");
+        this.visit(location2.href, {action, acceptsStreamResponse});
+    }
+    allowsVisitingLocationWithAction(location2, action) {
+        return this.locationWithActionIsSamePage(location2, action) || this.applicationAllowsVisitingLocation(location2);
+    }
+    visitProposedToLocation(location2, options) {
+        extendURLWithDeprecatedProperties(location2);
+        this.adapter.visitProposedToLocation(location2, options);
+    }
+    visitStarted(visit2) {
+        if (!visit2.acceptsStreamResponse) {
+            markAsBusy(document.documentElement);
+        }
+        extendURLWithDeprecatedProperties(visit2.location);
+        if (!visit2.silent) {
+            this.notifyApplicationAfterVisitingLocation(visit2.location, visit2.action);
+        }
+    }
+    visitCompleted(visit2) {
+        clearBusyState(document.documentElement);
+        this.notifyApplicationAfterPageLoad(visit2.getTimingMetrics());
+    }
+    locationWithActionIsSamePage(location2, action) {
+        return this.navigator.locationWithActionIsSamePage(location2, action);
+    }
+    visitScrolledToSamePageLocation(oldURL, newURL) {
+        this.notifyApplicationAfterVisitingSamePageLocation(oldURL, newURL);
+    }
+    willSubmitForm(form, submitter) {
+        const action = getAction(form, submitter);
+        return this.submissionIsNavigatable(form, submitter) && locationIsVisitable(expandURL(action), this.snapshot.rootLocation);
+    }
+    formSubmitted(form, submitter) {
+        this.navigator.submitForm(form, submitter);
+    }
+    pageBecameInteractive() {
+        this.view.lastRenderedLocation = this.location;
+        this.notifyApplicationAfterPageLoad();
+    }
+    pageLoaded() {
+        this.history.assumeControlOfScrollRestoration();
+    }
+    pageWillUnload() {
+        this.history.relinquishControlOfScrollRestoration();
+    }
+    receivedMessageFromStream(message) {
+        this.renderStreamMessage(message);
+    }
+    viewWillCacheSnapshot() {
+        var _a;
+        if (!((_a = this.navigator.currentVisit) === null || _a === void 0 ? void 0 : _a.silent)) {
+            this.notifyApplicationBeforeCachingSnapshot();
+        }
+    }
+    allowsImmediateRender({element}, options) {
+        const event = this.notifyApplicationBeforeRender(element, options);
+        const {defaultPrevented, detail: {render}} = event;
+        if (this.view.renderer && render) {
+            this.view.renderer.renderElement = render;
+        }
+        return !defaultPrevented;
+    }
+    viewRenderedSnapshot(_snapshot, _isPreview) {
+        this.view.lastRenderedLocation = this.history.location;
+        this.notifyApplicationAfterRender();
+    }
+    preloadOnLoadLinksForView(element) {
+        this.preloader.preloadOnLoadLinksForView(element);
+    }
+    viewInvalidated(reason) {
+        this.adapter.pageInvalidated(reason);
+    }
+    frameLoaded(frame) {
+        this.notifyApplicationAfterFrameLoad(frame);
+    }
+    frameRendered(fetchResponse, frame) {
+        this.notifyApplicationAfterFrameRender(fetchResponse, frame);
+    }
+    applicationAllowsFollowingLinkToLocation(link, location2, ev) {
+        const event = this.notifyApplicationAfterClickingLinkToLocation(link, location2, ev);
+        return !event.defaultPrevented;
+    }
+    applicationAllowsVisitingLocation(location2) {
+        const event = this.notifyApplicationBeforeVisitingLocation(location2);
+        return !event.defaultPrevented;
+    }
+    notifyApplicationAfterClickingLinkToLocation(link, location2, event) {
+        return dispatch("turbo:click", {
+            target: link,
+            detail: {url: location2.href, originalEvent: event},
+            cancelable: true
+        });
+    }
+    notifyApplicationBeforeVisitingLocation(location2) {
+        return dispatch("turbo:before-visit", {
+            detail: {url: location2.href},
+            cancelable: true
+        });
+    }
+    notifyApplicationAfterVisitingLocation(location2, action) {
+        return dispatch("turbo:visit", {detail: {url: location2.href, action}});
+    }
+    notifyApplicationBeforeCachingSnapshot() {
+        return dispatch("turbo:before-cache");
+    }
+    notifyApplicationBeforeRender(newBody, options) {
+        return dispatch("turbo:before-render", {
+            detail: Object.assign({newBody}, options),
+            cancelable: true
+        });
+    }
+    notifyApplicationAfterRender() {
+        return dispatch("turbo:render");
+    }
+    notifyApplicationAfterPageLoad(timing = {}) {
+        return dispatch("turbo:load", {
+            detail: {url: this.location.href, timing}
+        });
+    }
+    notifyApplicationAfterVisitingSamePageLocation(oldURL, newURL) {
+        dispatchEvent(new HashChangeEvent("hashchange", {
+            oldURL: oldURL.toString(),
+            newURL: newURL.toString()
+        }));
+    }
+    notifyApplicationAfterFrameLoad(frame) {
+        return dispatch("turbo:frame-load", {target: frame});
+    }
+    notifyApplicationAfterFrameRender(fetchResponse, frame) {
+        return dispatch("turbo:frame-render", {
+            detail: {fetchResponse},
+            target: frame,
+            cancelable: true
+        });
+    }
+    submissionIsNavigatable(form, submitter) {
+        if (this.formMode == "off") {
+            return false;
+        } else {
+            const submitterIsNavigatable = submitter ? this.elementIsNavigatable(submitter) : true;
+            if (this.formMode == "optin") {
+                return submitterIsNavigatable && form.closest('[data-turbo="true"]') != null;
+            } else {
+                return submitterIsNavigatable && this.elementIsNavigatable(form);
+            }
+        }
+    }
+    elementIsNavigatable(element) {
+        const container = element.closest("[data-turbo]");
+        const withinFrame = element.closest("turbo-frame");
+        if (this.drive || withinFrame) {
+            if (container) {
+                return container.getAttribute("data-turbo") != "false";
+            } else {
+                return true;
+            }
+        } else {
+            if (container) {
+                return container.getAttribute("data-turbo") == "true";
+            } else {
+                return false;
+            }
+        }
+    }
+    getActionForLink(link) {
+        const action = link.getAttribute("data-turbo-action");
+        return isAction(action) ? action : "advance";
+    }
+    get snapshot() {
+        return this.view.snapshot;
+    }
+}
+function extendURLWithDeprecatedProperties(url) {
+    Object.defineProperties(url, deprecatedLocationPropertyDescriptors);
+}
+const deprecatedLocationPropertyDescriptors = {
+    absoluteURL: {
+        get() {
+            return this.toString();
+        }
+    }
+};
+class Cache {
+    constructor(session2) {
+        this.session = session2;
+    }
+    clear() {
+        this.session.clearCache();
+    }
+    resetCacheControl() {
+        this.setCacheControl("");
+    }
+    exemptPageFromCache() {
+        this.setCacheControl("no-cache");
+    }
+    exemptPageFromPreview() {
+        this.setCacheControl("no-preview");
+    }
+    setCacheControl(value) {
+        setMetaContent("turbo-cache-control", value);
+    }
+}
+const StreamActions = {
+    after() {
+        this.targetElements.forEach((e) => {
+            var _a;
+            return (_a = e.parentElement) === null || _a === void 0 ? void 0 : _a.insertBefore(this.templateContent, e.nextSibling);
+        });
+    },
+    append() {
+        this.removeDuplicateTargetChildren();
+        this.targetElements.forEach((e) => e.append(this.templateContent));
+    },
+    before() {
+        this.targetElements.forEach((e) => {
+            var _a;
+            return (_a = e.parentElement) === null || _a === void 0 ? void 0 : _a.insertBefore(this.templateContent, e);
+        });
+    },
+    prepend() {
+        this.removeDuplicateTargetChildren();
+        this.targetElements.forEach((e) => e.prepend(this.templateContent));
+    },
+    remove() {
+        this.targetElements.forEach((e) => e.remove());
+    },
+    replace() {
+        this.targetElements.forEach((e) => e.replaceWith(this.templateContent));
+    },
+    update() {
+        this.targetElements.forEach((e) => e.replaceChildren(this.templateContent));
+    }
+};
+const session = new Session();
+const cache = new Cache(session);
+const {navigator: navigator$1} = session;
+function start() {
+    session.start();
+}
+function registerAdapter(adapter) {
+    session.registerAdapter(adapter);
+}
+function visit(location2, options) {
+    session.visit(location2, options);
+}
+function connectStreamSource(source) {
+    session.connectStreamSource(source);
+}
+function disconnectStreamSource(source) {
+    session.disconnectStreamSource(source);
+}
+function renderStreamMessage(message) {
+    session.renderStreamMessage(message);
+}
+function clearCache() {
+    console.warn("Please replace `Turbo.clearCache()` with `Turbo.cache.clear()`. The top-level function is deprecated and will be removed in a future version of Turbo.`");
+    session.clearCache();
+}
+function setProgressBarDelay(delay) {
+    session.setProgressBarDelay(delay);
+}
+function setConfirmMethod(confirmMethod) {
+    FormSubmission.confirmMethod = confirmMethod;
+}
+function setFormMode(mode) {
+    session.setFormMode(mode);
+}
+var Turbo = /* @__PURE__ */ Object.freeze({
+    __proto__: null,
+    navigator: navigator$1,
+    session,
+    cache,
+    PageRenderer,
+    PageSnapshot,
+    FrameRenderer,
+    start,
+    registerAdapter,
+    visit,
+    connectStreamSource,
+    disconnectStreamSource,
+    renderStreamMessage,
+    clearCache,
+    setProgressBarDelay,
+    setConfirmMethod,
+    setFormMode,
+    StreamActions
+});
+class FrameController {
+    constructor(element) {
+        this.fetchResponseLoaded = (_fetchResponse) => {
+        };
+        this.currentFetchRequest = null;
+        this.resolveVisitPromise = () => {
+        };
+        this.connected = false;
+        this.hasBeenLoaded = false;
+        this.ignoredAttributes = new Set();
+        this.action = null;
+        this.visitCachedSnapshot = ({element: element2}) => {
+            const frame = element2.querySelector("#" + this.element.id);
+            if (frame && this.previousFrameElement) {
+                frame.replaceChildren(...this.previousFrameElement.children);
+            }
+            delete this.previousFrameElement;
+        };
+        this.element = element;
+        this.view = new FrameView(this, this.element);
+        this.appearanceObserver = new AppearanceObserver(this, this.element);
+        this.formLinkClickObserver = new FormLinkClickObserver(this, this.element);
+        this.linkInterceptor = new LinkInterceptor(this, this.element);
+        this.restorationIdentifier = uuid();
+        this.formSubmitObserver = new FormSubmitObserver(this, this.element);
+    }
+    connect() {
+        if (!this.connected) {
+            this.connected = true;
+            if (this.loadingStyle == FrameLoadingStyle.lazy) {
+                this.appearanceObserver.start();
+            } else {
+                this.loadSourceURL();
+            }
+            this.formLinkClickObserver.start();
+            this.linkInterceptor.start();
+            this.formSubmitObserver.start();
+        }
+    }
+    disconnect() {
+        if (this.connected) {
+            this.connected = false;
+            this.appearanceObserver.stop();
+            this.formLinkClickObserver.stop();
+            this.linkInterceptor.stop();
+            this.formSubmitObserver.stop();
+        }
+    }
+    disabledChanged() {
+        if (this.loadingStyle == FrameLoadingStyle.eager) {
+            this.loadSourceURL();
+        }
+    }
+    sourceURLChanged() {
+        if (this.isIgnoringChangesTo("src"))
+            return;
+        if (this.element.isConnected) {
+            this.complete = false;
+        }
+        if (this.loadingStyle == FrameLoadingStyle.eager || this.hasBeenLoaded) {
+            this.loadSourceURL();
+        }
+    }
+    sourceURLReloaded() {
+        const {src} = this.element;
+        this.ignoringChangesToAttribute("complete", () => {
+            this.element.removeAttribute("complete");
+        });
+        this.element.src = null;
+        this.element.src = src;
+        return this.element.loaded;
+    }
+    completeChanged() {
+        if (this.isIgnoringChangesTo("complete"))
+            return;
+        this.loadSourceURL();
+    }
+    loadingStyleChanged() {
+        if (this.loadingStyle == FrameLoadingStyle.lazy) {
+            this.appearanceObserver.start();
+        } else {
+            this.appearanceObserver.stop();
+            this.loadSourceURL();
+        }
+    }
+    async loadSourceURL() {
+        if (this.enabled && this.isActive && !this.complete && this.sourceURL) {
+            this.element.loaded = this.visit(expandURL(this.sourceURL));
+            this.appearanceObserver.stop();
+            await this.element.loaded;
+            this.hasBeenLoaded = true;
+        }
+    }
+    async loadResponse(fetchResponse) {
+        if (fetchResponse.redirected || fetchResponse.succeeded && fetchResponse.isHTML) {
+            this.sourceURL = fetchResponse.response.url;
+        }
+        try {
+            const html = await fetchResponse.responseHTML;
+            if (html) {
+                const {body} = parseHTMLDocument(html);
+                const newFrameElement = await this.extractForeignFrameElement(body);
+                if (newFrameElement) {
+                    const snapshot = new Snapshot(newFrameElement);
+                    const renderer = new FrameRenderer(this, this.view.snapshot, snapshot, FrameRenderer.renderElement, false, false);
+                    if (this.view.renderPromise)
+                        await this.view.renderPromise;
+                    this.changeHistory();
+                    await this.view.render(renderer);
+                    this.complete = true;
+                    session.frameRendered(fetchResponse, this.element);
+                    session.frameLoaded(this.element);
+                    this.fetchResponseLoaded(fetchResponse);
+                } else if (this.willHandleFrameMissingFromResponse(fetchResponse)) {
+                    console.warn(`A matching frame for #${this.element.id} was missing from the response, transforming into full-page Visit.`);
+                    this.visitResponse(fetchResponse.response);
+                }
+            }
+        } catch (error) {
+            console.error(error);
+            this.view.invalidate();
+        } finally {
+            this.fetchResponseLoaded = () => {
+            };
+        }
+    }
+    elementAppearedInViewport(_element) {
+        this.loadSourceURL();
+    }
+    willSubmitFormLinkToLocation(link) {
+        return this.shouldInterceptNavigation(link);
+    }
+    submittedFormLinkToLocation(link, _location, form) {
+        const frame = this.findFrameElement(link);
+        if (frame)
+            form.setAttribute("data-turbo-frame", frame.id);
+    }
+    shouldInterceptLinkClick(element, _location, _event) {
+        return this.shouldInterceptNavigation(element);
+    }
+    linkClickIntercepted(element, location2) {
+        this.navigateFrame(element, location2);
+    }
+    willSubmitForm(element, submitter) {
+        return element.closest("turbo-frame") == this.element && this.shouldInterceptNavigation(element, submitter);
+    }
+    formSubmitted(element, submitter) {
+        if (this.formSubmission) {
+            this.formSubmission.stop();
+        }
+        this.formSubmission = new FormSubmission(this, element, submitter);
+        const {fetchRequest} = this.formSubmission;
+        this.prepareHeadersForRequest(fetchRequest.headers, fetchRequest);
+        this.formSubmission.start();
+    }
+    prepareHeadersForRequest(headers, request) {
+        var _a;
+        headers["Turbo-Frame"] = this.id;
+        if ((_a = this.currentNavigationElement) === null || _a === void 0 ? void 0 : _a.hasAttribute("data-turbo-stream")) {
+            request.acceptResponseType(StreamMessage.contentType);
+        }
+    }
+    requestStarted(_request) {
+        markAsBusy(this.element);
+    }
+    requestPreventedHandlingResponse(_request, _response) {
+        this.resolveVisitPromise();
+    }
+    async requestSucceededWithResponse(request, response) {
+        await this.loadResponse(response);
+        this.resolveVisitPromise();
+    }
+    async requestFailedWithResponse(request, response) {
+        console.error(response);
+        await this.loadResponse(response);
+        this.resolveVisitPromise();
+    }
+    requestErrored(request, error) {
+        console.error(error);
+        this.resolveVisitPromise();
+    }
+    requestFinished(_request) {
+        clearBusyState(this.element);
+    }
+    formSubmissionStarted({formElement}) {
+        markAsBusy(formElement, this.findFrameElement(formElement));
+    }
+    formSubmissionSucceededWithResponse(formSubmission, response) {
+        const frame = this.findFrameElement(formSubmission.formElement, formSubmission.submitter);
+        frame.delegate.proposeVisitIfNavigatedWithAction(frame, formSubmission.formElement, formSubmission.submitter);
+        frame.delegate.loadResponse(response);
+    }
+    formSubmissionFailedWithResponse(formSubmission, fetchResponse) {
+        this.element.delegate.loadResponse(fetchResponse);
+    }
+    formSubmissionErrored(formSubmission, error) {
+        console.error(error);
+    }
+    formSubmissionFinished({formElement}) {
+        clearBusyState(formElement, this.findFrameElement(formElement));
+    }
+    allowsImmediateRender({element: newFrame}, options) {
+        const event = dispatch("turbo:before-frame-render", {
+            target: this.element,
+            detail: Object.assign({newFrame}, options),
+            cancelable: true
+        });
+        const {defaultPrevented, detail: {render}} = event;
+        if (this.view.renderer && render) {
+            this.view.renderer.renderElement = render;
+        }
+        return !defaultPrevented;
+    }
+    viewRenderedSnapshot(_snapshot, _isPreview) {
+    }
+    preloadOnLoadLinksForView(element) {
+        session.preloadOnLoadLinksForView(element);
+    }
+    viewInvalidated() {
+    }
+    willRenderFrame(currentElement, _newElement) {
+        this.previousFrameElement = currentElement.cloneNode(true);
+    }
+    async visit(url) {
+        var _a;
+        const request = new FetchRequest(this, FetchMethod.get, url, new URLSearchParams(), this.element);
+        (_a = this.currentFetchRequest) === null || _a === void 0 ? void 0 : _a.cancel();
+        this.currentFetchRequest = request;
+        return new Promise((resolve) => {
+            this.resolveVisitPromise = () => {
+                this.resolveVisitPromise = () => {
+                };
+                this.currentFetchRequest = null;
+                resolve();
+            };
+            request.perform();
+        });
+    }
+    navigateFrame(element, url, submitter) {
+        const frame = this.findFrameElement(element, submitter);
+        this.pageSnapshot = PageSnapshot.fromElement(frame).clone();
+        frame.delegate.proposeVisitIfNavigatedWithAction(frame, element, submitter);
+        this.withCurrentNavigationElement(element, () => {
+            frame.src = url;
+        });
+    }
+    proposeVisitIfNavigatedWithAction(frame, element, submitter) {
+        this.action = getVisitAction(submitter, element, frame);
+        if (isAction(this.action)) {
+            const {visitCachedSnapshot} = frame.delegate;
+            frame.delegate.fetchResponseLoaded = (fetchResponse) => {
+                if (frame.src) {
+                    const {statusCode, redirected} = fetchResponse;
+                    const responseHTML = frame.ownerDocument.documentElement.outerHTML;
+                    const response = {statusCode, redirected, responseHTML};
+                    const options = {
+                        response,
+                        visitCachedSnapshot,
+                        willRender: false,
+                        updateHistory: false,
+                        restorationIdentifier: this.restorationIdentifier,
+                        snapshot: this.pageSnapshot
+                    };
+                    if (this.action)
+                        options.action = this.action;
+                    session.visit(frame.src, options);
+                }
+            };
+        }
+    }
+    changeHistory() {
+        if (this.action) {
+            const method = getHistoryMethodForAction(this.action);
+            session.history.update(method, expandURL(this.element.src || ""), this.restorationIdentifier);
+        }
+    }
+    willHandleFrameMissingFromResponse(fetchResponse) {
+        this.element.setAttribute("complete", "");
+        const response = fetchResponse.response;
+        const visit2 = async (url, options = {}) => {
+            if (url instanceof Response) {
+                this.visitResponse(url);
+            } else {
+                session.visit(url, options);
+            }
+        };
+        const event = dispatch("turbo:frame-missing", {
+            target: this.element,
+            detail: {response, visit: visit2},
+            cancelable: true
+        });
+        return !event.defaultPrevented;
+    }
+    async visitResponse(response) {
+        const wrapped = new FetchResponse(response);
+        const responseHTML = await wrapped.responseHTML;
+        const {location: location2, redirected, statusCode} = wrapped;
+        return session.visit(location2, {response: {redirected, statusCode, responseHTML}});
+    }
+    findFrameElement(element, submitter) {
+        var _a;
+        const id = getAttribute("data-turbo-frame", submitter, element) || this.element.getAttribute("target");
+        return (_a = getFrameElementById(id)) !== null && _a !== void 0 ? _a : this.element;
+    }
+    async extractForeignFrameElement(container) {
+        let element;
+        const id = CSS.escape(this.id);
+        try {
+            element = activateElement(container.querySelector(`turbo-frame#${id}`), this.sourceURL);
+            if (element) {
+                return element;
+            }
+            element = activateElement(container.querySelector(`turbo-frame[src][recurse~=${id}]`), this.sourceURL);
+            if (element) {
+                await element.loaded;
+                return await this.extractForeignFrameElement(element);
+            }
+        } catch (error) {
+            console.error(error);
+            return new FrameElement();
+        }
+        return null;
+    }
+    formActionIsVisitable(form, submitter) {
+        const action = getAction(form, submitter);
+        return locationIsVisitable(expandURL(action), this.rootLocation);
+    }
+    shouldInterceptNavigation(element, submitter) {
+        const id = getAttribute("data-turbo-frame", submitter, element) || this.element.getAttribute("target");
+        if (element instanceof HTMLFormElement && !this.formActionIsVisitable(element, submitter)) {
+            return false;
+        }
+        if (!this.enabled || id == "_top") {
+            return false;
+        }
+        if (id) {
+            const frameElement = getFrameElementById(id);
+            if (frameElement) {
+                return !frameElement.disabled;
+            }
+        }
+        if (!session.elementIsNavigatable(element)) {
+            return false;
+        }
+        if (submitter && !session.elementIsNavigatable(submitter)) {
+            return false;
+        }
+        return true;
+    }
+    get id() {
+        return this.element.id;
+    }
+    get enabled() {
+        return !this.element.disabled;
+    }
+    get sourceURL() {
+        if (this.element.src) {
+            return this.element.src;
+        }
+    }
+    set sourceURL(sourceURL) {
+        this.ignoringChangesToAttribute("src", () => {
+            this.element.src = sourceURL !== null && sourceURL !== void 0 ? sourceURL : null;
+        });
+    }
+    get loadingStyle() {
+        return this.element.loading;
+    }
+    get isLoading() {
+        return this.formSubmission !== void 0 || this.resolveVisitPromise() !== void 0;
+    }
+    get complete() {
+        return this.element.hasAttribute("complete");
+    }
+    set complete(value) {
+        this.ignoringChangesToAttribute("complete", () => {
+            if (value) {
+                this.element.setAttribute("complete", "");
+            } else {
+                this.element.removeAttribute("complete");
+            }
+        });
+    }
+    get isActive() {
+        return this.element.isActive && this.connected;
+    }
+    get rootLocation() {
+        var _a;
+        const meta = this.element.ownerDocument.querySelector(`meta[name="turbo-root"]`);
+        const root = (_a = meta === null || meta === void 0 ? void 0 : meta.content) !== null && _a !== void 0 ? _a : "/";
+        return expandURL(root);
+    }
+    isIgnoringChangesTo(attributeName) {
+        return this.ignoredAttributes.has(attributeName);
+    }
+    ignoringChangesToAttribute(attributeName, callback) {
+        this.ignoredAttributes.add(attributeName);
+        callback();
+        this.ignoredAttributes.delete(attributeName);
+    }
+    withCurrentNavigationElement(element, callback) {
+        this.currentNavigationElement = element;
+        callback();
+        delete this.currentNavigationElement;
+    }
+}
+function getFrameElementById(id) {
+    if (id != null) {
+        const element = document.getElementById(id);
+        if (element instanceof FrameElement) {
+            return element;
+        }
+    }
+}
+function activateElement(element, currentURL) {
+    if (element) {
+        const src = element.getAttribute("src");
+        if (src != null && currentURL != null && urlsAreEqual(src, currentURL)) {
+            throw new Error(`Matching <turbo-frame id="${element.id}"> element has a source URL which references itself`);
+        }
+        if (element.ownerDocument !== document) {
+            element = document.importNode(element, true);
+        }
+        if (element instanceof FrameElement) {
+            element.connectedCallback();
+            element.disconnectedCallback();
+            return element;
+        }
+    }
+}
+class StreamElement extends HTMLElement {
+    static async renderElement(newElement) {
+        await newElement.performAction();
+    }
+    async connectedCallback() {
+        try {
+            await this.render();
+        } catch (error) {
+            console.error(error);
+        } finally {
+            this.disconnect();
+        }
+    }
+    async render() {
+        var _a;
+        return (_a = this.renderPromise) !== null && _a !== void 0 ? _a : this.renderPromise = (async () => {
+            const event = this.beforeRenderEvent;
+            if (this.dispatchEvent(event)) {
+                await nextAnimationFrame();
+                await event.detail.render(this);
+            }
+        })();
+    }
+    disconnect() {
+        try {
+            this.remove();
+        } catch (_a) {
+        }
+    }
+    removeDuplicateTargetChildren() {
+        this.duplicateChildren.forEach((c) => c.remove());
+    }
+    get duplicateChildren() {
+        var _a;
+        const existingChildren = this.targetElements.flatMap((e) => [...e.children]).filter((c) => !!c.id);
+        const newChildrenIds = [...((_a = this.templateContent) === null || _a === void 0 ? void 0 : _a.children) || []].filter((c) => !!c.id).map((c) => c.id);
+        return existingChildren.filter((c) => newChildrenIds.includes(c.id));
+    }
+    get performAction() {
+        if (this.action) {
+            const actionFunction = StreamActions[this.action];
+            if (actionFunction) {
+                return actionFunction;
+            }
+            this.raise("unknown action");
+        }
+        this.raise("action attribute is missing");
+    }
+    get targetElements() {
+        if (this.target) {
+            return this.targetElementsById;
+        } else if (this.targets) {
+            return this.targetElementsByQuery;
+        } else {
+            this.raise("target or targets attribute is missing");
+        }
+    }
+    get templateContent() {
+        return this.templateElement.content.cloneNode(true);
+    }
+    get templateElement() {
+        if (this.firstElementChild === null) {
+            const template = this.ownerDocument.createElement("template");
+            this.appendChild(template);
+            return template;
+        } else if (this.firstElementChild instanceof HTMLTemplateElement) {
+            return this.firstElementChild;
+        }
+        this.raise("first child element must be a <template> element");
+    }
+    get action() {
+        return this.getAttribute("action");
+    }
+    get target() {
+        return this.getAttribute("target");
+    }
+    get targets() {
+        return this.getAttribute("targets");
+    }
+    raise(message) {
+        throw new Error(`${this.description}: ${message}`);
+    }
+    get description() {
+        var _a, _b;
+        return (_b = ((_a = this.outerHTML.match(/<[^>]+>/)) !== null && _a !== void 0 ? _a : [])[0]) !== null && _b !== void 0 ? _b : "<turbo-stream>";
+    }
+    get beforeRenderEvent() {
+        return new CustomEvent("turbo:before-stream-render", {
+            bubbles: true,
+            cancelable: true,
+            detail: {newStream: this, render: StreamElement.renderElement}
+        });
+    }
+    get targetElementsById() {
+        var _a;
+        const element = (_a = this.ownerDocument) === null || _a === void 0 ? void 0 : _a.getElementById(this.target);
+        if (element !== null) {
+            return [element];
+        } else {
+            return [];
+        }
+    }
+    get targetElementsByQuery() {
+        var _a;
+        const elements = (_a = this.ownerDocument) === null || _a === void 0 ? void 0 : _a.querySelectorAll(this.targets);
+        if (elements.length !== 0) {
+            return Array.prototype.slice.call(elements);
+        } else {
+            return [];
+        }
+    }
+}
+class StreamSourceElement extends HTMLElement {
+    constructor() {
+        super(...arguments);
+        this.streamSource = null;
+    }
+    connectedCallback() {
+        this.streamSource = this.src.match(/^ws{1,2}:/) ? new WebSocket(this.src) : new EventSource(this.src);
+        connectStreamSource(this.streamSource);
+    }
+    disconnectedCallback() {
+        if (this.streamSource) {
+            disconnectStreamSource(this.streamSource);
+        }
+    }
+    get src() {
+        return this.getAttribute("src") || "";
+    }
+}
+FrameElement.delegateConstructor = FrameController;
+if (customElements.get("turbo-frame") === void 0) {
+    customElements.define("turbo-frame", FrameElement);
+}
+if (customElements.get("turbo-stream") === void 0) {
+    customElements.define("turbo-stream", StreamElement);
+}
+if (customElements.get("turbo-stream-source") === void 0) {
+    customElements.define("turbo-stream-source", StreamSourceElement);
+}
+(() => {
+    let element = document.currentScript;
+    if (!element)
+        return;
+    if (element.hasAttribute("data-turbo-suppress-warning"))
+        return;
+    element = element.parentElement;
+    while (element) {
+        if (element == document.body) {
+            return console.warn(unindent`
         You are loading Turbo from a <script> element inside the <body> element. This is probably not what you meant to do!
 
         Load your application’s JavaScript bundle inside the <head> element instead. <script> elements in <body> are evaluated with each page change.
@@ -23,4 +3680,12 @@
 
         ——
         Suppress this warning by adding a "data-turbo-suppress-warning" attribute to: %s
-      `,s.outerHTML);s=s.parentElement}})(),window.Turbo=Vt,X();export{f as FrameElement,g as FrameLoadingStyle,N as FrameRenderer,_ as PageRenderer,m as PageSnapshot,Q as StreamActions,D as StreamElement,Ce as StreamSourceElement,pe as cache,we as clearCache,Y as connectStreamSource,J as disconnectStreamSource,fe as navigator,ge as registerAdapter,be as renderStreamMessage,a as session,Se as setConfirmMethod,ye as setFormMode,Ee as setProgressBarDelay,X as start,ve as visit};export default null;
+      `, element.outerHTML);
+        }
+        element = element.parentElement;
+    }
+})();
+window.Turbo = Turbo;
+start();
+export {FrameElement, FrameLoadingStyle, FrameRenderer, PageRenderer, PageSnapshot, StreamActions, StreamElement, StreamSourceElement, cache, clearCache, connectStreamSource, disconnectStreamSource, navigator$1 as navigator, registerAdapter, renderStreamMessage, session, setConfirmMethod, setFormMode, setProgressBarDelay, start, visit};
+export default null;
