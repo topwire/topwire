@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\TYPO3\Telegraph\Turbo\ViewHelpers;
+namespace Helhum\TYPO3\Telegraph\ViewHelpers\Turbo;
 
 use Helhum\TYPO3\Telegraph\RenderingContext\RenderingContext as TelegraphRenderingContext;
 use Helhum\TYPO3\Telegraph\RenderingContext\RenderingContextFactory;
@@ -22,48 +22,41 @@ class FrameViewHelper extends AbstractViewHelper
     public function initializeArguments(): void
     {
         $this->registerArgument('id', 'string', 'id of the frame', true);
-        $this->registerArgument('renderingContext', 'string', 'rendering context', false, 'current');
         $this->registerArgument('propagateUrl', 'bool', 'Whether the URL should be pushed to browser history', false, false);
     }
 
     /**
      * @param array<mixed> $arguments
      * @param \Closure $renderChildrenClosure
-     * @param FluidRenderingContextInterface $renderingContext
+     * @param FluidRenderingContextInterface $fluidRenderingContext
      * @return string
      * @throws \JsonException
      */
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
-        FluidRenderingContextInterface $renderingContext
+        FluidRenderingContextInterface $fluidRenderingContext
     ): string {
+        $telegraphRenderingContext = self::extractRenderingContext($fluidRenderingContext);
         return (new FrameRenderer())->render(
-            self::extractRenderingContext($arguments, $renderingContext),
+            $telegraphRenderingContext,
             $renderChildrenClosure(),
             new FrameOptions(
                 id: $arguments['id'],
+                src: null,
                 propagateUrl: $arguments['propagateUrl'],
             )
         );
     }
 
-    /**
-     * @param array<mixed> $arguments
-     * @param FluidRenderingContext $renderingContext
-     * @return TelegraphRenderingContext|null
-     */
-    private static function extractRenderingContext(array $arguments, FluidRenderingContext $renderingContext): ?TelegraphRenderingContext
+    private static function extractRenderingContext(FluidRenderingContextInterface $fluidRenderingContext): TelegraphRenderingContext
     {
-        if ($arguments['renderingContext'] === 'none') {
-            return null;
-        }
-        assert($renderingContext instanceof FluidRenderingContext);
+        assert($fluidRenderingContext instanceof FluidRenderingContext);
         $renderingContextFactory = new RenderingContextFactory(
             $GLOBALS['TSFE']
         );
         return $renderingContextFactory->forExtbaseRequest(
-            $renderingContext->getRequest(),
+            $fluidRenderingContext->getRequest(),
             GeneralUtility::makeInstance(ConfigurationManager::class),
         );
     }

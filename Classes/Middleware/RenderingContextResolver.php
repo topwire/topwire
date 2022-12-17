@@ -11,7 +11,7 @@ use TYPO3\CMS\Core\Routing\PageArguments;
 
 class RenderingContextResolver implements MiddlewareInterface
 {
-    private const contextHeader = 'Telegraph-Rendering-Context';
+    private const contextHeader = 'Telegraph-Context';
     private const argumentNamespace = 'tx_telegraph';
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -60,7 +60,7 @@ class RenderingContextResolver implements MiddlewareInterface
     private function addVaryHeader(ResponseInterface $response): ResponseInterface
     {
         $varyHeader = $response->getHeader('Vary');
-        $varyHeader[] = 'Telegraph-Rendering-Context';
+        $varyHeader[] = 'Telegraph-Context';
         return $response->withAddedHeader('Vary', $varyHeader);
     }
 }

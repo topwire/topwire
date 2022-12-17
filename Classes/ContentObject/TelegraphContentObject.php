@@ -2,6 +2,8 @@
 namespace Helhum\TYPO3\Telegraph\ContentObject;
 
 use Helhum\TYPO3\Telegraph\RenderingContext\RenderingContext;
+use Helhum\TYPO3\Telegraph\Turbo\FrameOptions;
+use Helhum\TYPO3\Telegraph\Turbo\FrameRenderer;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -18,10 +20,24 @@ class TelegraphContentObject extends AbstractContentObject
         $renderingContext = $conf['context'];
         assert($renderingContext instanceof RenderingContext);
 
-        return (new ContentObjectRenderer())->cObjGetSingle(
+        $content = (new ContentObjectRenderer())->cObjGetSingle(
             'RECORDS',
             $this->transformToRecordsConfiguration($renderingContext)
         );
+        if (!isset($conf['frameId'])
+            || str_contains($content, sprintf('%s_%s', $conf['frameId'], $renderingContext->id))
+        ) {
+            // The frame id is known and set during partial rendering
+            // At the same time the rendered content already contains this id, so the frame is wrapped already
+            return $content;
+        }
+
+        return (new FrameRenderer())
+            ->render(
+                renderingContext: $renderingContext,
+                content: $content,
+                options: new FrameOptions(id: $conf['frameId']),
+            );
     }
 
     /**

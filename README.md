@@ -1,3 +1,138 @@
+## Examples
+
+### Wrapping parts of a Fluid template of an Extbase plugin in a Turbo Frame 
+
+#### `Default.html`
+
+```html
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <telegraph:turbo.frame id="my_plugin">
+        <h2>Default action</h2>
+        <f:link.action action="my">Show my action result</f:link.action>
+    </telegraph:turbo.frame>    
+
+</html>
+```
+
+#### `My.html`
+
+```html
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <telegraph:turbo.frame id="my_plugin">
+        <h2>My action</h2>
+        <f:link.action action="default">Show default action result</f:link.action>
+    </telegraph:turbo.frame>    
+
+</html>
+```
+
+### Render a plugin, wrapped in a Turbo Frame
+
+```html
+<html
+    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <telegraph:turbo.frame.withContext 
+        id="other_plugin" 
+        context="{telegraph:context.plugin(extensionName: 'FeLogin', pluginName: 'Login')}" 
+    />
+
+</html>
+```
+
+### Render a plugin asynchronously, wrapped in a Turbo Frame
+
+```html
+<html
+    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <telegraph:turbo.frame.withContext 
+        id="other_plugin_async" async="true" 
+        context="{telegraph:context.plugin(extensionName: 'FeLogin', pluginName: 'Login')}"
+    >
+        Loading...
+    </telegraph:turbo.frame.withContext>
+
+</html>
+```
+
+### Render content element, wrapped in a Turbo Frame
+
+```html
+<html
+    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <telegraph:turbo.frame.withContext 
+        id="content_element" 
+        context="{telegraph:context.contentElement(contentElementUid: '148')}"
+    />
+
+</html>
+```
+
+### Render content element asynchronously, wrapped in a Turbo Frame
+
+```html
+<html
+    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <telegraph:turbo.frame.withContext 
+        id="content_element_async" 
+        async="true" 
+        context="{telegraph:context.contentElement(contentElementUid: '148')}"
+    >
+        Loading...
+    </telegraph:turbo.frame.withContext>
+
+</html>
+```
+
+### Render any TypoScript, wrapped in a Turbo Frame
+
+```html
+<html
+    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <telegraph:turbo.frame.withContext 
+        id="typo_script" 
+        context="{telegraph:context.typoScript(typoScriptPath: 'lib.tsExample')}"
+    />
+
+</html>
+```
+
+### Render any TypoScript asynchronously, wrapped in a Turbo Frame
+
+```html
+<html
+    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <telegraph:turbo.frame.withContext 
+        id="typo_script_async" 
+        async="true" 
+        context="{telegraph:context.typoScript(typoScriptPath: 'lib.tsExample')}"
+    >
+        Loading...
+    </telegraph:turbo.frame.withContext>
+
+</html>
+```
+
+
 ## Concepts
 
 ### Rendering Context
@@ -19,3 +154,9 @@ and/ or plugins, it is also possible to define a rendering context for
 other tables as well. The only requirement is, that the record with the uid
 exists in the table and that the TypoScript defined in the path is also available.
 
+
+## TODO
+
+* Implement turbo streams
+* Maybe optionally allow wrapping server response in turbo frame to 
+  not require changing the plugin itself

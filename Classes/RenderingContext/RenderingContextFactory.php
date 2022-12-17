@@ -21,15 +21,15 @@ class RenderingContextFactory
         return $this->forPlugin(
             $request->getControllerExtensionName(),
             $request->getPluginName(),
-            $configurationManager->getContentObject()?->currentRecord
+            $configurationManager->getContentObject()?->currentRecord,
         );
     }
 
-    public function forPlugin(string $extensionName, string $pluginName, ?string $contextRecordId): RenderingContext
+    public function forPlugin(string $extensionName, string $pluginName, ?string $contextRecordId, ?int $pageUid = null): RenderingContext
     {
         return new RenderingContext(
             RenderingPath::fromPlugin($extensionName, $pluginName, $this->typoScriptFrontendController->tmpl->setup['tt_content.']),
-            $this->resolveContextRecord($contextRecordId)
+            $this->resolveContextRecord($contextRecordId, $pageUid),
         );
     }
 
@@ -47,10 +47,10 @@ class RenderingContextFactory
      * Falls back to current page if none is available
      *
      * @param string|null $contextRecordId
-     *
+     * @param int|null $pageUid
      * @return ContextRecord
      */
-    private function resolveContextRecord(?string $contextRecordId): ContextRecord
+    private function resolveContextRecord(?string $contextRecordId, ?int $pageUid = null): ContextRecord
     {
         if ($contextRecordId === null
             || $contextRecordId === 'currentPage'
@@ -59,7 +59,7 @@ class RenderingContextFactory
             return new ContextRecord(
                 'pages',
                 (int)$this->typoScriptFrontendController->id,
-                (int)$this->typoScriptFrontendController->id,
+                $pageUid ?? (int)$this->typoScriptFrontendController->id,
             );
         }
         [$tableName, $uid] = explode(':', $contextRecordId);
@@ -67,14 +67,14 @@ class RenderingContextFactory
             return new ContextRecord(
                 'pages',
                 (int)$this->typoScriptFrontendController->id,
-                (int)$this->typoScriptFrontendController->id,
+                $pageUid ?? (int)$this->typoScriptFrontendController->id,
             );
         }
         // TODO: maybe check if the record is available
         return new ContextRecord(
             $tableName,
             (int)$uid,
-            (int)$this->typoScriptFrontendController->id,
+            $pageUid ?? (int)$this->typoScriptFrontendController->id,
         );
     }
 }

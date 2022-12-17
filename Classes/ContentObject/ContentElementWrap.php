@@ -61,10 +61,12 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
         ) {
             return $content;
         }
+        if ($parentObject->getRequest()->hasHeader('Telegraph-Context')) {
+            return $content;
+        }
         if ($parentObject->getCurrentTable() !== 'tt_content') {
             throw new InvalidTableContext('"stdWrap.telegraphFrameWrap" can only be used for table "tt_content"', 1671124640);
         }
-
         $controller = $parentObject->getTypoScriptFrontendController();
         assert($controller instanceof TypoScriptFrontendController);
 
@@ -79,7 +81,7 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
             $contextFactory->forPath($path, $record),
             $content,
             new FrameOptions(
-                id: 'tt_content',
+                id: $parentObject->currentRecord,
                 propagateUrl: false,
             )
         );
