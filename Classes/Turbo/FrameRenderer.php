@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Helhum\Topwire\Turbo;
 
 use Helhum\Topwire\Context\TopwireContext;
+use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
 class FrameRenderer
 {
@@ -13,14 +14,17 @@ class FrameRenderer
             $options->id,
             $context->id
         );
-        return sprintf(
-            '<turbo-frame id="%2$s"%5$s%3$s%4$s%6$s>%1$s</turbo-frame>',
-            $content,
-            htmlspecialchars($frameId),
-            sprintf(' data-topwire-context="%s"', htmlspecialchars(\json_encode($context, JSON_THROW_ON_ERROR))),
-            $options->propagateUrl ? ' data-turbo-action="advance"' : '',
-            isset($options->src) ? sprintf(' src="%s"', htmlspecialchars($options->src)) : '',
-            sprintf(' data-topwire-id="%s"', htmlspecialchars($options->id)),
-        );
+        $tagBuilder = new TagBuilder('turbo-frame', $content);
+        $tagBuilder->addAttribute('id', $frameId);
+        $tagBuilder->addAttribute('data-topwire-id', $options->id);
+        $tagBuilder->addAttribute('data-topwire-context', \json_encode($context, JSON_THROW_ON_ERROR));
+        if ($options->propagateUrl) {
+            $tagBuilder->addAttribute('data-turbo-action', 'advance');
+        }
+        if (isset($options->src)) {
+            $tagBuilder->addAttribute('src', $options->src);
+        }
+
+        return $tagBuilder->render();
     }
 }
