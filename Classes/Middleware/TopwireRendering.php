@@ -2,7 +2,7 @@
 namespace Helhum\Topwire\Middleware;
 
 use Helhum\Topwire\ContentObject\TopwireContentObject;
-use Helhum\Topwire\RenderingContext\RenderingContext;
+use Helhum\Topwire\Context\TopwireContext;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -20,8 +20,8 @@ class TopwireRendering implements MiddlewareInterface
     {
         $frontendController = $GLOBALS['TSFE'];
         assert($frontendController instanceof TypoScriptFrontendController);
-        $renderingContext = $request->getAttribute('topwire');
-        if (!$renderingContext instanceof RenderingContext || !$frontendController->isGeneratePage()) {
+        $context = $request->getAttribute('topwire');
+        if (!$context instanceof TopwireContext || !$frontendController->isGeneratePage()) {
             return $this->validateContentType($request, $handler->handle($request));
         }
 
@@ -31,7 +31,7 @@ class TopwireRendering implements MiddlewareInterface
         $frontendController->pSetup = [
             '10' => TopwireContentObject::NAME,
             '10.' => [
-                'context' => $renderingContext,
+                'context' => $context,
                 'frameId' => $request->getHeader('Topwire-Frame-Id')[0] ?? null,
             ],
         ];

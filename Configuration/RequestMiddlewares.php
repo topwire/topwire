@@ -3,7 +3,7 @@
 return [
     'frontend' => [
         'helhum/topwire-vary-header' => [
-            'target' => \Helhum\Topwire\Middleware\RenderingContextResolver::class,
+            'target' => \Helhum\Topwire\Middleware\TopwireContextResolver::class,
             'description' => '',
             'after' => [
                 'typo3/cms-frontend/page-resolver',

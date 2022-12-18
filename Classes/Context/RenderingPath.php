@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\RenderingContext;
+namespace Helhum\Topwire\Context;
 
-use Helhum\Topwire\RenderingContext\Exception\InvalidRenderingContext;
+use Helhum\Topwire\Context\Exception\InvalidTopwireContext;
 
 class RenderingPath implements \JsonSerializable
 {
@@ -32,7 +32,7 @@ class RenderingPath implements \JsonSerializable
     {
         $path = \json_decode($json, true, 512, JSON_THROW_ON_ERROR);
         if (!is_string($path)) {
-            throw new InvalidRenderingContext('Could not decode context record', 1671024039);
+            throw new InvalidTopwireContext('Could not decode context record', 1671024039);
         }
 
         return new self(renderingPath: $path);

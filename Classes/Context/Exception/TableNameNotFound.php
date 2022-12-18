@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\RenderingContext\Exception;
+namespace Helhum\Topwire\Context\Exception;
 
 use Helhum\Topwire\TopwireException;
 

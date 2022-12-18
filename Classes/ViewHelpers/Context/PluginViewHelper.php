@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Helhum\Topwire\ViewHelpers\Context;
 
-use Helhum\Topwire\RenderingContext\RenderingContext as TopwireRenderingContext;
-use Helhum\Topwire\RenderingContext\RenderingContextFactory;
-use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext as FluidRenderingContext;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface as FluidRenderingContextInterface;
+use Helhum\Topwire\Context\TopwireContext;
+use Helhum\Topwire\Context\TopwireContextFactory;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
@@ -25,33 +25,33 @@ class PluginViewHelper extends AbstractViewHelper
     /**
      * @param array<mixed> $arguments
      * @param \Closure $renderChildrenClosure
-     * @param FluidRenderingContextInterface $renderingContext
-     * @return TopwireRenderingContext
+     * @param RenderingContextInterface $renderingContext
+     * @return TopwireContext
      */
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
-        FluidRenderingContextInterface $renderingContext
-    ): TopwireRenderingContext {
-        return self::extractRenderingContext($arguments, $renderingContext);
+        RenderingContextInterface $renderingContext
+    ): TopwireContext {
+        return self::extractTopwireContext($arguments, $renderingContext);
     }
 
     /**
      * @param array<mixed> $arguments
-     * @param FluidRenderingContextInterface $renderingContext
-     * @return TopwireRenderingContext
+     * @param RenderingContextInterface $renderingContext
+     * @return TopwireContext
      */
-    private static function extractRenderingContext(
+    private static function extractTopwireContext(
         array $arguments,
-        FluidRenderingContextInterface $renderingContext
-    ): TopwireRenderingContext {
-        assert($renderingContext instanceof FluidRenderingContext);
+        RenderingContextInterface $renderingContext
+    ): TopwireContext {
+        assert($renderingContext instanceof RenderingContext);
         $extensionName = $arguments['extensionName'] ?? $renderingContext->getRequest();
         $pluginName = $arguments['pluginName'] ?? $renderingContext->getRequest();
-        $renderingContextFactory = new RenderingContextFactory(
+        $contextFactory = new TopwireContextFactory(
             $GLOBALS['TSFE']
         );
-        return $renderingContextFactory->forPlugin(
+        return $contextFactory->forPlugin(
             extensionName: $extensionName,
             pluginName: $pluginName,
             contextRecordId: null,

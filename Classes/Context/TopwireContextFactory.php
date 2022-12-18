@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\RenderingContext;
+namespace Helhum\Topwire\Context;
 
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Request as ExtbaseRequest;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
-class RenderingContextFactory
+class TopwireContextFactory
 {
     private TypoScriptFrontendController $typoScriptFrontendController;
 
@@ -16,7 +16,7 @@ class RenderingContextFactory
         $this->typoScriptFrontendController = $typoScriptFrontendController;
     }
 
-    public function forExtbaseRequest(ExtbaseRequest $request, ConfigurationManagerInterface $configurationManager): RenderingContext
+    public function forExtbaseRequest(ExtbaseRequest $request, ConfigurationManagerInterface $configurationManager): TopwireContext
     {
         return $this->forPlugin(
             $request->getControllerExtensionName(),
@@ -25,18 +25,18 @@ class RenderingContextFactory
         );
     }
 
-    public function forPlugin(string $extensionName, string $pluginName, ?string $contextRecordId, ?int $pageUid = null): RenderingContext
+    public function forPlugin(string $extensionName, string $pluginName, ?string $contextRecordId, ?int $pageUid = null): TopwireContext
     {
-        return new RenderingContext(
+        return new TopwireContext(
             RenderingPath::fromPlugin($extensionName, $pluginName, $this->typoScriptFrontendController->tmpl->setup['tt_content.']),
             $this->resolveContextRecord($contextRecordId, $pageUid),
         );
     }
 
-    public function forPath(string $renderingPath, ?string $contextRecordId): RenderingContext
+    public function forPath(string $renderingPath, ?string $contextRecordId): TopwireContext
     {
         $contextRecord = $this->resolveContextRecord($contextRecordId);
-        return new RenderingContext(
+        return new TopwireContext(
             new RenderingPath($renderingPath),
             $contextRecord
         );

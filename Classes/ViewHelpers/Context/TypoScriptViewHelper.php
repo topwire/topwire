@@ -2,9 +2,9 @@
 declare(strict_types=1);
 namespace Helhum\Topwire\ViewHelpers\Context;
 
-use Helhum\Topwire\RenderingContext\RenderingContext as TopwireRenderingContext;
-use Helhum\Topwire\RenderingContext\RenderingContextFactory;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface as FluidRenderingContextInterface;
+use Helhum\Topwire\Context\TopwireContext;
+use Helhum\Topwire\Context\TopwireContextFactory;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
@@ -25,18 +25,18 @@ class TypoScriptViewHelper extends AbstractViewHelper
     /**
      * @param array<mixed> $arguments
      * @param \Closure $renderChildrenClosure
-     * @param FluidRenderingContextInterface $renderingContext
-     * @return TopwireRenderingContext
+     * @param RenderingContextInterface $renderingContext
+     * @return TopwireContext
      */
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
-        FluidRenderingContextInterface $renderingContext
-    ): TopwireRenderingContext {
-        $renderingContextFactory = new RenderingContextFactory(
+        RenderingContextInterface $renderingContext
+    ): TopwireContext {
+        $contextFactory = new TopwireContextFactory(
             $GLOBALS['TSFE']
         );
-        return $renderingContextFactory->forPath(
+        return $contextFactory->forPath(
             renderingPath: $arguments['typoScriptPath'],
             contextRecordId: $arguments['tableName'] . ':' . $arguments['recordUid'],
         );

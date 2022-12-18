@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace Helhum\Topwire\Middleware;
 
-use Helhum\Topwire\RenderingContext\RenderingContext;
+use Helhum\Topwire\Context\TopwireContext;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Routing\PageArguments;
 
-class RenderingContextResolver implements MiddlewareInterface
+class TopwireContextResolver implements MiddlewareInterface
 {
     private const contextHeader = 'Topwire-Context';
     private const argumentNamespace = 'tx_topwire';
@@ -26,15 +26,15 @@ class RenderingContextResolver implements MiddlewareInterface
         ) {
             return $this->addVaryHeader($handler->handle($request));
         }
-        $renderingContextString = $this->resolveContextString($request);
-        $renderingContext = RenderingContext::fromJson($renderingContextString);
-        if ($renderingContext->contextRecord->pageId !== $pageArguments->getPageId()) {
+        $contextString = $this->resolveContextString($request);
+        $context = TopwireContext::fromJson($contextString);
+        if ($context->contextRecord->pageId !== $pageArguments->getPageId()) {
             return $this->addVaryHeader($handler->handle($request));
         }
         $newStaticArguments = array_merge(
             $pageArguments->getStaticArguments(),
             [
-                self::argumentNamespace => $renderingContextString,
+                self::argumentNamespace => $contextString,
             ]
         );
         $modifiedPageArguments = new PageArguments(
@@ -46,7 +46,7 @@ class RenderingContextResolver implements MiddlewareInterface
         );
         $request = $request
             ->withAttribute('routing', $modifiedPageArguments)
-            ->withAttribute('topwire', $renderingContext)
+            ->withAttribute('topwire', $context)
         ;
 
         return $this->addVaryHeader($handler->handle($request));

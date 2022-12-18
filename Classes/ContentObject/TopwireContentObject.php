@@ -1,7 +1,7 @@
 <?php
 namespace Helhum\Topwire\ContentObject;
 
-use Helhum\Topwire\RenderingContext\RenderingContext;
+use Helhum\Topwire\Context\TopwireContext;
 use Helhum\Topwire\Turbo\FrameOptions;
 use Helhum\Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
@@ -17,15 +17,15 @@ class TopwireContentObject extends AbstractContentObject
      */
     public function render($conf = []): string
     {
-        $renderingContext = $conf['context'];
-        assert($renderingContext instanceof RenderingContext);
+        $context = $conf['context'];
+        assert($context instanceof TopwireContext);
 
         $content = (new ContentObjectRenderer())->cObjGetSingle(
             'RECORDS',
-            $this->transformToRecordsConfiguration($renderingContext)
+            $this->transformToRecordsConfiguration($context)
         );
         if (!isset($conf['frameId'])
-            || str_contains($content, sprintf('%s_%s', $conf['frameId'], $renderingContext->id))
+            || str_contains($content, sprintf('%s_%s', $conf['frameId'], $context->id))
         ) {
             // The frame id is known and set during partial rendering
             // At the same time the rendered content already contains this id, so the frame is wrapped already
@@ -34,17 +34,17 @@ class TopwireContentObject extends AbstractContentObject
 
         return (new FrameRenderer())
             ->render(
-                renderingContext: $renderingContext,
+                context: $context,
                 content: $content,
                 options: new FrameOptions(id: $conf['frameId']),
             );
     }
 
     /**
-     * @param RenderingContext $context
+     * @param TopwireContext $context
      * @return array<string, mixed>
      */
-    private function transformToRecordsConfiguration(RenderingContext $context): array
+    private function transformToRecordsConfiguration(TopwireContext $context): array
     {
         return [
             'source' => $context->contextRecord->tableName . '_' . $context->contextRecord->id,

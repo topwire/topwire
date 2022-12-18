@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\RenderingContext;
+namespace Helhum\Topwire\Context;
 
-use Helhum\Topwire\RenderingContext\Exception\InvalidRenderingContext;
+use Helhum\Topwire\Context\Exception\InvalidTopwireContext;
 
-class RenderingContext implements \JsonSerializable
+class TopwireContext implements \JsonSerializable
 {
     public readonly string $id;
 
@@ -28,7 +28,7 @@ class RenderingContext implements \JsonSerializable
         $renderingPath = RenderingPath::fromJson(\json_encode($objectVars['renderingPath'], JSON_THROW_ON_ERROR));
         $calculatedHash = self::calculateHmac($contextRecord, $renderingPath);
         if (!hash_equals($calculatedHash, $objectVars['hmac'] ?? '')) {
-            throw new InvalidRenderingContext('Invalid topwire request', 1671023710);
+            throw new InvalidTopwireContext('Invalid topwire request', 1671023710);
         }
         return new self(
             renderingPath: $renderingPath,
