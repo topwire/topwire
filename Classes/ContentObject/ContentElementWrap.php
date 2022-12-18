@@ -83,7 +83,7 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
             $content,
             new FrameOptions(
                 id: $parentObject->currentRecord,
-                propagateUrl: false,
+                propagateUrl: (bool)$parentObject->stdWrapValue('propagateUrl', $configuration['turboFrameWrap.'] ?? [], 0),
             )
         );
     }
