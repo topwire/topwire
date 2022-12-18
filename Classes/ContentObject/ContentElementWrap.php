@@ -53,10 +53,10 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
     public function stdWrapPostProcess($content, array $configuration, ContentObjectRenderer &$parentObject)
     {
         if (
-            empty($configuration['topwireFrameWrap'])
+            empty($configuration['turboFrameWrap'])
             && (
-                empty($configuration['topwireFrameWrap.'])
-                || empty($parentObject->stdWrapValue('topwireFrameWrap', $configuration))
+                empty($configuration['turboFrameWrap.'])
+                || empty($parentObject->stdWrapValue('turboFrameWrap', $configuration))
             )
         ) {
             return $content;
@@ -66,7 +66,7 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
             return $content;
         }
         if ($parentObject->getCurrentTable() !== 'tt_content') {
-            throw new InvalidTableContext('"stdWrap.topwireFrameWrap" can only be used for table "tt_content"', 1671124640);
+            throw new InvalidTableContext('"stdWrap.turboFrameWrap" can only be used for table "tt_content"', 1671124640);
         }
         $controller = $parentObject->getTypoScriptFrontendController();
         assert($controller instanceof TypoScriptFrontendController);
