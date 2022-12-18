@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\TYPO3\Telegraph\RenderingContext\Exception;
+namespace Helhum\Topwire\RenderingContext\Exception;
 
-use Helhum\TYPO3\Telegraph\TelegraphException;
+use Helhum\Topwire\TopwireException;
 
-class InvalidRenderingContext extends TelegraphException
+class InvalidRenderingContext extends TopwireException
 {
 }

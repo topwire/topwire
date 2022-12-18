@@ -1,10 +1,10 @@
 <?php
-namespace Helhum\TYPO3\Telegraph\ContentObject;
+namespace Helhum\Topwire\ContentObject;
 
-use Helhum\TYPO3\Telegraph\ContentObject\Exception\InvalidTableContext;
-use Helhum\TYPO3\Telegraph\RenderingContext\RenderingContextFactory;
-use Helhum\TYPO3\Telegraph\Turbo\FrameOptions;
-use Helhum\TYPO3\Telegraph\Turbo\FrameRenderer;
+use Helhum\Topwire\ContentObject\Exception\InvalidTableContext;
+use Helhum\Topwire\RenderingContext\RenderingContextFactory;
+use Helhum\Topwire\Turbo\FrameOptions;
+use Helhum\Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectStdWrapHookInterface;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -53,19 +53,20 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
     public function stdWrapPostProcess($content, array $configuration, ContentObjectRenderer &$parentObject)
     {
         if (
-            empty($configuration['telegraphFrameWrap'])
+            empty($configuration['topwireFrameWrap'])
             && (
-                empty($configuration['telegraphFrameWrap.'])
-                || empty($parentObject->stdWrapValue('telegraphFrameWrap', $configuration))
+                empty($configuration['topwireFrameWrap.'])
+                || empty($parentObject->stdWrapValue('topwireFrameWrap', $configuration))
             )
         ) {
             return $content;
         }
-        if ($parentObject->getRequest()->hasHeader('Telegraph-Context')) {
+        if ($parentObject->getRequest()->hasHeader('Topwire-Context')) {
+            // Frame wrap is done by middleware automatically
             return $content;
         }
         if ($parentObject->getCurrentTable() !== 'tt_content') {
-            throw new InvalidTableContext('"stdWrap.telegraphFrameWrap" can only be used for table "tt_content"', 1671124640);
+            throw new InvalidTableContext('"stdWrap.topwireFrameWrap" can only be used for table "tt_content"', 1671124640);
         }
         $controller = $parentObject->getTypoScriptFrontendController();
         assert($controller instanceof TypoScriptFrontendController);

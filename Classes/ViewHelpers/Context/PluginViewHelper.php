@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\TYPO3\Telegraph\ViewHelpers\Context;
+namespace Helhum\Topwire\ViewHelpers\Context;
 
-use Helhum\TYPO3\Telegraph\RenderingContext\RenderingContext as TelegraphRenderingContext;
-use Helhum\TYPO3\Telegraph\RenderingContext\RenderingContextFactory;
+use Helhum\Topwire\RenderingContext\RenderingContext as TopwireRenderingContext;
+use Helhum\Topwire\RenderingContext\RenderingContextFactory;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext as FluidRenderingContext;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface as FluidRenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -26,25 +26,25 @@ class PluginViewHelper extends AbstractViewHelper
      * @param array<mixed> $arguments
      * @param \Closure $renderChildrenClosure
      * @param FluidRenderingContextInterface $renderingContext
-     * @return TelegraphRenderingContext
+     * @return TopwireRenderingContext
      */
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
         FluidRenderingContextInterface $renderingContext
-    ): TelegraphRenderingContext {
+    ): TopwireRenderingContext {
         return self::extractRenderingContext($arguments, $renderingContext);
     }
 
     /**
      * @param array<mixed> $arguments
      * @param FluidRenderingContextInterface $renderingContext
-     * @return TelegraphRenderingContext
+     * @return TopwireRenderingContext
      */
     private static function extractRenderingContext(
         array $arguments,
         FluidRenderingContextInterface $renderingContext
-    ): TelegraphRenderingContext {
+    ): TopwireRenderingContext {
         assert($renderingContext instanceof FluidRenderingContext);
         $extensionName = $arguments['extensionName'] ?? $renderingContext->getRequest();
         $pluginName = $arguments['pluginName'] ?? $renderingContext->getRequest();

@@ -1,8 +1,8 @@
 <?php
-namespace Helhum\TYPO3\Telegraph\Middleware;
+namespace Helhum\Topwire\Middleware;
 
-use Helhum\TYPO3\Telegraph\ContentObject\TelegraphContentObject;
-use Helhum\TYPO3\Telegraph\RenderingContext\RenderingContext;
+use Helhum\Topwire\ContentObject\TopwireContentObject;
+use Helhum\Topwire\RenderingContext\RenderingContext;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -12,7 +12,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 /**
  * Lightweight alternative to regular frontend requests, rendering only the provided context record/ plugin
  */
-class TelegraphRendering implements MiddlewareInterface
+class TopwireRendering implements MiddlewareInterface
 {
     private const defaultContentType = 'text/html';
 
@@ -20,7 +20,7 @@ class TelegraphRendering implements MiddlewareInterface
     {
         $frontendController = $GLOBALS['TSFE'];
         assert($frontendController instanceof TypoScriptFrontendController);
-        $renderingContext = $request->getAttribute('telegraph');
+        $renderingContext = $request->getAttribute('topwire');
         if (!$renderingContext instanceof RenderingContext || !$frontendController->isGeneratePage()) {
             return $this->validateContentType($request, $handler->handle($request));
         }
@@ -29,10 +29,10 @@ class TelegraphRendering implements MiddlewareInterface
         $frontendController->config['config']['disableAllHeaderCode'] = 1;
         $frontendController->config['config']['disableCharsetHeader'] = 0;
         $frontendController->pSetup = [
-            '10' => TelegraphContentObject::NAME,
+            '10' => TopwireContentObject::NAME,
             '10.' => [
                 'context' => $renderingContext,
-                'frameId' => $request->getHeader('Telegraph-Frame-Id')[0] ?? null,
+                'frameId' => $request->getHeader('Topwire-Frame-Id')[0] ?? null,
             ],
         ];
 

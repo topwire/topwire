@@ -7,13 +7,13 @@ document.addEventListener('turbo:before-fetch-request', async (event) => {
     const turboFrame = event.target.tagName === 'turbo-frame' ? event.target : event.target.closest('turbo-frame')
     if (!headers['Turbo-Frame']
         || !turboFrame.dataset
-        || !turboFrame.dataset.telegraphContext
+        || !turboFrame.dataset.topwireContext
     ) {
         event.detail.resume()
         return
     }
-    headers['Telegraph-Context'] = turboFrame.dataset.telegraphContext
-    headers['Telegraph-Frame-Id'] = turboFrame.dataset.telegraphId
+    headers['Topwire-Context'] = turboFrame.dataset.topwireContext
+    headers['Topwire-Frame-Id'] = turboFrame.dataset.topwireId
     event.detail.fetchOptions.headers = headers
     event.detail.resume()
 })

@@ -2,8 +2,8 @@
 
 return [
     'frontend' => [
-        'helhum/telegraph-vary-header' => [
-            'target' => \Helhum\TYPO3\Telegraph\Middleware\RenderingContextResolver::class,
+        'helhum/topwire-vary-header' => [
+            'target' => \Helhum\Topwire\Middleware\RenderingContextResolver::class,
             'description' => '',
             'after' => [
                 'typo3/cms-frontend/page-resolver',
@@ -12,8 +12,8 @@ return [
                 'typo3/cms-frontend/tsfe',
             ],
         ],
-        'helhum/telegraph-rendering' => [
-            'target' => \Helhum\TYPO3\Telegraph\Middleware\TelegraphRendering::class,
+        'helhum/topwire-rendering' => [
+            'target' => \Helhum\Topwire\Middleware\TopwireRendering::class,
             'description' => '',
             'after' => [
                 'typo3/cms-frontend/prepare-tsfe-rendering',

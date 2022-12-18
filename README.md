@@ -7,13 +7,13 @@
 ```html
 <html
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <telegraph:turbo.frame id="my_plugin">
+    <topwire:turbo.frame id="my_plugin">
         <h2>Default action</h2>
         <f:link.action action="my">Show my action result</f:link.action>
-    </telegraph:turbo.frame>    
+    </topwire:turbo.frame>    
 
 </html>
 ```
@@ -23,13 +23,13 @@
 ```html
 <html
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <telegraph:turbo.frame id="my_plugin">
+    <topwire:turbo.frame id="my_plugin">
         <h2>My action</h2>
         <f:link.action action="default">Show default action result</f:link.action>
-    </telegraph:turbo.frame>    
+    </topwire:turbo.frame>    
 
 </html>
 ```
@@ -38,12 +38,12 @@
 
 ```html
 <html
-    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <telegraph:turbo.frame.withContext 
+    <topwire:turbo.frame.withContext 
         id="other_plugin" 
-        context="{telegraph:context.plugin(extensionName: 'FeLogin', pluginName: 'Login')}" 
+        context="{topwire:context.plugin(extensionName: 'FeLogin', pluginName: 'Login')}" 
     />
 
 </html>
@@ -53,15 +53,15 @@
 
 ```html
 <html
-    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <telegraph:turbo.frame.withContext 
+    <topwire:turbo.frame.withContext 
         id="other_plugin_async" async="true" 
-        context="{telegraph:context.plugin(extensionName: 'FeLogin', pluginName: 'Login')}"
+        context="{topwire:context.plugin(extensionName: 'FeLogin', pluginName: 'Login')}"
     >
         Loading...
-    </telegraph:turbo.frame.withContext>
+    </topwire:turbo.frame.withContext>
 
 </html>
 ```
@@ -70,12 +70,12 @@
 
 ```html
 <html
-    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <telegraph:turbo.frame.withContext 
+    <topwire:turbo.frame.withContext 
         id="content_element" 
-        context="{telegraph:context.contentElement(contentElementUid: '148')}"
+        context="{topwire:context.contentElement(contentElementUid: '148')}"
     />
 
 </html>
@@ -85,16 +85,16 @@
 
 ```html
 <html
-    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <telegraph:turbo.frame.withContext 
+    <topwire:turbo.frame.withContext 
         id="content_element_async" 
         async="true" 
-        context="{telegraph:context.contentElement(contentElementUid: '148')}"
+        context="{topwire:context.contentElement(contentElementUid: '148')}"
     >
         Loading...
-    </telegraph:turbo.frame.withContext>
+    </topwire:turbo.frame.withContext>
 
 </html>
 ```
@@ -103,12 +103,12 @@
 
 ```html
 <html
-    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <telegraph:turbo.frame.withContext 
+    <topwire:turbo.frame.withContext 
         id="typo_script" 
-        context="{telegraph:context.typoScript(typoScriptPath: 'lib.tsExample')}"
+        context="{topwire:context.typoScript(typoScriptPath: 'lib.tsExample')}"
     />
 
 </html>
@@ -118,16 +118,16 @@
 
 ```html
 <html
-    xmlns:telegraph="http://typo3.org/ns/Helhum/TYPO3/Telegraph/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <telegraph:turbo.frame.withContext 
+    <topwire:turbo.frame.withContext 
         id="typo_script_async" 
         async="true" 
-        context="{telegraph:context.typoScript(typoScriptPath: 'lib.tsExample')}"
+        context="{topwire:context.typoScript(typoScriptPath: 'lib.tsExample')}"
     >
         Loading...
-    </telegraph:turbo.frame.withContext>
+    </topwire:turbo.frame.withContext>
 
 </html>
 ```

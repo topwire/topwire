@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\TYPO3\Telegraph\Turbo;
+namespace Helhum\Topwire\Turbo;
 
-use Helhum\TYPO3\Telegraph\RenderingContext\RenderingContext;
+use Helhum\Topwire\RenderingContext\RenderingContext;
 
 class FrameRenderer
 {
@@ -17,10 +17,10 @@ class FrameRenderer
             '<turbo-frame id="%2$s"%5$s%3$s%4$s%6$s>%1$s</turbo-frame>',
             $content,
             htmlspecialchars($frameId),
-            sprintf(' data-telegraph-context="%s"', htmlspecialchars(\json_encode($renderingContext, JSON_THROW_ON_ERROR))),
+            sprintf(' data-topwire-context="%s"', htmlspecialchars(\json_encode($renderingContext, JSON_THROW_ON_ERROR))),
             $options->propagateUrl ? ' data-turbo-action="advance"' : '',
             isset($options->src) ? sprintf(' src="%s"', htmlspecialchars($options->src)) : '',
-            sprintf(' data-telegraph-id="%s"', htmlspecialchars($options->id)),
+            sprintf(' data-topwire-id="%s"', htmlspecialchars($options->id)),
         );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\TYPO3\Telegraph\Turbo;
+namespace Helhum\Topwire\Turbo;
 
 class FrameOptions
 {

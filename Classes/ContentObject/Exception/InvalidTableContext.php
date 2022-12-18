@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\TYPO3\Telegraph\ContentObject\Exception;
+namespace Helhum\Topwire\ContentObject\Exception;
 
-use Helhum\TYPO3\Telegraph\TelegraphException;
+use Helhum\Topwire\TopwireException;
 
-class InvalidTableContext extends TelegraphException
+class InvalidTableContext extends TopwireException
 {
 }

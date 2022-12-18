@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\TYPO3\Telegraph\ViewHelpers\Turbo\Frame;
+namespace Helhum\Topwire\ViewHelpers\Turbo\Frame;
 
-use Helhum\TYPO3\Telegraph\ContentObject\TelegraphContentObject;
-use Helhum\TYPO3\Telegraph\RenderingContext\Exception\InvalidRenderingContext;
-use Helhum\TYPO3\Telegraph\RenderingContext\RenderingContext as TelegraphRenderingContext;
-use Helhum\TYPO3\Telegraph\Turbo\FrameOptions;
-use Helhum\TYPO3\Telegraph\Turbo\FrameRenderer;
+use Helhum\Topwire\ContentObject\TopwireContentObject;
+use Helhum\Topwire\RenderingContext\Exception\InvalidRenderingContext;
+use Helhum\Topwire\RenderingContext\RenderingContext as TopwireRenderingContext;
+use Helhum\Topwire\Turbo\FrameOptions;
+use Helhum\Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext as FluidRenderingContext;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -23,7 +23,7 @@ class WithContextViewHelper extends AbstractViewHelper
     public function initializeArguments(): void
     {
         $this->registerArgument('id', 'string', 'id of the frame', true);
-        $this->registerArgument('context', 'Helhum\\TYPO3\\Telegraph\\RenderingContext\\RenderingContext', 'Rendering context', true);
+        $this->registerArgument('context', 'Helhum\\Topwire\\RenderingContext\\RenderingContext', 'Rendering context', true);
         $this->registerArgument('propagateUrl', 'bool', 'Whether the URL should be pushed to browser history', false, false);
         $this->registerArgument('async', 'bool', 'Whether HTML for the given context should be loaded asynchronously', false, false);
         $this->registerArgument('src', 'string', 'Override URL for async loading. Setting this will imply async.');
@@ -41,7 +41,7 @@ class WithContextViewHelper extends AbstractViewHelper
         \Closure $renderChildrenClosure,
         FluidRenderingContextInterface $fluidRenderingContext
     ): string {
-        if (!$arguments['context'] instanceof TelegraphRenderingContext) {
+        if (!$arguments['context'] instanceof TopwireRenderingContext) {
             throw new InvalidRenderingContext('"context" must be instance of RenderingContext', 1671280838);
         }
         $src = self::extractSourceUrl($arguments, $fluidRenderingContext);
@@ -66,7 +66,7 @@ class WithContextViewHelper extends AbstractViewHelper
         if (isset($arguments['src'])) {
             return $arguments['src'];
         }
-        if ($arguments['async'] === true) {
+        if ($arguments['async'] === false) {
             return null;
         }
         assert($fluidRenderingContext instanceof FluidRenderingContext);
@@ -75,15 +75,15 @@ class WithContextViewHelper extends AbstractViewHelper
             ->build();
     }
 
-    private static function renderContent(?string $src, \Closure $renderChildrenClosure, TelegraphRenderingContext $renderingContext): string
+    private static function renderContent(?string $src, \Closure $renderChildrenClosure, TopwireRenderingContext $renderingContext): string
     {
         if (isset($src)) {
-            return $renderChildrenClosure();
+            return (string)$renderChildrenClosure();
         }
         $contentObjectRenderer = GeneralUtility::makeInstance(ContentObjectRenderer::class);
         return $contentObjectRenderer
             ->cObjGetSingle(
-                TelegraphContentObject::NAME,
+                TopwireContentObject::NAME,
                 [
                     'context' => $renderingContext,
                 ]

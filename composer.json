@@ -1,8 +1,8 @@
 {
-    "name": "helhum/typo3-telegraph",
+    "name": "helhum/topwire",
     "type": "typo3-cms-extension",
     "description": "Wiring up backend and frontend in a dynamic and modern way using hotwire",
-    "homepage": "https://github.com/helhum/typo3-telegraph",
+    "homepage": "https://github.com/helhum/topwire",
     "license": [
         "GPL-2.0-or-later"
     ],
@@ -21,12 +21,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Helhum\\TYPO3\\Telegraph\\": "Classes/"
+            "Helhum\\Topwire\\": "Classes/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Helhum\\TYPO3\\Telegraph\\Tests\\": "Tests/"
+            "Helhum\\Topwire\\Tests\\": "Tests/"
         }
     },
     "require": {
@@ -44,7 +44,7 @@
     },
     "extra": {
         "typo3/cms": {
-            "extension-key": "telegraph"
+            "extension-key": "topwire"
         }
     }
 }

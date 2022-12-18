@@ -1,13 +1,13 @@
 <?php
-namespace Helhum\TYPO3\Telegraph\ContentObject;
+namespace Helhum\Topwire\ContentObject;
 
-use Helhum\TYPO3\Telegraph\RenderingContext\RenderingContext;
-use Helhum\TYPO3\Telegraph\Turbo\FrameOptions;
-use Helhum\TYPO3\Telegraph\Turbo\FrameRenderer;
+use Helhum\Topwire\RenderingContext\RenderingContext;
+use Helhum\Topwire\Turbo\FrameOptions;
+use Helhum\Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
-class TelegraphContentObject extends AbstractContentObject
+class TopwireContentObject extends AbstractContentObject
 {
     public const NAME = 'TELEGRAPH';
 

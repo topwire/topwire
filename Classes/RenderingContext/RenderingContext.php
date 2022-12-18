@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\TYPO3\Telegraph\RenderingContext;
+namespace Helhum\Topwire\RenderingContext;
 
-use Helhum\TYPO3\Telegraph\RenderingContext\Exception\InvalidRenderingContext;
+use Helhum\Topwire\RenderingContext\Exception\InvalidRenderingContext;
 
 class RenderingContext implements \JsonSerializable
 {
@@ -28,7 +28,7 @@ class RenderingContext implements \JsonSerializable
         $renderingPath = RenderingPath::fromJson(\json_encode($objectVars['renderingPath'], JSON_THROW_ON_ERROR));
         $calculatedHash = self::calculateHmac($contextRecord, $renderingPath);
         if (!hash_equals($calculatedHash, $objectVars['hmac'] ?? '')) {
-            throw new InvalidRenderingContext('Invalid telegraph request', 1671023710);
+            throw new InvalidRenderingContext('Invalid topwire request', 1671023710);
         }
         return new self(
             renderingPath: $renderingPath,

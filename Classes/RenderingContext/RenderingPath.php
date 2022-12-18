@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\TYPO3\Telegraph\RenderingContext;
+namespace Helhum\Topwire\RenderingContext;
 
-use Helhum\TYPO3\Telegraph\RenderingContext\Exception\InvalidRenderingContext;
+use Helhum\Topwire\RenderingContext\Exception\InvalidRenderingContext;
 
 class RenderingPath implements \JsonSerializable
 {

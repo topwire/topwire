@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\TYPO3\Telegraph\ViewHelpers\Turbo;
+namespace Helhum\Topwire\ViewHelpers\Turbo;
 
-use Helhum\TYPO3\Telegraph\RenderingContext\RenderingContext as TelegraphRenderingContext;
-use Helhum\TYPO3\Telegraph\RenderingContext\RenderingContextFactory;
-use Helhum\TYPO3\Telegraph\Turbo\FrameOptions;
-use Helhum\TYPO3\Telegraph\Turbo\FrameRenderer;
+use Helhum\Topwire\RenderingContext\RenderingContext as TopwireRenderingContext;
+use Helhum\Topwire\RenderingContext\RenderingContextFactory;
+use Helhum\Topwire\Turbo\FrameOptions;
+use Helhum\Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext as FluidRenderingContext;
@@ -37,9 +37,9 @@ class FrameViewHelper extends AbstractViewHelper
         \Closure $renderChildrenClosure,
         FluidRenderingContextInterface $fluidRenderingContext
     ): string {
-        $telegraphRenderingContext = self::extractRenderingContext($fluidRenderingContext);
+        $topwireRenderingContext = self::extractRenderingContext($fluidRenderingContext);
         return (new FrameRenderer())->render(
-            $telegraphRenderingContext,
+            $topwireRenderingContext,
             $renderChildrenClosure(),
             new FrameOptions(
                 id: $arguments['id'],
@@ -49,7 +49,7 @@ class FrameViewHelper extends AbstractViewHelper
         );
     }
 
-    private static function extractRenderingContext(FluidRenderingContextInterface $fluidRenderingContext): TelegraphRenderingContext
+    private static function extractRenderingContext(FluidRenderingContextInterface $fluidRenderingContext): TopwireRenderingContext
     {
         assert($fluidRenderingContext instanceof FluidRenderingContext);
         $renderingContextFactory = new RenderingContextFactory(

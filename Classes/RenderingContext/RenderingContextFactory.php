@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\TYPO3\Telegraph\RenderingContext;
+namespace Helhum\Topwire\RenderingContext;
 
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;

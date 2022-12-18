@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\TYPO3\Telegraph\RenderingContext;
+namespace Helhum\Topwire\RenderingContext;
 
-use Helhum\TYPO3\Telegraph\RenderingContext\Exception\InvalidRenderingContext;
-use Helhum\TYPO3\Telegraph\RenderingContext\Exception\TableNameNotFound;
+use Helhum\Topwire\RenderingContext\Exception\InvalidRenderingContext;
+use Helhum\Topwire\RenderingContext\Exception\TableNameNotFound;
 
 class ContextRecord implements \JsonSerializable
 {

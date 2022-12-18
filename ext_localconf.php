@@ -1,10 +1,10 @@
 <?php
 
-use Helhum\TYPO3\Telegraph\ContentObject\ContentElementWrap;
-use Helhum\TYPO3\Telegraph\ContentObject\TelegraphContentObject;
+use Helhum\Topwire\ContentObject\ContentElementWrap;
+use Helhum\Topwire\ContentObject\TopwireContentObject;
 
 (static function ($extKey): void {
-    $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'][TelegraphContentObject::NAME] = TelegraphContentObject::class;
-    $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_telegraph';
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['stdWrap']['tx_telegraph'] = ContentElementWrap::class;
-})('telegraph');
+    $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'][TopwireContentObject::NAME] = TopwireContentObject::class;
+    $GLOBALS['TYPO3_CONF_VARS']['FE']['cacheHash']['excludedParameters'][] = 'tx_topwire';
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['stdWrap']['tx_topwire'] = ContentElementWrap::class;
+})('topwire');
