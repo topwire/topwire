@@ -3,6 +3,7 @@ namespace Helhum\Topwire\Middleware;
 
 use Helhum\Topwire\ContentObject\TopwireContentObject;
 use Helhum\Topwire\Context\TopwireContext;
+use Helhum\Topwire\Exception\InvalidContentType;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -49,7 +50,7 @@ class TopwireRendering implements MiddlewareInterface
         }
         $contentTypeHeader = $response->getHeader('Content-Type')[0];
         if (!str_starts_with($contentTypeHeader, self::defaultContentType)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidContentType(
                 sprintf(
                     'Turbo requests must return content/type "text/html", got "%s". Maybe forgot to add data-turbo="false" attribute for links leading to this error.',
                     $contentTypeHeader
