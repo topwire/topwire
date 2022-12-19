@@ -24,8 +24,8 @@ class TopwireContentObject extends AbstractContentObject
             'RECORDS',
             $this->transformToRecordsConfiguration($context)
         );
-        if (!isset($conf['frameId'])
-            || str_contains($content, sprintf('%s_%s', $conf['frameId'], $context->id))
+        if (!isset($this->request?->getAttribute('turbo.frame')?->id)
+            || str_contains($content, $this->request->getAttribute('turbo.frame')->id)
         ) {
             // The frame id is known and set during partial rendering
             // At the same time the rendered content already contains this id, so the frame is wrapped already
@@ -36,7 +36,7 @@ class TopwireContentObject extends AbstractContentObject
             ->render(
                 context: $context,
                 content: $content,
-                options: new FrameOptions(id: $conf['frameId']),
+                options: new FrameOptions(id: $this->request->getAttribute('turbo.frame')->baseId),
             );
     }
 

@@ -9,15 +9,12 @@ class FrameRenderer
 {
     public function render(TopwireContext $context, string $content, FrameOptions $options): string
     {
-        $frameId = sprintf(
-            '%s_%s',
+        $frameId = new FrameId(
             $options->id,
-            $context->id
+            \json_encode($context, JSON_THROW_ON_ERROR)
         );
         $tagBuilder = new TagBuilder('turbo-frame', $content);
-        $tagBuilder->addAttribute('id', $frameId);
-        $tagBuilder->addAttribute('data-topwire-id', $options->id);
-        $tagBuilder->addAttribute('data-topwire-context', \json_encode($context, JSON_THROW_ON_ERROR));
+        $tagBuilder->addAttribute('id', $frameId->id);
         if ($options->propagateUrl) {
             $tagBuilder->addAttribute('data-turbo-action', 'advance');
         }

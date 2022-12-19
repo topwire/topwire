@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Helhum\Topwire\Middleware;
 
 use Helhum\Topwire\Context\TopwireContext;
+use Helhum\Topwire\Turbo\FrameId;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -11,22 +12,21 @@ use TYPO3\CMS\Core\Routing\PageArguments;
 
 class TopwireContextResolver implements MiddlewareInterface
 {
-    private const contextHeader = 'Topwire-Context';
-    private const argumentNamespace = 'tx_topwire';
+    private const turboHeader = 'Turbo-Frame';
+    private const argumentName = 'tx_topwire';
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        $contextString = $request->getQueryParams()[self::argumentName] ?? null;
+        if (!$contextString && $request->hasHeader(self::turboHeader)) {
+            $frameId = FrameId::fromHeaderString($request->getHeaderLine(self::turboHeader));
+            $request = $request->withAttribute('turbo.frame', $frameId);
+            $contextString = $frameId->context;
+        }
         $pageArguments = $request->getAttribute('routing');
-        if (
-            !$pageArguments instanceof PageArguments
-            || (
-                !$request->hasHeader(self::contextHeader)
-                && !isset($request->getQueryParams()[self::argumentNamespace])
-            )
-        ) {
+        if ($contextString === null || !$pageArguments instanceof PageArguments) {
             return $this->addVaryHeader($handler->handle($request));
         }
-        $contextString = $this->resolveContextString($request);
         $context = TopwireContext::fromJson($contextString);
         if ($context->contextRecord->pageId !== $pageArguments->getPageId()) {
             return $this->addVaryHeader($handler->handle($request));
@@ -34,7 +34,7 @@ class TopwireContextResolver implements MiddlewareInterface
         $newStaticArguments = array_merge(
             $pageArguments->getStaticArguments(),
             [
-                self::argumentNamespace => $contextString,
+                self::argumentName => $contextString,
             ]
         );
         $modifiedPageArguments = new PageArguments(
@@ -52,15 +52,10 @@ class TopwireContextResolver implements MiddlewareInterface
         return $this->addVaryHeader($handler->handle($request));
     }
 
-    private function resolveContextString(ServerRequestInterface $request): string
-    {
-        return $request->getQueryParams()[self::argumentNamespace] ?? $request->getHeader(self::contextHeader)[0];
-    }
-
     private function addVaryHeader(ResponseInterface $response): ResponseInterface
     {
         $varyHeader = $response->getHeader('Vary');
-        $varyHeader[] = 'Topwire-Context';
+        $varyHeader[] = self::turboHeader;
         return $response->withAddedHeader('Vary', $varyHeader);
     }
 }

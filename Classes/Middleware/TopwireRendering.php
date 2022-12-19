@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
@@ -19,7 +20,7 @@ class TopwireRendering implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $frontendController = $GLOBALS['TSFE'];
+        $frontendController = $request->getAttribute('frontend.controller');
         assert($frontendController instanceof TypoScriptFrontendController);
         $context = $request->getAttribute('topwire');
         if (!$context instanceof TopwireContext || !$frontendController->isGeneratePage()) {
@@ -33,7 +34,6 @@ class TopwireRendering implements MiddlewareInterface
             '10' => TopwireContentObject::NAME,
             '10.' => [
                 'context' => $context,
-                'frameId' => $request->getHeader('Topwire-Frame-Id')[0] ?? null,
             ],
         ];
 
@@ -48,7 +48,7 @@ class TopwireRendering implements MiddlewareInterface
         ) {
             return $response;
         }
-        $contentTypeHeader = $response->getHeader('Content-Type')[0];
+        $contentTypeHeader = $response->getHeaderLine('Content-Type');
         if (!str_starts_with($contentTypeHeader, self::defaultContentType)) {
             throw new InvalidContentType(
                 sprintf(

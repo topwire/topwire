@@ -2,7 +2,7 @@
 
 return [
     'frontend' => [
-        'helhum/topwire-vary-header' => [
+        'helhum/topwire-context-resolver' => [
             'target' => \Helhum\Topwire\Middleware\TopwireContextResolver::class,
             'description' => '',
             'after' => [
