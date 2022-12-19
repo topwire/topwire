@@ -3,6 +3,7 @@ namespace Helhum\Topwire\ContentObject;
 
 use Helhum\Topwire\ContentObject\Exception\InvalidTableContext;
 use Helhum\Topwire\Context\TopwireContextFactory;
+use Helhum\Topwire\Turbo\Frame;
 use Helhum\Topwire\Turbo\FrameOptions;
 use Helhum\Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -79,12 +80,14 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
 
         $contextFactory = new TopwireContextFactory($controller);
         return (new FrameRenderer())->render(
-            $contextFactory->forPath($path, $record),
-            $content,
-            new FrameOptions(
-                id: $parentObject->currentRecord,
+            frame: new Frame(
+                baseId: $parentObject->currentRecord,
+                context: $contextFactory->forPath($path, $record),
+            ),
+            content: $content,
+            options: new FrameOptions(
                 propagateUrl: (bool)$parentObject->stdWrapValue('propagateUrl', $configuration['turboFrameWrap.'] ?? [], 0),
-            )
+            ),
         );
     }
 }

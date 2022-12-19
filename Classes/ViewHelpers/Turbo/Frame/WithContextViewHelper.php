@@ -5,6 +5,7 @@ namespace Helhum\Topwire\ViewHelpers\Turbo\Frame;
 use Helhum\Topwire\ContentObject\TopwireContentObject;
 use Helhum\Topwire\Context\Exception\InvalidTopwireContext;
 use Helhum\Topwire\Context\TopwireContext;
+use Helhum\Topwire\Turbo\Frame;
 use Helhum\Topwire\Turbo\FrameOptions;
 use Helhum\Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -46,13 +47,16 @@ class WithContextViewHelper extends AbstractViewHelper
         }
         $src = self::extractSourceUrl($arguments, $renderingContext);
         return (new FrameRenderer())->render(
-            $arguments['context'],
-            self::renderContent($src, $renderChildrenClosure, $arguments['context']),
-            new FrameOptions(
-                id: $arguments['id'],
+            frame: new Frame(
+                baseId: $arguments['id'],
+                context: $arguments['context'],
+                wrapResponse: true,
+            ),
+            content: self::renderContent($src, $renderChildrenClosure, $arguments['context']),
+            options: new FrameOptions(
                 src: $src,
                 propagateUrl: $arguments['propagateUrl'],
-            )
+            ),
         );
     }
 

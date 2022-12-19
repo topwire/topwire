@@ -2,8 +2,7 @@
 declare(strict_types=1);
 namespace Helhum\Topwire\Middleware;
 
-use Helhum\Topwire\Context\TopwireContext;
-use Helhum\Topwire\Turbo\FrameId;
+use Helhum\Topwire\Turbo\Frame;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -17,24 +16,27 @@ class TopwireContextResolver implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $contextString = $request->getQueryParams()[self::argumentName] ?? null;
-        if (!$contextString && $request->hasHeader(self::turboHeader)) {
-            $frameId = FrameId::fromHeaderString($request->getHeaderLine(self::turboHeader));
-            $request = $request->withAttribute('turbo.frame', $frameId);
-            $contextString = $frameId->context;
+        $frame = null;
+        if ($request->hasHeader(self::turboHeader)) {
+            $frame = Frame::fromUntrustedString($request->getHeaderLine(self::turboHeader));
+            $request = $request->withAttribute('turbo.frame', $frame);
+        } elseif (isset($request->getQueryParams()[self::argumentName])) {
+            $frame = Frame::fromUntrustedString($request->getQueryParams()[self::argumentName]);
         }
+        $context = $frame?->context;
+        $cacheId = $frame?->cacheId;
         $pageArguments = $request->getAttribute('routing');
-        if ($contextString === null || !$pageArguments instanceof PageArguments) {
-            return $this->addVaryHeader($handler->handle($request));
-        }
-        $context = TopwireContext::fromJson($contextString);
-        if ($context->contextRecord->pageId !== $pageArguments->getPageId()) {
+        if ($context === null
+            || $cacheId === null
+            || !$pageArguments instanceof PageArguments
+            || $context->contextRecord->pageId !== $pageArguments->getPageId()
+        ) {
             return $this->addVaryHeader($handler->handle($request));
         }
         $newStaticArguments = array_merge(
             $pageArguments->getStaticArguments(),
             [
-                self::argumentName => $contextString,
+                self::argumentName => $cacheId,
             ]
         );
         $modifiedPageArguments = new PageArguments(

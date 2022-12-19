@@ -4,6 +4,7 @@ namespace Helhum\Topwire\ViewHelpers\Turbo;
 
 use Helhum\Topwire\Context\TopwireContext;
 use Helhum\Topwire\Context\TopwireContextFactory;
+use Helhum\Topwire\Turbo\Frame;
 use Helhum\Topwire\Turbo\FrameOptions;
 use Helhum\Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -39,13 +40,14 @@ class FrameViewHelper extends AbstractViewHelper
     ): string {
         $context = self::extractTopwireContext($renderingContext);
         return (new FrameRenderer())->render(
-            $context,
-            $renderChildrenClosure(),
-            new FrameOptions(
-                id: $arguments['id'],
-                src: null,
+            frame: new Frame(
+                baseId: $arguments['id'],
+                context: $context,
+            ),
+            content: $renderChildrenClosure(),
+            options: new FrameOptions(
                 propagateUrl: $arguments['propagateUrl'],
-            )
+            ),
         );
     }
 

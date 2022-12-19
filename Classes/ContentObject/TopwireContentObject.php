@@ -2,6 +2,7 @@
 namespace Helhum\Topwire\ContentObject;
 
 use Helhum\Topwire\Context\TopwireContext;
+use Helhum\Topwire\Turbo\Frame;
 use Helhum\Topwire\Turbo\FrameOptions;
 use Helhum\Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
@@ -24,20 +25,21 @@ class TopwireContentObject extends AbstractContentObject
             'RECORDS',
             $this->transformToRecordsConfiguration($context)
         );
-        if (!isset($this->request?->getAttribute('turbo.frame')?->id)
-            || str_contains($content, $this->request->getAttribute('turbo.frame')->id)
-        ) {
+        if ($this->request?->getAttribute('turbo.frame')?->wrapResponse !== true) {
             // The frame id is known and set during partial rendering
             // At the same time the rendered content already contains this id, so the frame is wrapped already
             return $content;
         }
 
-        return (new FrameRenderer())
-            ->render(
+        return (new FrameRenderer())->render(
+            frame: new Frame(
+                baseId: $this->request->getAttribute('turbo.frame')->baseId,
                 context: $context,
-                content: $content,
-                options: new FrameOptions(id: $this->request->getAttribute('turbo.frame')->baseId),
-            );
+                wrapResponse: true,
+            ),
+            content: $content,
+            options: new FrameOptions(),
+        );
     }
 
     /**

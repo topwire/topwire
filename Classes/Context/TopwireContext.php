@@ -2,13 +2,10 @@
 declare(strict_types=1);
 namespace Helhum\Topwire\Context;
 
-use Helhum\Topwire\Context\Exception\InvalidTopwireContext;
-
 class TopwireContext implements \JsonSerializable
 {
     public readonly string $id;
-
-    private const hashScope = self::class;
+    public readonly string $cacheId;
 
     public function __construct(
         public readonly RenderingPath $renderingPath,
@@ -19,43 +16,40 @@ class TopwireContext implements \JsonSerializable
             . $this->contextRecord->tableName
             . $this->contextRecord->id
         );
-    }
-
-    public static function fromJson(string $json): self
-    {
-        $objectVars = \json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-        $contextRecord = ContextRecord::fromJson(\json_encode($objectVars['contextRecord'], JSON_THROW_ON_ERROR));
-        $renderingPath = RenderingPath::fromJson(\json_encode($objectVars['renderingPath'], JSON_THROW_ON_ERROR));
-        $calculatedHash = self::calculateHmac($contextRecord, $renderingPath);
-        if (!hash_equals($calculatedHash, $objectVars['hmac'] ?? '')) {
-            throw new InvalidTopwireContext('Invalid topwire request', 1671023710);
-        }
-        return new self(
-            renderingPath: $renderingPath,
-            contextRecord: $contextRecord,
-        );
+        $this->cacheId = $this->id . $this->contextRecord->pageId;
     }
 
     /**
-     * @return array{contextRecord: ContextRecord, renderingPath: RenderingPath, hmac: string}
-     * @throws \JsonException
+     * @param array{renderingPath: string, contextRecord: array{tableName: string, id: int, pageId: int}} $objectVars
+     * @return self
+     */
+    public static function fromArray(array $objectVars): self
+    {
+        return new self(
+            renderingPath: new RenderingPath($objectVars['renderingPath']),
+            contextRecord: new ContextRecord(...$objectVars['contextRecord']),
+        );
+    }
+
+    public static function fromUntrustedString(string $untrustedString): self
+    {
+        $objectVars = \json_decode(
+            TopwireHash::fromUntrustedString($untrustedString)->secureString,
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
+        return self::fromArray($objectVars['context']);
+    }
+
+    /**
+     * @return array{renderingPath: RenderingPath, contextRecord: ContextRecord}
      */
     public function jsonSerialize(): array
     {
         return [
-            'contextRecord' => $this->contextRecord,
             'renderingPath' => $this->renderingPath,
-            'hmac' => self::calculateHmac($this->contextRecord, $this->renderingPath)
+            'contextRecord' => $this->contextRecord,
         ];
-    }
-
-    private static function calculateHmac(ContextRecord $contextRecord, RenderingPath $renderingPath): string
-    {
-        return hash_hmac(
-            'sha1',
-            \json_encode($contextRecord, JSON_THROW_ON_ERROR)
-                . \json_encode($renderingPath, JSON_THROW_ON_ERROR),
-            $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'] . self::hashScope,
-        );
     }
 }

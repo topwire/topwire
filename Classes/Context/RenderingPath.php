@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace Helhum\Topwire\Context;
 
-use Helhum\Topwire\Context\Exception\InvalidTopwireContext;
-
 class RenderingPath implements \JsonSerializable
 {
     public function __construct(private readonly string $renderingPath)
@@ -26,16 +24,6 @@ class RenderingPath implements \JsonSerializable
             return new self(sprintf('tt_content.list.20.%s', $pluginSignature));
         }
         return new self('tt_content');
-    }
-
-    public static function fromJson(string $json): self
-    {
-        $path = \json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-        if (!is_string($path)) {
-            throw new InvalidTopwireContext('Could not decode context record', 1671024039);
-        }
-
-        return new self(renderingPath: $path);
     }
 
     public function jsonSerialize(): string
