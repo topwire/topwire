@@ -5,6 +5,7 @@ namespace Helhum\Topwire\ViewHelpers\Context;
 use Helhum\Topwire\Context\TopwireContext;
 use Helhum\Topwire\Context\TopwireContextFactory;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -46,10 +47,12 @@ class PluginViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ): TopwireContext {
         assert($renderingContext instanceof RenderingContext);
+        $frontendController = $renderingContext->getRequest()->getAttribute('frontend.controller');
+        assert($frontendController instanceof TypoScriptFrontendController);
         $extensionName = $arguments['extensionName'] ?? $renderingContext->getRequest();
         $pluginName = $arguments['pluginName'] ?? $renderingContext->getRequest();
         $contextFactory = new TopwireContextFactory(
-            $GLOBALS['TSFE']
+            $frontendController
         );
         return $contextFactory->forPlugin(
             extensionName: $extensionName,

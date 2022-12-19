@@ -10,6 +10,7 @@ use Helhum\Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -54,8 +55,10 @@ class FrameViewHelper extends AbstractViewHelper
     private static function extractTopwireContext(RenderingContextInterface $renderingContext): TopwireContext
     {
         assert($renderingContext instanceof RenderingContext);
+        $frontendController = $renderingContext->getRequest()->getAttribute('frontend.controller');
+        assert($frontendController instanceof TypoScriptFrontendController);
         $contextFactory = new TopwireContextFactory(
-            $GLOBALS['TSFE']
+            $frontendController
         );
         return $contextFactory->forExtbaseRequest(
             $renderingContext->getRequest(),

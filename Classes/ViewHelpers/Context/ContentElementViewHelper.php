@@ -4,6 +4,8 @@ namespace Helhum\Topwire\ViewHelpers\Context;
 
 use Helhum\Topwire\Context\TopwireContext;
 use Helhum\Topwire\Context\TopwireContextFactory;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -31,8 +33,11 @@ class ContentElementViewHelper extends AbstractViewHelper
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): TopwireContext {
+        assert($renderingContext instanceof RenderingContext);
+        $frontendController = $renderingContext->getRequest()->getAttribute('frontend.controller');
+        assert($frontendController instanceof TypoScriptFrontendController);
         $contextFactory = new TopwireContextFactory(
-            $GLOBALS['TSFE']
+            $frontendController
         );
         return $contextFactory->forPath(
             renderingPath: 'tt_content',
