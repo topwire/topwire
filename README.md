@@ -1,5 +1,32 @@
 ## Examples
 
+### Generating links for partial rendering
+
+```
+lib.tsExample = TEXT
+lib.tsExample.typolink.htmlSpecialChars = 1
+lib.tsExample.typolink.parameter.data = page:uid
+lib.tsExample.typolink.additionalParams = &tx_topwire[type]=plugin&tx_topwire[extensionName]=TopwireExamples&tx_topwire[pluginName]=Json
+lib.tsExample.typolink.returnLast = url
+```
+
+```html
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+    
+    <f:link.page 
+        pageUid="42" 
+        additionalParams="{tx_topwire: {type: 'plugin', extensionName: 'TopwireExamples', pluginName: 'Json'}}" class="btn btn-primary"
+    >
+        Download
+    </f:link.page>
+
+</html>
+```
+
+
 ### Wrapping parts of a Fluid template of an Extbase plugin in a Turbo Frame 
 
 #### `Default.html`
@@ -161,7 +188,7 @@ exists in the table and that the TypoScript defined in the path is also availabl
       not require changing the plugin itself
 * [ ] Implement other features of frames or make it possible to arbitrary ones
 * [ ] Add a way to address frames with the dynamically generated ids
-* [ ] Implement URI generation for addressing plugin rendering via URLs
+* [x] Implement URI generation for addressing plugin rendering via URLs
 * [ ] Re-evaluate responsibilities of Frame and TopwireContext
       (Frame is currently used to unserialize TopwireContext for URLs, 
       Frame also used to represent a frame during rendering. Introduce a third entity?)
