@@ -13,15 +13,14 @@ lib.tsExample.typolink.returnLast = url
 ```html
 <html
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
     
-    <f:link.page 
-        pageUid="42" 
-        additionalParams="{tx_topwire: {type: 'plugin', extensionName: 'TopwireExamples', pluginName: 'Json'}}" class="btn btn-primary"
-    >
-        Download
-    </f:link.page>
+<f:link.page 
+    pageUid="42" 
+    additionalParams="{tx_topwire: {type: 'plugin', extensionName: 'TopwireExamples', pluginName: 'Json'}}" class="btn btn-primary"
+>
+    Download
+</f:link.page>
 
 </html>
 ```
@@ -37,10 +36,10 @@ lib.tsExample.typolink.returnLast = url
     xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <topwire:turbo.frame id="my_plugin">
-        <h2>Default action</h2>
-        <f:link.action action="my">Show my action result</f:link.action>
-    </topwire:turbo.frame>    
+<topwire:turbo.frame id="my_plugin">
+    <h2>Default action</h2>
+    <f:link.action action="my">Show my action result</f:link.action>
+</topwire:turbo.frame>    
 
 </html>
 ```
@@ -53,10 +52,10 @@ lib.tsExample.typolink.returnLast = url
     xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <topwire:turbo.frame id="my_plugin">
-        <h2>My action</h2>
-        <f:link.action action="default">Show default action result</f:link.action>
-    </topwire:turbo.frame>    
+<topwire:turbo.frame id="my_plugin">
+    <h2>My action</h2>
+    <f:link.action action="default">Show default action result</f:link.action>
+</topwire:turbo.frame>    
 
 </html>
 ```
@@ -68,10 +67,10 @@ lib.tsExample.typolink.returnLast = url
     xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <topwire:turbo.frame.withContext 
-        id="other_plugin" 
-        context="{topwire:context.plugin(extensionName: 'FeLogin', pluginName: 'Login')}" 
-    />
+<topwire:turbo.frame.withContext 
+    id="other_plugin" 
+    context="{topwire:context.plugin(extensionName: 'FeLogin', pluginName: 'Login')}" 
+/>
 
 </html>
 ```
@@ -83,12 +82,12 @@ lib.tsExample.typolink.returnLast = url
     xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <topwire:turbo.frame.withContext 
-        id="other_plugin_async" async="true" 
-        context="{topwire:context.plugin(extensionName: 'FeLogin', pluginName: 'Login')}"
-    >
-        Loading...
-    </topwire:turbo.frame.withContext>
+<topwire:turbo.frame.withContext 
+    id="other_plugin_async" async="true" 
+    context="{topwire:context.plugin(extensionName: 'FeLogin', pluginName: 'Login')}"
+>
+    Loading...
+</topwire:turbo.frame.withContext>
 
 </html>
 ```
@@ -100,10 +99,10 @@ lib.tsExample.typolink.returnLast = url
     xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <topwire:turbo.frame.withContext 
-        id="content_element" 
-        context="{topwire:context.contentElement(contentElementUid: '148')}"
-    />
+<topwire:turbo.frame.withContext 
+    id="content_element" 
+    context="{topwire:context.contentElement(contentElementUid: '148')}"
+/>
 
 </html>
 ```
@@ -115,13 +114,13 @@ lib.tsExample.typolink.returnLast = url
     xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <topwire:turbo.frame.withContext 
-        id="content_element_async" 
-        async="true" 
-        context="{topwire:context.contentElement(contentElementUid: '148')}"
-    >
-        Loading...
-    </topwire:turbo.frame.withContext>
+<topwire:turbo.frame.withContext 
+    id="content_element_async" 
+    async="true" 
+    context="{topwire:context.contentElement(contentElementUid: '148')}"
+>
+    Loading...
+</topwire:turbo.frame.withContext>
 
 </html>
 ```
@@ -133,10 +132,10 @@ lib.tsExample.typolink.returnLast = url
     xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <topwire:turbo.frame.withContext 
-        id="typo_script" 
-        context="{topwire:context.typoScript(typoScriptPath: 'lib.tsExample')}"
-    />
+<topwire:turbo.frame.withContext 
+    id="typo_script" 
+    context="{topwire:context.typoScript(typoScriptPath: 'lib.tsExample')}"
+/>
 
 </html>
 ```
@@ -148,13 +147,13 @@ lib.tsExample.typolink.returnLast = url
     xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-    <topwire:turbo.frame.withContext 
-        id="typo_script_async" 
-        async="true" 
-        context="{topwire:context.typoScript(typoScriptPath: 'lib.tsExample')}"
-    >
-        Loading...
-    </topwire:turbo.frame.withContext>
+<topwire:turbo.frame.withContext 
+    id="typo_script_async" 
+    async="true" 
+    context="{topwire:context.typoScript(typoScriptPath: 'lib.tsExample')}"
+>
+    Loading...
+</topwire:turbo.frame.withContext>
 
 </html>
 ```
@@ -162,9 +161,9 @@ lib.tsExample.typolink.returnLast = url
 
 ## Concepts
 
-### Rendering Context
+### Topwire Context
 
-The rendering context is a piece of information, that defines,
+The topwire context is a piece of information, that defines,
 which content element should be rendered standalone, without
 anything else that is available on the page.
 Most of the time it will be a content element containing an Extbase plugin.
@@ -193,4 +192,8 @@ exists in the table and that the TypoScript defined in the path is also availabl
       (Frame is currently used to unserialize TopwireContext for URLs, 
       Frame also used to represent a frame during rendering. Introduce a third entity?)
 * [ ] Evaluate routing enhancers for nice URLs and a clean way to add page arguments
+* [ ] Context VHs should propagate the context to their children, 
+      maybe get rid of the argument then altogether. With that it would be
+      possible to get rid of the additional withContext VH and to easily render
+      multiple frames within one context without duplicating the code for that.
 * [ ] Implement turbo streams
