@@ -157,6 +157,13 @@ exists in the table and that the TypoScript defined in the path is also availabl
 
 ## TODO
 
-* Implement turbo streams
-* Maybe optionally allow wrapping server response in turbo frame to 
-  not require changing the plugin itself
+* [x] Maybe optionally allow wrapping server response in turbo frame to 
+      not require changing the plugin itself
+* [ ] Implement other features of frames or make it possible to arbitrary ones
+* [ ] Add a way to address frames with the dynamically generated ids
+* [ ] Implement URI generation for addressing plugin rendering via URLs
+* [ ] Re-evaluate responsibilities of Frame and TopwireContext
+      (Frame is currently used to unserialize TopwireContext for URLs, 
+      Frame also used to represent a frame during rendering. Introduce a third entity?)
+* [ ] Evaluate routing enhancers for nice URLs and a clean way to add page arguments
+* [ ] Implement turbo streams
