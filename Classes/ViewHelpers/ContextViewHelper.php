@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\ViewHelpers\Context;
+namespace Helhum\Topwire\ViewHelpers;
 
 use Helhum\Topwire\Context\ContextStack;
 use Helhum\Topwire\Context\TopwireContextFactory;
@@ -10,17 +10,21 @@ use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
-class ContentElementViewHelper extends AbstractViewHelper
+class ContextViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
+
+    public const currentTopwireContext = 'currentTopwireContext';
 
     protected $escapeOutput = false;
     protected $escapeChildren = true;
 
     public function initializeArguments(): void
     {
-        $this->registerArgument('contentElementUid', 'int', 'Uid of the content element that will be rendered', true);
-        $this->registerArgument('pageUid', 'int', 'Uid of the page, on which the content element will be rendered. If NULL the current page uid is used');
+        $this->registerArgument('typoScriptPath', 'string', 'Target Extension Name (without `tx_` prefix and no underscores). If NULL the current extension name is used', true);
+        $this->registerArgument('recordUid', 'int', 'Uid of the record that will be passed to TypoScript. If not set, the current page uid will be used');
+        $this->registerArgument('tableName', 'string', 'Table name of the record that will be passed to TypoScript. If not set, "pages" will be used', false, 'pages');
+        $this->registerArgument('pageUid', 'int', 'Uid of the page, to which the context is bound to. If not set, the current page uid is used');
     }
 
     /**
@@ -41,8 +45,8 @@ class ContentElementViewHelper extends AbstractViewHelper
             $frontendController
         );
         $context = $contextFactory->forPath(
-            renderingPath: 'tt_content',
-            contextRecordId: 'tt_content:' . $arguments['contentElementUid'],
+            renderingPath: $arguments['typoScriptPath'],
+            contextRecordId: $arguments['tableName'] . ':' . $arguments['recordUid'],
         );
         $contextStack = new ContextStack($renderingContext->getViewHelperVariableContainer());
         $contextStack->push($context);

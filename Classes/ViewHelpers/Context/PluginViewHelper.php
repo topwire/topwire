@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Helhum\Topwire\ViewHelpers\Context;
 
-use Helhum\Topwire\Context\TopwireContext;
+use Helhum\Topwire\Context\ContextStack;
 use Helhum\Topwire\Context\TopwireContextFactory;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -15,6 +15,7 @@ class PluginViewHelper extends AbstractViewHelper
     use CompileWithRenderStatic;
 
     protected $escapeOutput = false;
+    protected $escapeChildren = true;
 
     public function initializeArguments(): void
     {
@@ -27,25 +28,13 @@ class PluginViewHelper extends AbstractViewHelper
      * @param array<mixed> $arguments
      * @param \Closure $renderChildrenClosure
      * @param RenderingContextInterface $renderingContext
-     * @return TopwireContext
+     * @return string
      */
     public static function renderStatic(
         array $arguments,
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
-    ): TopwireContext {
-        return self::extractTopwireContext($arguments, $renderingContext);
-    }
-
-    /**
-     * @param array<mixed> $arguments
-     * @param RenderingContextInterface $renderingContext
-     * @return TopwireContext
-     */
-    private static function extractTopwireContext(
-        array $arguments,
-        RenderingContextInterface $renderingContext
-    ): TopwireContext {
+    ): string {
         assert($renderingContext instanceof RenderingContext);
         $frontendController = $renderingContext->getRequest()->getAttribute('frontend.controller');
         assert($frontendController instanceof TypoScriptFrontendController);
@@ -54,11 +43,17 @@ class PluginViewHelper extends AbstractViewHelper
         $contextFactory = new TopwireContextFactory(
             $frontendController
         );
-        return $contextFactory->forPlugin(
+        $context = $contextFactory->forPlugin(
             extensionName: $extensionName,
             pluginName: $pluginName,
             contextRecordId: null,
             pageUid: $arguments['pageUid']
         );
+        $contextStack = new ContextStack($renderingContext->getViewHelperVariableContainer());
+        $contextStack->push($context);
+        $renderedChildren = $renderChildrenClosure();
+        $contextStack->pop();
+
+        return (string)$renderedChildren;
     }
 }

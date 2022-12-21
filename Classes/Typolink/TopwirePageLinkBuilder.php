@@ -74,6 +74,7 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
         unset($queryArguments[self::linkNamespace]);
 
         $this->ensureValidArguments($topwireArguments);
+        assert(in_array($topwireArguments['type'], ['plugin', 'contentElement', 'typoScript'], true));
         $contextRecordId = $this->contentObjectRenderer->currentRecord;
         if (isset($topwireArguments['contextTableName'], $topwireArguments['contextTableNameUid'])) {
             $contextRecordId = $topwireArguments['contextTableName'] . ':' . $topwireArguments['contextTableNameUid'];
@@ -85,9 +86,7 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
             'contentElement' => $contextFactory->forPath('tt_content', 'tt_content:' . $topwireArguments['contentElementUid']),
             'typoScript' => $contextFactory->forPath($topwireArguments['typoScriptPath'], $contextRecordId),
         };
-        if (isset($config)) {
-            $queryArguments[self::linkNamespace] = (new Frame('link', $config))->toHashedString();
-        }
+        $queryArguments[self::linkNamespace] = (new Frame('link', $config))->toHashedString();
         $conf['additionalParams'] = '&' . HttpUtility::buildQueryString($queryArguments);
 
         return $conf;
