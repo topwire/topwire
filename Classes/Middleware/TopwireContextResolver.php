@@ -17,26 +17,22 @@ class TopwireContextResolver implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $frame = null;
-        if ($request->hasHeader(self::turboHeader)) {
-            $frame = Frame::fromUntrustedString($request->getHeaderLine(self::turboHeader));
+        $frameString = $request->getQueryParams()[self::argumentName] ?? $request->getHeaderLine(self::turboHeader);
+        if (!empty($frameString)) {
+            $frame = Frame::fromUntrustedString($frameString);
             $request = $request->withAttribute('turbo.frame', $frame);
-        } elseif (isset($request->getQueryParams()[self::argumentName])) {
-            $frame = Frame::fromUntrustedString($request->getQueryParams()[self::argumentName]);
         }
-        $context = $frame?->context;
-        $cacheId = $frame?->cacheId;
         $pageArguments = $request->getAttribute('routing');
-        if ($context === null
-            || $cacheId === null
+        if ($frame?->context === null
             || !$pageArguments instanceof PageArguments
-            || $context->contextRecord->pageId !== $pageArguments->getPageId()
+            || $frame->context->contextRecord->pageId !== $pageArguments->getPageId()
         ) {
             return $this->addVaryHeader($handler->handle($request));
         }
         $newStaticArguments = array_merge(
             $pageArguments->getStaticArguments(),
             [
-                self::argumentName => $cacheId,
+                self::argumentName => $frame->cacheId,
             ]
         );
         $modifiedPageArguments = new PageArguments(
@@ -48,7 +44,7 @@ class TopwireContextResolver implements MiddlewareInterface
         );
         $request = $request
             ->withAttribute('routing', $modifiedPageArguments)
-            ->withAttribute('topwire', $context)
+            ->withAttribute('topwire', $frame->context)
         ;
 
         return $this->addVaryHeader($handler->handle($request));
