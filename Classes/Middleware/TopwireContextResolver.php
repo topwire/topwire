@@ -11,13 +11,13 @@ use TYPO3\CMS\Core\Routing\PageArguments;
 
 class TopwireContextResolver implements MiddlewareInterface
 {
-    private const turboHeader = 'Turbo-Frame';
+    private const topwireHeader = 'Topwire-Context';
     private const argumentName = 'tx_topwire';
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $frame = null;
-        $frameString = $request->getQueryParams()[self::argumentName] ?? $request->getHeaderLine(self::turboHeader);
+        $frameString = $request->getQueryParams()[self::argumentName] ?? $request->getHeaderLine(self::topwireHeader);
         if (!empty($frameString)) {
             $frame = Frame::fromUntrustedString($frameString);
             $request = $request->withAttribute('turbo.frame', $frame);
@@ -53,7 +53,7 @@ class TopwireContextResolver implements MiddlewareInterface
     private function addVaryHeader(ResponseInterface $response): ResponseInterface
     {
         $varyHeader = $response->getHeader('Vary');
-        $varyHeader[] = self::turboHeader;
+        $varyHeader[] = self::topwireHeader;
         return $response->withAddedHeader('Vary', $varyHeader);
     }
 }

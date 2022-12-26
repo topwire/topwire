@@ -25,6 +25,14 @@ lib.tsExample.typolink.returnLast = url
     Download
 </f:link.page>
 
+<f:link.page
+    class="btn btn-primary"
+    pageUid="42" 
+    additionalParams="{tx_topwire: {type: 'typoScript', typoScriptPath: 'lib.tsPluginExample', recordUid: '42', tableName: 'tt_content'}}"
+>
+    Show rendered TypoScript only
+</f:link.page>
+
 </html>
 ```
 

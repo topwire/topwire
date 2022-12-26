@@ -9,7 +9,8 @@ class FrameRenderer
     public function render(Frame $frame, string $content, FrameOptions $options): string
     {
         $tagBuilder = new TagBuilder('turbo-frame', $content);
-        $tagBuilder->addAttribute('id', $frame->toHashedString());
+        $tagBuilder->addAttribute('id', $frame->id);
+        $tagBuilder->addAttribute('data-topwire-context', $frame->toHashedString());
         if ($options->propagateUrl) {
             $tagBuilder->addAttribute('data-turbo-action', 'advance');
         }

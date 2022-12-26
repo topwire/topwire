@@ -96,6 +96,15 @@ class FrameViewHelper extends AbstractViewHelper
         if ($arguments['src'] === 'async') {
             return $renderingContext->getUriBuilder()
                 ->setTargetPageUid($context->contextRecord->pageId)
+                ->setArguments([
+                    'tx_topwire' => [
+                        'frameId' => $arguments['id'],
+                        'type' => 'typoScript',
+                        'typoScriptPath' => $context->renderingPath->jsonSerialize(),
+                        'recordUid' => $context->contextRecord->id,
+                        'tableName' => $context->contextRecord->tableName,
+                    ],
+                ])
                 ->build();
         }
         return $arguments['src'];

@@ -76,17 +76,21 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
         $this->ensureValidArguments($topwireArguments);
         assert(in_array($topwireArguments['type'], ['plugin', 'contentElement', 'typoScript'], true));
         $contextRecordId = $this->contentObjectRenderer->currentRecord;
-        if (isset($topwireArguments['contextTableName'], $topwireArguments['contextTableNameUid'])) {
-            $contextRecordId = $topwireArguments['contextTableName'] . ':' . $topwireArguments['contextTableNameUid'];
+        if (isset($topwireArguments['tableName'], $topwireArguments['recordUid'])) {
+            $contextRecordId = $topwireArguments['tableName'] . ':' . $topwireArguments['recordUid'];
         }
         $frontendController = $this->getTypoScriptFrontendController();
         $contextFactory = new TopwireContextFactory($frontendController);
-        $config = match ($topwireArguments['type']) {
+        $context = match ($topwireArguments['type']) {
             'plugin' => $contextFactory->forPlugin($topwireArguments['extensionName'], $topwireArguments['pluginName'], $contextRecordId),
             'contentElement' => $contextFactory->forPath('tt_content', 'tt_content:' . $topwireArguments['contentElementUid']),
             'typoScript' => $contextFactory->forPath($topwireArguments['typoScriptPath'], $contextRecordId),
         };
-        $queryArguments[self::linkNamespace] = (new Frame('link', $config))->toHashedString();
+        $queryArguments[self::linkNamespace] = (new Frame(
+            baseId: $topwireArguments['frameId'] ?? 'link',
+            context: $context,
+            wrapResponse: isset($topwireArguments['frameId'])
+        ))->toHashedString();
         $conf['additionalParams'] = '&' . HttpUtility::buildQueryString($queryArguments);
 
         return $conf;
@@ -104,7 +108,7 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
                     && throw new InvalidConfiguration('URLs of type "plugin" must have "extensionName" and "pluginName" set', 1671558884),
                 'contentElement' => !isset($topwireArguments['contentElementUid'])
                     && throw new InvalidConfiguration('URLs of type "contentElement" must have "contentElementUid" set', 1671560042),
-                'typoScript' => !isset($topwireArguments['contentElementUid'])
+                'typoScript' => !isset($topwireArguments['typoScriptPath'])
                     && throw new InvalidConfiguration('URLs of type "typoScript" must have "typoScriptPath" set', 1671558886),
             };
         } catch (\UnhandledMatchError $e) {

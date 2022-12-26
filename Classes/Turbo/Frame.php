@@ -21,7 +21,7 @@ class Frame implements \JsonSerializable
         $this->ensureValidBaseId($baseId);
         $this->id = $baseId
             . self::idSeparatorToken
-            . \json_encode($this)
+            . $this->context->id
         ;
         $this->cacheId = $this->context->cacheId . ($this->wrapResponse ? $baseId : '');
     }
