@@ -10,7 +10,7 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 class TopwireContentObject extends AbstractContentObject
 {
-    public const NAME = 'TELEGRAPH';
+    public const NAME = 'TOPWIRE';
 
     /**
      * @param array<mixed> $conf
@@ -25,18 +25,16 @@ class TopwireContentObject extends AbstractContentObject
             'RECORDS',
             $this->transformToRecordsConfiguration($context)
         );
-        if ($this->request?->getAttribute('turbo.frame')?->wrapResponse !== true) {
+        if (!$this->request?->getAttribute('turbo.frame') instanceof Frame
+            || !$this->request->getAttribute('turbo.frame')->wrapResponse
+        ) {
             // The frame id is known and set during partial rendering
             // At the same time the rendered content already contains this id, so the frame is wrapped already
             return $content;
         }
 
         return (new FrameRenderer())->render(
-            frame: new Frame(
-                baseId: $this->request->getAttribute('turbo.frame')->baseId,
-                context: $context,
-                wrapResponse: true,
-            ),
+            frame: $this->request->getAttribute('turbo.frame'),
             content: $content,
             options: new FrameOptions(),
         );
