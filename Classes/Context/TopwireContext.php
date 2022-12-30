@@ -7,49 +7,76 @@ class TopwireContext implements \JsonSerializable
     public readonly string $id;
     public readonly string $cacheId;
 
+    /**
+     * @var array<string, Attribute>
+     */
+    private array $attributes = [];
+
     public function __construct(
         public readonly RenderingPath $renderingPath,
         public readonly ContextRecord $contextRecord,
+        ?string $cacheId = null,
     ) {
         $this->id = md5(
             $this->renderingPath->jsonSerialize()
             . $this->contextRecord->tableName
             . $this->contextRecord->id
         );
-        $this->cacheId = $this->id . $this->contextRecord->pageId;
+        $this->cacheId = $cacheId ?? ($this->id . $this->contextRecord->pageId);
     }
 
-    /**
-     * @param array{renderingPath: string, contextRecord: array{tableName: string, id: int, pageId: int}} $objectVars
-     * @return self
-     */
-    public static function fromArray(array $objectVars): self
+    public static function fromUntrustedString(string $untrustedString, ContextDenormalizer $denormalizer): self
     {
-        return new self(
-            renderingPath: new RenderingPath($objectVars['renderingPath']),
-            contextRecord: new ContextRecord(...$objectVars['contextRecord']),
-        );
-    }
-
-    public static function fromUntrustedString(string $untrustedString): self
-    {
-        $objectVars = \json_decode(
+        $data = \json_decode(
             TopwireHash::fromUntrustedString($untrustedString)->secureString,
             true,
             512,
             JSON_THROW_ON_ERROR
         );
-        return self::fromArray($objectVars['context']);
+        return $denormalizer->denormalize($data);
+    }
+
+    public function toHashedString(): string
+    {
+        return (new TopwireHash(\json_encode($this, JSON_THROW_ON_ERROR)))
+            ->hashedString;
+    }
+
+    public function withAttribute(
+        string $name,
+        Attribute $attribute,
+    ): self {
+        $newContext = new self(
+            $this->renderingPath,
+            $this->contextRecord,
+            $this->cacheId . $attribute->getCacheId()
+        );
+        $newContext->attributes = $this->attributes;
+        $newContext->attributes[$name] = $attribute;
+        return $newContext;
+    }
+
+    public function getAttribute(string $name): ?Attribute
+    {
+        return $this->attributes[$name] ?? null;
     }
 
     /**
-     * @return array{renderingPath: RenderingPath, contextRecord: ContextRecord}
+     * @return array{renderingPath: RenderingPath, contextRecord: ContextRecord, attributes?: array<string, Attribute>}
      */
     public function jsonSerialize(): array
     {
-        return [
+        $normalizedContext = [
             'renderingPath' => $this->renderingPath,
             'contextRecord' => $this->contextRecord,
         ];
+        $attributes = array_filter(
+            $this->attributes,
+            static fn (Attribute $attribute) => $attribute->jsonSerialize() !== null,
+        );
+        if ($attributes !== []) {
+            $normalizedContext['attributes'] = $attributes;
+        }
+        return $normalizedContext;
     }
 }

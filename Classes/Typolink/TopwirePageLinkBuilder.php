@@ -86,11 +86,13 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
             'contentElement' => $contextFactory->forPath('tt_content', 'tt_content:' . $topwireArguments['contentElementUid']),
             'typoScript' => $contextFactory->forPath($topwireArguments['typoScriptPath'], $contextRecordId),
         };
-        $queryArguments[self::linkNamespace] = (new Frame(
+        $frame = new Frame(
             baseId: $topwireArguments['frameId'] ?? 'link',
+            wrapResponse: isset($topwireArguments['frameId']),
             context: $context,
-            wrapResponse: isset($topwireArguments['frameId'])
-        ))->toHashedString();
+        );
+        $context = $context->withAttribute('frame', $frame);
+        $queryArguments[self::linkNamespace] = $context->toHashedString();
         $conf['additionalParams'] = '&' . HttpUtility::buildQueryString($queryArguments);
 
         return $conf;

@@ -42,30 +42,39 @@ class FrameViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ): string {
         assert($renderingContext instanceof RenderingContext);
-        [$wrapResponse, $context] = self::extractTopwireContext($renderingContext);
+        $stack = new ContextStack($renderingContext->getViewHelperVariableContainer());
+        [$wrapResponse, $context] = self::extractTopwireContext($renderingContext, $stack);
+        $frame = new Frame(
+            baseId: $arguments['id'],
+            wrapResponse: $wrapResponse,
+            context: $context,
+        );
+        $contextWithFrame = $context->withAttribute('frame', $frame);
+        $stack->push($contextWithFrame);
+        $content = $renderChildrenClosure();
+        $stack->pop();
+        if ($content === null) {
+            return $frame->id;
+        }
         return (new FrameRenderer())->render(
-            frame: new Frame(
-                baseId: $arguments['id'],
-                context: $context,
-                wrapResponse: $wrapResponse,
-            ),
-            content: $renderChildrenClosure(),
+            frame: $frame,
+            content: $content,
             options: new FrameOptions(
-                src: self::extractSourceUrl($arguments, $renderingContext, $context),
+                src: self::extractSourceUrl($arguments, $renderingContext, $contextWithFrame),
                 propagateUrl: $arguments['propagateUrl'],
             ),
+            context: $contextWithFrame,
         );
     }
 
     /**
-     * @param RenderingContext $renderingContext
+     * @param ContextStack $stack
      * @return array{0: bool, 1: TopwireContext}
      */
-    private static function extractTopwireContext(RenderingContext $renderingContext): array
+    private static function extractTopwireContext(RenderingContext $renderingContext, ContextStack $stack): array
     {
-        $context = (new ContextStack($renderingContext->getViewHelperVariableContainer()))->current();
-        if ($context instanceof TopwireContext) {
-            return [true, $context];
+        if ($stack->current() instanceof TopwireContext) {
+            return [true, $stack->current()];
         }
         $frontendController = $renderingContext->getRequest()->getAttribute('frontend.controller');
         assert($frontendController instanceof TypoScriptFrontendController);
@@ -78,7 +87,7 @@ class FrameViewHelper extends AbstractViewHelper
             $contextFactory->forExtbaseRequest(
                 $renderingContext->getRequest(),
                 GeneralUtility::makeInstance(ConfigurationManager::class),
-            )
+            ),
         ];
     }
 

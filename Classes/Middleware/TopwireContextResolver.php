@@ -2,7 +2,8 @@
 declare(strict_types=1);
 namespace Helhum\Topwire\Middleware;
 
-use Helhum\Topwire\Turbo\Frame;
+use Helhum\Topwire\Context\ContextDenormalizer;
+use Helhum\Topwire\Context\TopwireContext;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -16,23 +17,22 @@ class TopwireContextResolver implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $frame = null;
-        $frameString = $request->getQueryParams()[self::argumentName] ?? $request->getHeaderLine(self::topwireHeader);
-        if (!empty($frameString)) {
-            $frame = Frame::fromUntrustedString($frameString);
-            $request = $request->withAttribute('turbo.frame', $frame);
+        $context = null;
+        $contextString = $request->getQueryParams()[self::argumentName] ?? $request->getHeaderLine(self::topwireHeader);
+        if (!empty($contextString)) {
+            $context = TopwireContext::fromUntrustedString($contextString, new ContextDenormalizer());
         }
         $pageArguments = $request->getAttribute('routing');
-        if ($frame?->context === null
+        if ($context === null
             || !$pageArguments instanceof PageArguments
-            || $frame->context->contextRecord->pageId !== $pageArguments->getPageId()
+            || $context->contextRecord->pageId !== $pageArguments->getPageId()
         ) {
             return $this->addVaryHeader($handler->handle($request));
         }
         $newStaticArguments = array_merge(
             $pageArguments->getStaticArguments(),
             [
-                self::argumentName => $frame->cacheId,
+                self::argumentName => $context->cacheId,
             ]
         );
         $modifiedPageArguments = new PageArguments(
@@ -44,7 +44,7 @@ class TopwireContextResolver implements MiddlewareInterface
         );
         $request = $request
             ->withAttribute('routing', $modifiedPageArguments)
-            ->withAttribute('topwire', $frame->context)
+            ->withAttribute('topwire', $context)
         ;
 
         return $this->addVaryHeader($handler->handle($request));

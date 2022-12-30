@@ -2,68 +2,53 @@
 declare(strict_types=1);
 namespace Helhum\Topwire\Turbo;
 
+use Helhum\Topwire\Context\Attribute;
 use Helhum\Topwire\Context\TopwireContext;
-use Helhum\Topwire\Context\TopwireHash;
 use Helhum\Topwire\Turbo\Exception\FrameIdContainsReservedToken;
 
-class Frame implements \JsonSerializable
+class Frame implements Attribute
 {
     private const idSeparatorToken = '__';
-
     public readonly string $id;
-    public readonly string $cacheId;
 
     public function __construct(
         public readonly string $baseId,
-        public readonly TopwireContext $context,
-        public readonly bool $wrapResponse = false,
+        public readonly bool $wrapResponse,
+        ?TopwireContext $context,
     ) {
         $this->ensureValidBaseId($baseId);
         $this->id = $baseId
-            . self::idSeparatorToken
-            . $this->context->id
-        ;
-        $this->cacheId = $this->context->cacheId . ($this->wrapResponse ? $baseId : '');
-    }
-
-    public static function fromUntrustedString(string $untrustedString): self
-    {
-        [$baseIdString, $untrustedFrameString] = explode(self::idSeparatorToken, $untrustedString);
-        $objectVars = \json_decode(
-            TopwireHash::fromUntrustedString($untrustedFrameString)->secureString,
-            true,
-            512,
-            JSON_THROW_ON_ERROR
-        );
-        return new self(
-            baseId: $objectVars['baseId'] ?? $baseIdString,
-            context: TopwireContext::fromArray($objectVars['context']),
-            wrapResponse: $objectVars['wrapResponse'] ?? false,
-        );
-    }
-
-    public function toHashedString(): string
-    {
-        return $this->baseId
-            . self::idSeparatorToken
-            . (new TopwireHash(\json_encode($this, JSON_THROW_ON_ERROR)))->hashedString
+            . ($context === null ? '' : self::idSeparatorToken . $context->id)
         ;
     }
 
     /**
-     * @return array{baseId?: string, context: TopwireContext, wrapResponse?: bool}
+     * @param array<string, mixed> $data
+     * @param array<string, mixed> $context
+     * @return self
      */
-    public function jsonSerialize(): array
+    public static function denormalize(array $data, array $context = []): self
     {
-        $objectVars = [
-            'baseId' => $this->baseId,
-            'context' => $this->context,
-            'wrapResponse' => $this->wrapResponse,
-        ];
-        if (!$this->wrapResponse) {
-            unset($objectVars['baseId'], $objectVars['wrapResponse']);
-        }
-        return $objectVars;
+        return new Frame(
+            $data['baseId'],
+            $data['wrapResponse'],
+            $context['context'],
+        );
+    }
+
+    public function getCacheId(): string
+    {
+        return $this->wrapResponse ? $this->baseId : '';
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->wrapResponse
+            ? [
+                'baseId' => $this->baseId,
+                'wrapResponse' => $this->wrapResponse,
+            ]
+            : null;
     }
 
     private function ensureValidBaseId(string $id): void
