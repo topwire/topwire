@@ -6,3 +6,6 @@ services:
 
     Helhum\Topwire\:
         resource: '../Classes/*'
+
+    Helhum\Topwire\Fluid\Parser\TopwireContextParser:
+        public: true
