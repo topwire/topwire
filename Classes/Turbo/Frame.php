@@ -10,6 +10,7 @@ class Frame implements Attribute
 {
     private const idSeparatorToken = '__';
     public readonly string $id;
+    public readonly string $partialName;
 
     public function __construct(
         public readonly string $baseId,
@@ -17,6 +18,7 @@ class Frame implements Attribute
         ?TopwireContext $context,
     ) {
         $this->ensureValidBaseId($baseId);
+        $this->partialName = str_replace(' ', '', ucwords(str_replace('-', ' ', strtolower($baseId))));
         $this->id = $baseId
             . ($context === null ? '' : self::idSeparatorToken . $context->id)
         ;
@@ -31,7 +33,7 @@ class Frame implements Attribute
     {
         return new Frame(
             $data['baseId'],
-            $data['wrapResponse'],
+            $data['wrapResponse'] ?? false,
             $context['context'],
         );
     }
@@ -43,12 +45,13 @@ class Frame implements Attribute
 
     public function jsonSerialize(): mixed
     {
-        return $this->wrapResponse
-            ? [
-                'baseId' => $this->baseId,
-                'wrapResponse' => $this->wrapResponse,
-            ]
-            : null;
+        $data = [
+            'baseId' => $this->baseId,
+        ];
+        if ($this->wrapResponse) {
+            $data['wrapResponse'] = $this->wrapResponse;
+        }
+        return $data;
     }
 
     private function ensureValidBaseId(string $id): void

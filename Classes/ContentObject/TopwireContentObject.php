@@ -25,8 +25,9 @@ class TopwireContentObject extends AbstractContentObject
             'RECORDS',
             $this->transformToRecordsConfiguration($context)
         );
-        if (!$this->request?->getAttribute('turbo.frame') instanceof Frame
-            || !$this->request->getAttribute('turbo.frame')->wrapResponse
+        $frame = $context->getAttribute('frame');
+        if (!$frame instanceof Frame
+            || !$frame->wrapResponse
         ) {
             // The frame id is known and set during partial rendering
             // At the same time the rendered content already contains this id, so the frame is wrapped already
@@ -34,9 +35,10 @@ class TopwireContentObject extends AbstractContentObject
         }
 
         return (new FrameRenderer())->render(
-            frame: $this->request->getAttribute('turbo.frame'),
+            frame: $frame,
             content: $content,
             options: new FrameOptions(),
+            context: $context,
         );
     }
 

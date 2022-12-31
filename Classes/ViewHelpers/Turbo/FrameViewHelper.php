@@ -8,8 +8,6 @@ use Helhum\Topwire\Context\TopwireContextFactory;
 use Helhum\Topwire\Turbo\Frame;
 use Helhum\Topwire\Turbo\FrameOptions;
 use Helhum\Topwire\Turbo\FrameRenderer;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -26,6 +24,7 @@ class FrameViewHelper extends AbstractViewHelper
     {
         $this->registerArgument('id', 'string', 'id of the frame', true);
         $this->registerArgument('src', 'string', 'Either the keyword "async", which takes current Topwire context is taken into account, when fetching the HTML asynchronously. Alternatively can be set to any URL, for full flexibility.');
+        $this->registerArgument('wrapResponse', 'bool', 'Whether to wrap the response of the content in this frame. Useful, for plugins or content, that isn\'t adapted to use Hotwire frames', false, false);
         $this->registerArgument('propagateUrl', 'bool', 'Whether the URL should be pushed to browser history', false, false);
     }
 
@@ -43,10 +42,10 @@ class FrameViewHelper extends AbstractViewHelper
     ): string {
         assert($renderingContext instanceof RenderingContext);
         $stack = new ContextStack($renderingContext->getViewHelperVariableContainer());
-        [$wrapResponse, $context] = self::extractTopwireContext($renderingContext, $stack);
+        $context = self::extractTopwireContext($renderingContext, $stack);
         $frame = new Frame(
             baseId: $arguments['id'],
-            wrapResponse: $wrapResponse,
+            wrapResponse: $arguments['wrapResponse'],
             context: $context,
         );
         $contextWithFrame = $context->withAttribute('frame', $frame);
@@ -67,14 +66,10 @@ class FrameViewHelper extends AbstractViewHelper
         );
     }
 
-    /**
-     * @param ContextStack $stack
-     * @return array{0: bool, 1: TopwireContext}
-     */
-    private static function extractTopwireContext(RenderingContext $renderingContext, ContextStack $stack): array
+    private static function extractTopwireContext(RenderingContext $renderingContext, ContextStack $stack): TopwireContext
     {
         if ($stack->current() instanceof TopwireContext) {
-            return [true, $stack->current()];
+            return $stack->current();
         }
         $frontendController = $renderingContext->getRequest()->getAttribute('frontend.controller');
         assert($frontendController instanceof TypoScriptFrontendController);
@@ -82,13 +77,10 @@ class FrameViewHelper extends AbstractViewHelper
             $frontendController
         );
         // @todo: check how this behaves in a standalone view
-        return [
-            false,
-            $contextFactory->forExtbaseRequest(
-                $renderingContext->getRequest(),
-                GeneralUtility::makeInstance(ConfigurationManager::class),
-            ),
-        ];
+        return $contextFactory->forRequest(
+            $renderingContext->getRequest(),
+            [],
+        );
     }
 
     /**
@@ -103,18 +95,20 @@ class FrameViewHelper extends AbstractViewHelper
             return null;
         }
         if ($arguments['src'] === 'async') {
+            $action = $context->getAttribute('plugin')?->actionName ?? null;
             return $renderingContext->getUriBuilder()
                 ->setTargetPageUid($context->contextRecord->pageId)
                 ->setArguments([
                     'tx_topwire' => [
                         'frameId' => $arguments['id'],
+                        'wrapResponse' => $arguments['wrapResponse'],
                         'type' => 'typoScript',
                         'typoScriptPath' => $context->renderingPath->jsonSerialize(),
                         'recordUid' => $context->contextRecord->id,
                         'tableName' => $context->contextRecord->tableName,
                     ],
                 ])
-                ->build();
+                ->uriFor(actionName: $action);
         }
         return $arguments['src'];
     }

@@ -19,9 +19,10 @@ class PluginViewHelper extends AbstractViewHelper
 
     public function initializeArguments(): void
     {
-        $this->registerArgument('extensionName', 'string', 'Target Extension Name (without `tx_` prefix and no underscores). If NULL the current extension name is used');
+        $this->registerArgument('extensionName', 'string', 'Target Extension Name (without `tx_` prefix and no underscores). If empty, the current extension name is used');
         $this->registerArgument('pluginName', 'string', 'Target plugin. If empty, the current plugin name is used');
-        $this->registerArgument('pageUid', 'int', 'Uid of the page, on which the plugin will be rendered. If NULL the current page uid is used');
+        $this->registerArgument('action', 'string', 'Target action. If empty, the current action is used. This is only relevant, when using the <topwire:context.slot /> view helper as a child');
+        $this->registerArgument('pageUid', 'int', 'Uid of the page, on which the plugin will be rendered. If empty, the current page uid is used');
     }
 
     /**
@@ -38,17 +39,11 @@ class PluginViewHelper extends AbstractViewHelper
         assert($renderingContext instanceof RenderingContext);
         $frontendController = $renderingContext->getRequest()->getAttribute('frontend.controller');
         assert($frontendController instanceof TypoScriptFrontendController);
-        $extensionName = $arguments['extensionName'] ?? $renderingContext->getRequest();
-        $pluginName = $arguments['pluginName'] ?? $renderingContext->getRequest();
         $contextFactory = new TopwireContextFactory(
             $frontendController
         );
-        $context = $contextFactory->forPlugin(
-            extensionName: $extensionName,
-            pluginName: $pluginName,
-            contextRecordId: null,
-            pageUid: $arguments['pageUid']
-        );
+        $context = $contextFactory->forRequest($renderingContext->getRequest(), $arguments);
+
         $contextStack = new ContextStack($renderingContext->getViewHelperVariableContainer());
         $contextStack->push($context);
         $renderedChildren = $renderChildrenClosure();

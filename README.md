@@ -85,6 +85,34 @@ lib.tsExample.typolink.returnLast = url
 </html>
 ```
 
+### Render a specific (non default) action of a plugin
+
+```html
+<html
+    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<topwire:context.plugin extensionName="MyExtension" pluginName="MyPlugin" action="list">
+    <topwire:context.slot />
+</topwire:context.plugin>
+
+</html>
+```
+
+### Render a specific (non default) action of a plugin and limit output to a given frame id
+
+```html
+<html
+    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+<topwire:context.plugin extensionName="MyExtension" pluginName="MyPlugin" action="list">
+    <topwire:context.slot frame="my-list-frame" />
+</topwire:context.plugin>
+
+</html>
+```
+
 ### Render a plugin, wrapped in a Turbo Frame
 
 ```html
@@ -93,7 +121,7 @@ lib.tsExample.typolink.returnLast = url
     data-namespace-typo3-fluid="true">
 
 <topwire:context.plugin extensionName="FeLogin" pluginName="Login">
-    <topwire:turbo.frame id="other_plugin">
+    <topwire:turbo.frame id="other_plugin" wrapResponse="true">
         <topwire:context.slot />
     </topwire:turbo.frame>
 </topwire:context.plugin>
@@ -109,7 +137,7 @@ lib.tsExample.typolink.returnLast = url
     data-namespace-typo3-fluid="true">
 
 <topwire:context.plugin extensionName="FeLogin" pluginName="Login">
-    <topwire:turbo.frame id="other_plugin_async" src="async">
+    <topwire:turbo.frame id="other_plugin_async" src="async" wrapResponse="true">
         Loading...
     </topwire:turbo.frame>
 </topwire:context.plugin>
@@ -125,7 +153,7 @@ lib.tsExample.typolink.returnLast = url
     data-namespace-typo3-fluid="true">
 
 <topwire:context.contentElement contentElementUid="148">
-    <topwire:turbo.frame id="content_element">
+    <topwire:turbo.frame id="content_element" wrapResponse="true">
         <topwire:context.slot />
     </topwire:turbo.frame>
 </topwire:context.contentElement>
@@ -141,7 +169,7 @@ lib.tsExample.typolink.returnLast = url
     data-namespace-typo3-fluid="true">
 
 <topwire:context.contentElement contentElementUid="148">
-    <topwire:turbo.frame id="content_element_async" src="async">
+    <topwire:turbo.frame id="content_element_async" src="async" wrapResponse="true">
         Loading...
     </topwire:turbo.frame>
 </topwire:context.contentElement>
@@ -157,7 +185,7 @@ lib.tsExample.typolink.returnLast = url
     data-namespace-typo3-fluid="true">
 
 <topwire:context.typoScript typoScriptPath="lib.tsExample">
-    <topwire:turbo.frame id="typo_script">
+    <topwire:turbo.frame id="typo_script" wrapResponse="true">
         <topwire:context.slot />
     </topwire:turbo.frame>
 </topwire:context.typoScript>
@@ -173,7 +201,7 @@ lib.tsExample.typolink.returnLast = url
     data-namespace-typo3-fluid="true">
 
 <topwire:context.typoScript typoScriptPath="lib.tsExample">
-    <topwire:turbo.frame id="typo_script_async" src="async">
+    <topwire:turbo.frame id="typo_script_async" src="async" wrapResponse="true">
         Loading...
     </topwire:turbo.frame>
 </topwire:context.typoScript>
@@ -220,5 +248,12 @@ exists in the table and that the TypoScript defined in the path is also availabl
       maybe get rid of the argument then altogether. With that it would be
       possible to get rid of the additional withContext VH and to easily render
       multiple frames within one context without duplicating the code for that.
+* [ ] Evaluate more use cases for rendering a plugin inside a plugin template
+      and adapt view helpers accordingly
 * [ ] Evaluate and most likely tweak usages of the view helpers in standalone view context
 * [ ] Implement turbo streams
+* [ ] Performance evaluations and optimisations
+* [ ] Evaluate static file caching options
+* [ ] Implement tagging an Extbase controller via DI to inject a view resolver, 
+      that returns the TopwireTemplateView. Allow defining the resulting view class,
+      to be able to override the place where partials for frame rendering are located
