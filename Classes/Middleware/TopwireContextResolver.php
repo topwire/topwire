@@ -27,7 +27,13 @@ class TopwireContextResolver implements MiddlewareInterface
             || !$pageArguments instanceof PageArguments
             || $context->contextRecord->pageId !== $pageArguments->getPageId()
         ) {
-            return $this->addVaryHeader($handler->handle($request));
+            // Crossing page boundaries happen, when the controller returns a redirect response
+            // In this case, the context is invalid, needs to be reset and a full page render must happen
+            // Hotwire is smart enough in this case to convert the response to a full page visit,
+            // when the target page does not contain a corresponding frame id.
+            // This also allows for advanced setups, where the new target page actually contains the
+            // frame id, e.g. for forms with a "thank you" element on a different page than the form.
+            return $this->addVaryHeader($handler->handle($request->withAttribute('topwire', null)));
         }
         $newStaticArguments = array_merge(
             $pageArguments->getStaticArguments(),

@@ -2,6 +2,7 @@
 namespace Helhum\Topwire\ContentObject;
 
 use Helhum\Topwire\ContentObject\Exception\InvalidTableContext;
+use Helhum\Topwire\Context\TopwireContext;
 use Helhum\Topwire\Context\TopwireContextFactory;
 use Helhum\Topwire\Turbo\Frame;
 use Helhum\Topwire\Turbo\FrameOptions;
@@ -62,8 +63,8 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
         ) {
             return $content;
         }
-        if ($parentObject->getRequest()->hasHeader('Topwire-Context')) {
-            // Frame wrap is done by middleware automatically
+        if ($parentObject->getRequest()->getAttribute('topwire') instanceof TopwireContext) {
+            // Frame wrap is done by TOPWIRE content object automatically
             return $content;
         }
         if ($parentObject->getCurrentTable() !== 'tt_content') {
