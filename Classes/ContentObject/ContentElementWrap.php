@@ -81,10 +81,12 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
 
         $contextFactory = new TopwireContextFactory($controller);
         $context = $contextFactory->forPath($path, $record);
+        $scopeFrame = (bool)$parentObject->stdWrapValue('scopeFrame', $configuration['turboFrameWrap.'] ?? [], 1);
+        $frameId = $parentObject->stdWrapValue('frameId', $configuration['turboFrameWrap.'] ?? [], null);
         $frame = new Frame(
-            baseId: $parentObject->currentRecord,
+            baseId: (string)($frameId ?? $parentObject->currentRecord),
             wrapResponse: true,
-            scope: $context->scope,
+            scope: $scopeFrame ? $context->scope : null,
         );
         $context = $context->withAttribute('frame', $frame);
         return (new FrameRenderer())->render(

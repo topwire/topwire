@@ -32,7 +32,7 @@ class Frame implements Attribute
         return new Frame(
             $data['baseId'],
             $data['wrapResponse'] ?? false,
-            $context['context']?->scope,
+            array_key_exists('scope', $data) ? $data['scope'] : $context['context']?->scope,
         );
     }
 
@@ -48,6 +48,7 @@ class Frame implements Attribute
         ];
         if ($this->wrapResponse) {
             $data['wrapResponse'] = $this->wrapResponse;
+            $data['scope'] = $this->scope;
         }
         return $data;
     }
