@@ -2,10 +2,12 @@
 
 namespace Helhum\Topwire\Fluid\View;
 
-use Helhum\Topwire\Context\ContextStack;
+use Helhum\Topwire\Context\Attribute\Section;
+use Helhum\Topwire\Context\TopwireContext;
 use Helhum\Topwire\Turbo\Frame;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
+use TYPO3Fluid\Fluid\View\Exception\InvalidSectionException;
 
 class TopwireTemplateView extends AbstractTemplateView
 {
@@ -13,55 +15,24 @@ class TopwireTemplateView extends AbstractTemplateView
     {
         $renderingContext = $this->getCurrentRenderingContext();
         assert($renderingContext instanceof RenderingContext);
-        $this->assignContextIfAvailable($renderingContext);
-        $frame = $renderingContext->getRequest()
-            ->getAttribute('topwire')
-            ?->getAttribute('frame');
-        if (!$frame  instanceof Frame) {
+        $context = $renderingContext->getRequest()->getAttribute('topwire');
+        if (!$context instanceof TopwireContext) {
             return parent::render($actionName);
         }
-        [$sectionName, $partialName] = $this->partialFromFrameId(
-            $frame,
-            $renderingContext->getRequest()->getControllerName(),
-            $actionName ?? $renderingContext->getRequest()->getControllerActionName(),
-        );
-        return $this->renderPartial(
-            $partialName,
-            $sectionName,
-            (array)$renderingContext->getVariableProvider()->getAll()
-        );
-    }
-
-    /**
-     * @param Frame $frame
-     * @param string $controllerName
-     * @param string $actionName
-     * @return array{0: string, 1: string}
-     */
-    protected function partialFromFrameId(
-        Frame $frame,
-        string $controllerName,
-        string $actionName,
-    ): array {
-        return [
-            $frame->partialName,
-            sprintf(
-                'Topwire/Frame/%s',
-                $controllerName,
-            )
-        ];
-    }
-
-    /**
-     * @todo: is this really useful? currently unused!
-     *
-     * @param RenderingContext $renderingContext
-     */
-    private function assignContextIfAvailable(RenderingContext $renderingContext): void
-    {
-        $context = $renderingContext->getRequest()->getAttribute('topwire');
-        if ($context !== null) {
-            (new ContextStack($renderingContext->getViewHelperVariableContainer()))->push($context);
+        $frame = $context->getAttribute('frame');
+        if ($frame  instanceof Frame) {
+            $sectionName = str_replace(' ', '', ucwords(str_replace('-', ' ', strtolower($frame->baseId))));
+            try {
+                return $this->renderSection($sectionName, (array)$renderingContext->getVariableProvider()->getAll());
+            } catch (InvalidSectionException $e) {
+                // Section for frame is not found, gracefully render complete template
+                return parent::render($actionName);
+            }
         }
+        $section = $context->getAttribute('section');
+        if ($section  instanceof Section) {
+            return $this->renderSection($section->sectionName, (array)$renderingContext->getVariableProvider()->getAll());
+        }
+        return parent::render($actionName);
     }
 }

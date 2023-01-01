@@ -10,7 +10,6 @@ class Frame implements Attribute
 {
     private const idSeparatorToken = '__';
     public readonly string $id;
-    public readonly string $partialName;
 
     public function __construct(
         public readonly string $baseId,
@@ -18,7 +17,6 @@ class Frame implements Attribute
         public readonly ?string $scope,
     ) {
         $this->ensureValidBaseId($baseId);
-        $this->partialName = str_replace(' ', '', ucwords(str_replace('-', ' ', strtolower($baseId))));
         $this->id = $baseId
             . ($scope === null ? '' : self::idSeparatorToken . $scope)
         ;
@@ -34,7 +32,7 @@ class Frame implements Attribute
         return new Frame(
             $data['baseId'],
             $data['wrapResponse'] ?? false,
-            $context['context']->scope,
+            $context['context']?->scope,
         );
     }
 

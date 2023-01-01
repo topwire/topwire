@@ -4,12 +4,10 @@ namespace Helhum\Topwire\ViewHelpers\Turbo;
 
 use Helhum\Topwire\Context\ContextStack;
 use Helhum\Topwire\Context\TopwireContext;
-use Helhum\Topwire\Context\TopwireContextFactory;
 use Helhum\Topwire\Turbo\Frame;
 use Helhum\Topwire\Turbo\FrameOptions;
 use Helhum\Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -42,16 +40,20 @@ class FrameViewHelper extends AbstractViewHelper
     ): string {
         assert($renderingContext instanceof RenderingContext);
         $stack = new ContextStack($renderingContext->getViewHelperVariableContainer());
-        $context = self::extractTopwireContext($renderingContext, $stack);
+        $context = $stack->current();
         $frame = new Frame(
             baseId: $arguments['id'],
             wrapResponse: $arguments['wrapResponse'],
-            scope: $context->scope,
+            scope: $context?->scope,
         );
-        $contextWithFrame = $context->withAttribute('frame', $frame);
-        $stack->push($contextWithFrame);
+        if (isset($context)) {
+            $context = $context->withAttribute('frame', $frame);
+            $stack->push($context);
+        }
         $content = $renderChildrenClosure();
-        $stack->pop();
+        if (isset($context)) {
+            $stack->pop();
+        }
         if ($content === null) {
             return $frame->id;
         }
@@ -59,57 +61,40 @@ class FrameViewHelper extends AbstractViewHelper
             frame: $frame,
             content: $content,
             options: new FrameOptions(
-                src: self::extractSourceUrl($arguments, $renderingContext, $contextWithFrame),
+                src: self::extractSourceUrl($arguments, $renderingContext, $context),
                 propagateUrl: $arguments['propagateUrl'],
             ),
-            context: $contextWithFrame,
-        );
-    }
-
-    private static function extractTopwireContext(RenderingContext $renderingContext, ContextStack $stack): TopwireContext
-    {
-        if ($stack->current() instanceof TopwireContext) {
-            return $stack->current();
-        }
-        $frontendController = $renderingContext->getRequest()->getAttribute('frontend.controller');
-        assert($frontendController instanceof TypoScriptFrontendController);
-        $contextFactory = new TopwireContextFactory(
-            $frontendController
-        );
-        // @todo: check how this behaves in a standalone view
-        return $contextFactory->forRequest(
-            $renderingContext->getRequest(),
-            [],
+            context: $context,
         );
     }
 
     /**
      * @param array<mixed> $arguments
      * @param RenderingContext $renderingContext
-     * @param TopwireContext $context
+     * @param ?TopwireContext $context
      * @return string|null
      */
-    private static function extractSourceUrl(array $arguments, RenderingContext $renderingContext, TopwireContext $context): ?string
+    private static function extractSourceUrl(array $arguments, RenderingContext $renderingContext, ?TopwireContext $context): ?string
     {
-        if (!isset($arguments['src'])) {
+        if (!isset($context, $arguments['src'])) {
             return null;
         }
-        if ($arguments['src'] === 'async') {
-            $action = $context->getAttribute('plugin')?->actionName ?? null;
-            return $renderingContext->getUriBuilder()
-                ->setTargetPageUid($context->contextRecord->pageId)
-                ->setArguments([
-                    'tx_topwire' => [
-                        'frameId' => $arguments['id'],
-                        'wrapResponse' => $arguments['wrapResponse'],
-                        'type' => 'typoScript',
-                        'typoScriptPath' => $context->renderingPath->jsonSerialize(),
-                        'recordUid' => $context->contextRecord->id,
-                        'tableName' => $context->contextRecord->tableName,
-                    ],
-                ])
-                ->uriFor(actionName: $action);
+        if ($arguments['src'] !== 'async') {
+            return $arguments['src'];
         }
-        return $arguments['src'];
+        $action = $context->getAttribute('plugin')?->actionName ?? null;
+        return $renderingContext->getUriBuilder()
+            ->setTargetPageUid($context->contextRecord->pageId)
+            ->setArguments([
+                'tx_topwire' => [
+                    'frameId' => $arguments['id'],
+                    'wrapResponse' => $arguments['wrapResponse'],
+                    'type' => 'typoScript',
+                    'typoScriptPath' => $context->renderingPath->jsonSerialize(),
+                    'recordUid' => $context->contextRecord->id,
+                    'tableName' => $context->contextRecord->tableName,
+                ],
+            ])
+            ->uriFor(actionName: $action);
     }
 }

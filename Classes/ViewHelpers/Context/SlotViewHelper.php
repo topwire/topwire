@@ -23,11 +23,6 @@ class SlotViewHelper extends AbstractViewHelper
 
     protected $escapeOutput = false;
 
-    public function initializeArguments(): void
-    {
-        $this->registerArgument('frame', 'string', 'Frame id of a frame (or section name of a template section), that should be rendered only. If empty, the whole template is rendered');
-    }
-
     /**
      * @param array<mixed> $arguments
      * @param \Closure $renderChildrenClosure
@@ -50,10 +45,9 @@ class SlotViewHelper extends AbstractViewHelper
             [],
             $context->contextRecord->tableName,
             self::addActionNameToRequest(
-                $renderingContext->getRequest()
-                    ->withAttribute('topwire', $context),
-                $arguments
-            )
+                $renderingContext,
+                $context,
+            )->withAttribute('topwire', $context)
         );
         $contentObjectRenderer->currentRecord = $context->contextRecord->tableName . ':' . $context->contextRecord->id;
         return $contentObjectRenderer
@@ -66,21 +60,13 @@ class SlotViewHelper extends AbstractViewHelper
     }
 
     /**
-     * @param ServerRequestInterface $request
-     * @param array<string, mixed> $arguments
+     * @param RenderingContext $renderingContext
+     * @param TopwireContext $context
      * @return ServerRequestInterface
      */
-    private static function addActionNameToRequest(ServerRequestInterface $request, array $arguments): ServerRequestInterface
+    private static function addActionNameToRequest(RenderingContext $renderingContext, TopwireContext $context): ServerRequestInterface
     {
-        $context = $request->getAttribute('topwire');
-        assert($context instanceof TopwireContext);
-        if (isset($arguments['frame'])) {
-            if ($context->getAttribute('frame') !== null) {
-                throw new InvalidNestingOverride('Can not override frame of a slot that is already wrapped in a frame', 1672438241);
-            }
-            $context = $context->withAttribute('frame', new Frame($arguments['frame'], false, null));
-            $request = $request->withAttribute('topwire', $context);
-        }
+        $request = $renderingContext->getRequest();
         $plugin = $context->getAttribute('plugin');
         if (!$plugin instanceof Plugin
             || $plugin->actionName === null

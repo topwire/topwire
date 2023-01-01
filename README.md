@@ -92,22 +92,31 @@ lib.tsExample.typolink.returnLast = url
     xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<topwire:context.plugin extensionName="MyExtension" pluginName="MyPlugin" action="list">
+<topwire:context.plugin 
+    extensionName="MyExtension" 
+    pluginName="MyPlugin" 
+    action="list"
+>
     <topwire:context.slot />
 </topwire:context.plugin>
 
 </html>
 ```
 
-### Render a specific (non default) action of a plugin and limit output to a given frame id
+### Render a specific (non default) action of a plugin and limit output to a given Fluid section
 
 ```html
 <html
     xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<topwire:context.plugin extensionName="MyExtension" pluginName="MyPlugin" action="list">
-    <topwire:context.slot frame="my-list-frame" />
+<topwire:context.plugin 
+    extensionName="MyExtension" 
+    pluginName="MyPlugin" 
+    action="list" 
+    section="MySection"
+>
+    <topwire:context.slot />
 </topwire:context.plugin>
 
 </html>
