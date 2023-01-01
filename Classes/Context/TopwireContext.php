@@ -4,7 +4,7 @@ namespace Helhum\Topwire\Context;
 
 class TopwireContext implements \JsonSerializable
 {
-    public readonly string $id;
+    public readonly string $scope;
     public readonly string $cacheId;
 
     /**
@@ -17,12 +17,12 @@ class TopwireContext implements \JsonSerializable
         public readonly ContextRecord $contextRecord,
         ?string $cacheId = null,
     ) {
-        $this->id = md5(
+        $this->scope = md5(
             $this->renderingPath->jsonSerialize()
             . $this->contextRecord->tableName
             . $this->contextRecord->id
         );
-        $this->cacheId = $cacheId ?? ($this->id . $this->contextRecord->pageId);
+        $this->cacheId = $cacheId ?? ($this->scope . $this->contextRecord->pageId);
     }
 
     public static function fromUntrustedString(string $untrustedString, ContextDenormalizer $denormalizer): self

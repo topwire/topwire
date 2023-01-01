@@ -83,7 +83,7 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
         $frame = new Frame(
             baseId: $parentObject->currentRecord,
             wrapResponse: true,
-            context: $context,
+            scope: $context->scope,
         );
         $context = $context->withAttribute('frame', $frame);
         return (new FrameRenderer())->render(

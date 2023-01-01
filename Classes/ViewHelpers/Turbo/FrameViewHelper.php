@@ -46,7 +46,7 @@ class FrameViewHelper extends AbstractViewHelper
         $frame = new Frame(
             baseId: $arguments['id'],
             wrapResponse: $arguments['wrapResponse'],
-            context: $context,
+            scope: $context->scope,
         );
         $contextWithFrame = $context->withAttribute('frame', $frame);
         $stack->push($contextWithFrame);

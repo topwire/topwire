@@ -15,12 +15,12 @@ class Frame implements Attribute
     public function __construct(
         public readonly string $baseId,
         public readonly bool $wrapResponse,
-        ?TopwireContext $context,
+        public readonly ?string $scope,
     ) {
         $this->ensureValidBaseId($baseId);
         $this->partialName = str_replace(' ', '', ucwords(str_replace('-', ' ', strtolower($baseId))));
         $this->id = $baseId
-            . ($context === null ? '' : self::idSeparatorToken . $context->id)
+            . ($scope === null ? '' : self::idSeparatorToken . $scope)
         ;
     }
 
@@ -34,7 +34,7 @@ class Frame implements Attribute
         return new Frame(
             $data['baseId'],
             $data['wrapResponse'] ?? false,
-            $context['context'],
+            $context['context']->scope,
         );
     }
 

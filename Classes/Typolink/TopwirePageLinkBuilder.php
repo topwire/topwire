@@ -89,7 +89,7 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
         $frame = new Frame(
             baseId: $topwireArguments['frameId'] ?? 'link',
             wrapResponse: !empty($topwireArguments['wrapResponse']),
-            context: $context,
+            scope: $context->scope,
         );
         $context = $context->withAttribute('frame', $frame);
         $queryArguments[self::linkNamespace] = $context->toHashedString();
