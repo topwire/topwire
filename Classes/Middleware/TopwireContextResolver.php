@@ -12,13 +12,10 @@ use TYPO3\CMS\Core\Routing\PageArguments;
 
 class TopwireContextResolver implements MiddlewareInterface
 {
-    private const topwireHeader = 'Topwire-Context';
-    private const argumentName = 'tx_topwire';
-
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $context = null;
-        $contextString = $request->getQueryParams()[self::argumentName] ?? $request->getHeaderLine(self::topwireHeader);
+        $contextString = $request->getQueryParams()[TopwireContext::argumentName] ?? $request->getHeaderLine(TopwireContext::headerName);
         if (!empty($contextString)) {
             $context = TopwireContext::fromUntrustedString($contextString, new ContextDenormalizer());
         }
@@ -38,7 +35,7 @@ class TopwireContextResolver implements MiddlewareInterface
         $newStaticArguments = array_merge(
             $pageArguments->getStaticArguments(),
             [
-                self::argumentName => $context->cacheId,
+                TopwireContext::argumentName => $context->cacheId,
             ]
         );
         $modifiedPageArguments = new PageArguments(
@@ -59,7 +56,7 @@ class TopwireContextResolver implements MiddlewareInterface
     private function addVaryHeader(ResponseInterface $response): ResponseInterface
     {
         $varyHeader = $response->getHeader('Vary');
-        $varyHeader[] = self::topwireHeader;
+        $varyHeader[] = TopwireContext::headerName;
         return $response->withAddedHeader('Vary', $varyHeader);
     }
 }

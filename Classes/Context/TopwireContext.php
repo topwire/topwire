@@ -2,8 +2,13 @@
 declare(strict_types=1);
 namespace Helhum\Topwire\Context;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 class TopwireContext implements \JsonSerializable
 {
+    public const headerName = 'Topwire-Context';
+    public const argumentName = 'tx_topwire';
+
     public readonly string $scope;
     public readonly string $cacheId;
 
@@ -34,6 +39,11 @@ class TopwireContext implements \JsonSerializable
             JSON_THROW_ON_ERROR
         );
         return $denormalizer->denormalize($data);
+    }
+
+    public static function isRequestSubmitted(?ServerRequestInterface $request): bool
+    {
+        return isset($request?->getQueryParams()[self::argumentName]) || ($request?->hasHeader(self::headerName) ?? false);
     }
 
     public function toHashedString(): string

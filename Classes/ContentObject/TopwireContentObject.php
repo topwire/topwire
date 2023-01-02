@@ -24,6 +24,7 @@ class TopwireContentObject extends AbstractContentObject
         $frame = $context->getAttribute('frame');
         if (!$frame instanceof Frame
             || !$frame->wrapResponse
+            || !TopwireContext::isRequestSubmitted($this->request)
         ) {
             // The frame id is known and set during partial rendering
             // At the same time the rendered content already contains this id, so the frame is wrapped already
