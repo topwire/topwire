@@ -16,7 +16,6 @@ class Frame implements Attribute
         public readonly bool $wrapResponse,
         public readonly ?string $scope,
     ) {
-        $this->ensureValidBaseId($baseId);
         $this->id = $baseId
             . ($scope === null ? '' : self::idSeparatorToken . $scope)
         ;
@@ -51,12 +50,5 @@ class Frame implements Attribute
             $data['scope'] = $this->scope;
         }
         return $data;
-    }
-
-    private function ensureValidBaseId(string $id): void
-    {
-        if (str_contains($id, self::idSeparatorToken)) {
-            throw new FrameIdContainsReservedToken(sprintf('Frame id must not contain reserved token "%s"', self::idSeparatorToken));
-        }
     }
 }
