@@ -14,10 +14,10 @@ class FrameRenderer
         if ($context instanceof TopwireContext) {
             $tagBuilder->addAttribute('data-topwire-context', $context->toHashedString());
         }
-        if (isset($options?->propagateUrl)) {
+        if ($options?->propagateUrl === true) {
             $tagBuilder->addAttribute('data-turbo-action', 'advance');
         }
-        if (isset($options?->src)) {
+        if (!empty($options?->src)) {
             $tagBuilder->addAttribute('src', $options->src);
         }
 
