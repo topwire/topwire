@@ -1,7 +1,7 @@
 {
     "name": "helhum/topwire",
     "type": "typo3-cms-extension",
-    "description": "Wiring up backend and frontend in a dynamic and modern way using hotwire",
+    "description": "Turbo for TYPO3",
     "homepage": "https://github.com/helhum/topwire",
     "license": [
         "GPL-2.0-or-later"
