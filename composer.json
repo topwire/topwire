@@ -1,5 +1,11 @@
 {
     "name": "helhum/topwire",
+    "repositories": {
+        "local-packages": {
+            "url": ".packages/*",
+            "type": "path"
+        }
+    },
     "type": "typo3-cms-extension",
     "description": "Turbo for TYPO3",
     "homepage": "https://github.com/helhum/topwire",
@@ -16,7 +22,8 @@
     "config": {
         "allow-plugins": {
             "typo3/cms-composer-installers": false,
-            "typo3/class-alias-loader": false
+            "typo3/class-alias-loader": false,
+            "helhum/composer-mono": true
         },
         "sort-packages": true
     },
@@ -35,17 +42,38 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.2",
+        "helhum/composer-mono": "@dev",
+        "helhum/topwire-examples": "^1.0",
+        "helhum/vite": "@dev",
         "phpstan/phpstan": "^1.0",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-doctrine": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
         "phpstan/phpstan-strict-rules": "^1.0",
-        "phpstan/phpstan-deprecation-rules": "^1.0",
         "saschaegerer/phpstan-typo3": "^1.1.2",
+        "topwire/website": "^1.0",
+        "typo3/cms-composer-installers": "^4.0@rc",
         "typo3/minimal": "*"
     },
     "extra": {
         "typo3/cms": {
             "extension-key": "topwire"
+        },
+        "helhum/composer-mono": {
+            "options": {
+                "apps-dir": ".websites/*",
+                "versions": {
+                    "helhum/composer-mono": "1.0.0",
+                    "helhum/topwire-examples": "1.0.0",
+                    "helhum/topwire": "1.0.0"
+                }
+            }
         }
+    },
+    "scripts": {
+        "composer-mono": [
+            "@composer up -d .websites/demo.topwire.dev",
+            "@composer up -d .websites/topwire.dev"
+        ]
     }
 }
