@@ -20,7 +20,7 @@ class TopwireTemplateView extends AbstractTemplateView
             return parent::render($actionName);
         }
         $frame = $context->getAttribute('frame');
-        if ($frame  instanceof Frame) {
+        if ($frame instanceof Frame) {
             $sectionName = str_replace(' ', '', ucwords(str_replace('-', ' ', strtolower($frame->baseId))));
             try {
                 return $this->renderSection($sectionName, (array)$renderingContext->getVariableProvider()->getAll());
