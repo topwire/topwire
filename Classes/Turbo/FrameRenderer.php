@@ -17,6 +17,9 @@ class FrameRenderer
         if ($options?->propagateUrl === true) {
             $tagBuilder->addAttribute('data-turbo-action', 'advance');
         }
+        if ($options?->morph === true) {
+            $tagBuilder->addAttribute('data-topwire-morph', 'true');
+        }
         if (!empty($options?->src)) {
             $tagBuilder->addAttribute('src', $options->src);
         }
