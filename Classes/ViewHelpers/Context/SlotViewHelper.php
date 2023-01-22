@@ -7,7 +7,6 @@ use Helhum\Topwire\Context\Attribute\Plugin;
 use Helhum\Topwire\Context\ContextStack;
 use Helhum\Topwire\Context\Exception\InvalidTopwireContext;
 use Helhum\Topwire\Context\TopwireContext;
-use Helhum\Topwire\Turbo\Frame;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -81,9 +80,12 @@ class SlotViewHelper extends AbstractViewHelper
         $newRootArguments = array_merge(
             $pageArguments->getRouteArguments(),
             [
-                $plugin->pluginNamespace => [
-                    'action' => $plugin->actionName,
-                ],
+                $plugin->pluginNamespace => array_replace(
+                    $request->getArguments(),
+                    [
+                        'action' => $plugin->actionName,
+                    ]
+                ),
             ]
         );
         $modifiedPageArguments = new PageArguments(
