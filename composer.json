@@ -71,6 +71,7 @@
         }
     },
     "scripts": {
+        "build": "npm run build",
         "composer-mono": [
             "@composer up -d .websites/demo.topwire.dev",
             "@composer up -d .websites/topwire.dev"
