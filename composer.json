@@ -74,7 +74,7 @@
         "build": "npm run build",
         "composer-mono": [
             "@composer up -d .websites/demo.topwire.dev",
-            "@composer up -d .websites/topwire.dev"
+            "@composer ins --verbose --prefer-dist --no-progress --no-interaction --classmap-authoritative --no-suggest -d .websites/topwire.dev"
         ]
     }
 }
