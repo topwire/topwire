@@ -1,9 +1,20 @@
 <?php
 
+use Helhum\Topwire\Middleware\TopwireContextResolver;
+use Helhum\Topwire\Middleware\TopwireFormResponseFix;
+use Helhum\Topwire\Middleware\TopwireRendering;
+
 return [
     'frontend' => [
+        'helhum/topwire-form-response-fix' => [
+            'target' => TopwireFormResponseFix::class,
+            'description' => '',
+            'before' => [
+                'typo3/cms-frontend/timetracker',
+            ],
+        ],
         'helhum/topwire-context-resolver' => [
-            'target' => \Helhum\Topwire\Middleware\TopwireContextResolver::class,
+            'target' => TopwireContextResolver::class,
             'description' => '',
             'after' => [
                 'typo3/cms-frontend/page-resolver',
@@ -13,7 +24,7 @@ return [
             ],
         ],
         'helhum/topwire-rendering' => [
-            'target' => \Helhum\Topwire\Middleware\TopwireRendering::class,
+            'target' => TopwireRendering::class,
             'description' => '',
             'after' => [
                 'typo3/cms-frontend/prepare-tsfe-rendering',
