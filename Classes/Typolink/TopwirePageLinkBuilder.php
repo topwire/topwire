@@ -83,7 +83,7 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
         $contextFactory = new TopwireContextFactory($frontendController);
         $context = match ($topwireArguments['type']) {
             'plugin' => $contextFactory->forPlugin($topwireArguments['extensionName'], $topwireArguments['pluginName'], $contextRecordId),
-            'contentElement' => $contextFactory->forPath('tt_content', 'tt_content:' . $topwireArguments['contentElementUid']),
+            'contentElement' => $contextFactory->forPath('tt_content', 'tt_content:' . $topwireArguments['uid']),
             'typoScript' => $contextFactory->forPath($topwireArguments['typoScriptPath'], $contextRecordId),
         };
         $frame = new Frame(
@@ -108,8 +108,8 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
             match ($topwireArguments['type'] ?? null) {
                 'plugin' => !isset($topwireArguments['extensionName'], $topwireArguments['pluginName'])
                     && throw new InvalidConfiguration('URLs of type "plugin" must have "extensionName" and "pluginName" set', 1671558884),
-                'contentElement' => !isset($topwireArguments['contentElementUid'])
-                    && throw new InvalidConfiguration('URLs of type "contentElement" must have "contentElementUid" set', 1671560042),
+                'contentElement' => !isset($topwireArguments['uid'])
+                    && throw new InvalidConfiguration('URLs of type "contentElement" must have "uid" set', 1671560042),
                 'typoScript' => !isset($topwireArguments['typoScriptPath'])
                     && throw new InvalidConfiguration('URLs of type "typoScript" must have "typoScriptPath" set', 1671558886),
             };

@@ -19,7 +19,7 @@ class ContentElementViewHelper extends AbstractViewHelper
 
     public function initializeArguments(): void
     {
-        $this->registerArgument('contentElementUid', 'int', 'Uid of the content element that will be rendered', true);
+        $this->registerArgument('uid', 'int', 'Uid of the content element that will be rendered', true);
         $this->registerArgument('pageUid', 'int', 'Uid of the page, on which the content element will be rendered. If NULL the current page uid is used');
     }
 
@@ -42,7 +42,7 @@ class ContentElementViewHelper extends AbstractViewHelper
         );
         $context = $contextFactory->forPath(
             renderingPath: 'tt_content',
-            contextRecordId: 'tt_content:' . $arguments['contentElementUid'],
+            contextRecordId: 'tt_content:' . $arguments['uid'],
         );
         $contextStack = new ContextStack($renderingContext->getViewHelperVariableContainer());
         $contextStack->push($context);

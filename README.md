@@ -161,7 +161,7 @@ lib.tsExample.typolink.returnLast = url
     xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<topwire:context.contentElement contentElementUid="148">
+<topwire:context.contentElement uid="148">
     <topwire:turbo.frame id="content_element" wrapResponse="true">
         <topwire:context.slot />
     </topwire:turbo.frame>
@@ -177,7 +177,7 @@ lib.tsExample.typolink.returnLast = url
     xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
-<topwire:context.contentElement contentElementUid="148">
+<topwire:context.contentElement uid="148">
     <topwire:turbo.frame id="content_element_async" src="async" wrapResponse="true">
         Loading...
     </topwire:turbo.frame>
