@@ -9,3 +9,7 @@ services:
 
     Helhum\Topwire\Fluid\Parser\TopwireContextParser:
         public: true
+
+    Helhum\Topwire\Middleware\TopwireContextResolver:
+        arguments:
+            $cache: '@cache.pages'
