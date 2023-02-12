@@ -266,3 +266,4 @@ exists in the table and that the TypoScript defined in the path is also availabl
 * [ ] Implement tagging an Extbase controller via DI to inject a view resolver, 
       that returns the TopwireTemplateView. Allow defining the resulting view class,
       to be able to override the place where partials for frame rendering are located
+* [ ] Triage scroll restoration issues with anchors
