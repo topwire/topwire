@@ -88,7 +88,7 @@ class FrameViewHelper extends AbstractViewHelper
         return $renderingContext->getUriBuilder()
             ->setTargetPageUid($context->contextRecord->pageId)
             ->setArguments([
-                'tx_topwire' => [
+                'topwire' => [
                     'frameId' => $arguments['id'],
                     'wrapResponse' => $arguments['wrapResponse'],
                     'type' => 'typoScript',

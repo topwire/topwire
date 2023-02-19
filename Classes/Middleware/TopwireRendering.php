@@ -51,7 +51,9 @@ class TopwireRendering implements MiddlewareInterface
         if (!str_starts_with($contentTypeHeader, self::defaultContentType)) {
             throw new InvalidContentType(
                 sprintf(
-                    'Turbo requests must return content/type "text/html", got "%s". Maybe forgot to add data-turbo="false" attribute for links leading to this error.',
+                    'Turbo requests must return content/type "text/html", got "%s". '
+                    . 'Maybe forgot to add data-turbo="false" attribute for links leading to this error? '
+                    . 'Alternatively you can rewrite the current URL to have a file extension',
                     $contentTypeHeader
                 ),
                 1671308188

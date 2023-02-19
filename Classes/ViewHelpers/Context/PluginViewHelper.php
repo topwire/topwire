@@ -5,6 +5,8 @@ namespace Helhum\Topwire\ViewHelpers\Context;
 use Helhum\Topwire\Context\Attribute\Section;
 use Helhum\Topwire\Context\ContextStack;
 use Helhum\Topwire\Context\TopwireContextFactory;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -44,13 +46,19 @@ class PluginViewHelper extends AbstractViewHelper
         $contextFactory = new TopwireContextFactory(
             $frontendController
         );
-        $context = $contextFactory->forRequest($renderingContext->getRequest(), $arguments);
+        $request = $renderingContext->getRequest();
+        $context = $contextFactory->forRequest($request, $arguments);
         if (isset($arguments['section'])) {
             $context = $context->withAttribute('section', new Section($arguments['section']));
         }
         $contextStack = new ContextStack($renderingContext->getViewHelperVariableContainer());
         $contextStack->push($context);
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
+        $configurationManager->getContentObject()?->setRequest($request->withAttribute('topwire', $context));
+        $renderingContext->setRequest($request->withAttribute('topwire', $context));
         $renderedChildren = $renderChildrenClosure();
+        $renderingContext->setRequest($request);
+        $configurationManager->getContentObject()?->setRequest($request);
         $contextStack->pop();
 
         return (string)$renderedChildren;

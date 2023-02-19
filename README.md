@@ -7,7 +7,9 @@
 lib.tsExample = TEXT
 lib.tsExample.typolink.htmlSpecialChars = 1
 lib.tsExample.typolink.parameter.data = page:uid
-lib.tsExample.typolink.additionalParams = &tx_topwire[type]=plugin&tx_topwire[extensionName]=TopwireExamples&tx_topwire[pluginName]=Json
+lib.tsExample.typolink.topwire.type = plugin
+lib.tsExample.typolink.topwire.extensionName = TopwireExamples
+lib.tsExample.typolink.topwire.pluginName = Json
 lib.tsExample.typolink.returnLast = url
 ```
 
@@ -15,22 +17,25 @@ lib.tsExample.typolink.returnLast = url
 ```html
 <html
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
-    
-<f:link.page
-    class="btn btn-primary"
-    pageUid="42" 
-    additionalParams="{tx_topwire: {type: 'plugin', extensionName: 'TopwireExamples', pluginName: 'Json'}}"
->
-    Download
-</f:link.page>
+
+<topwire:context.plugin>
+    <f:link.action
+        class="btn btn-primary"
+        additionalParams="{topwire: {type: 'context'}}"
+        action="json"
+    >
+        Link that renders plugin action
+    </f:link.action>
+</topwire:context.plugin>
 
 <f:link.page
     class="btn btn-primary"
     pageUid="42" 
-    additionalParams="{tx_topwire: {type: 'typoScript', typoScriptPath: 'lib.tsPluginExample', recordUid: '42', tableName: 'tt_content'}}"
+    additionalParams="{topwire: {type: 'typoScript', typoScriptPath: 'lib.tsPluginExample', recordUid: '42', tableName: 'tt_content'}}"
 >
-    Show rendered TypoScript only
+    Show rendered TypoScript path
 </f:link.page>
 
 </html>
@@ -260,10 +265,11 @@ exists in the table and that the TypoScript defined in the path is also availabl
 * [ ] Evaluate more use cases for rendering a plugin inside a plugin template
       and adapt view helpers accordingly
 * [ ] Evaluate and most likely tweak usages of the view helpers in standalone view context
-* [ ] Implement turbo streams
+* [ ] Implement turbo streams helpers
 * [ ] Performance evaluations and optimisations
 * [ ] Evaluate static file caching options
 * [ ] Implement tagging an Extbase controller via DI to inject a view resolver, 
       that returns the TopwireTemplateView. Allow defining the resulting view class,
       to be able to override the place where partials for frame rendering are located
 * [ ] Triage scroll restoration issues with anchors
+* [ ] Implement cleaner solution for propagating context to PageLinkBuilder
