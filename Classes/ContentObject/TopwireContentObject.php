@@ -78,6 +78,10 @@ class TopwireContentObject extends AbstractContentObject
         return [
             'source' => $context->contextRecord->tableName . '_' . $context->contextRecord->id,
             'tables' => $context->contextRecord->tableName,
+            // The pid check does not make sense when the context record is a page
+            // In that case it is only relevant, whether the page itself is available,
+            // thus we disable the pid check for that case
+            'dontCheckPid' => $context->contextRecord->tableName === 'pages',
             'conf.' => [
                 $context->contextRecord->tableName => '< ' . $context->renderingPath->jsonSerialize(),
             ],
