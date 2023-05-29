@@ -23,8 +23,9 @@ class FrameViewHelper extends AbstractViewHelper
         $this->registerArgument('id', 'string', 'id of the frame', true);
         $this->registerArgument('src', 'string', 'Either the keyword "async", which takes current Topwire context is taken into account, when fetching the HTML asynchronously. Alternatively can be set to any URL, for full flexibility.');
         $this->registerArgument('wrapResponse', 'bool', 'Whether to wrap the response of the content in this frame. Useful, for plugins or content, that isn\'t adapted to use Hotwire frames', false, false);
-        $this->registerArgument('morph', 'bool', 'Whether to wrap the response HTML should be morphed instead of fully replaced', false, false);
+        $this->registerArgument('morph', 'bool', 'Whether the response HTML should be morphed instead of fully replaced', false, false);
         $this->registerArgument('propagateUrl', 'bool', 'Whether the URL should be pushed to browser history', false, false);
+        $this->registerArgument('target', 'string', 'Turbo target for links and forms within this frame');
     }
 
     /**
@@ -63,6 +64,7 @@ class FrameViewHelper extends AbstractViewHelper
             content: $content,
             options: new FrameOptions(
                 src: self::extractSourceUrl($arguments, $renderingContext, $context),
+                target: $arguments['target'],
                 propagateUrl: $arguments['propagateUrl'],
                 morph: $arguments['morph'],
             ),
