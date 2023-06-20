@@ -30,7 +30,7 @@ class TopwireTemplateView extends AbstractTemplateView
             }
         }
         $section = $context->getAttribute('section');
-        if ($section  instanceof Section) {
+        if ($section instanceof Section) {
             return $this->renderSection($section->sectionName, (array)$renderingContext->getVariableProvider()->getAll());
         }
         return parent::render($actionName);

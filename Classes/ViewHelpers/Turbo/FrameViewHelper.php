@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Helhum\Topwire\ViewHelpers\Turbo;
 
+use Helhum\Topwire\Context\Attribute\Plugin;
 use Helhum\Topwire\Context\ContextStack;
 use Helhum\Topwire\Context\TopwireContext;
 use Helhum\Topwire\Turbo\Frame;
@@ -86,19 +87,25 @@ class FrameViewHelper extends AbstractViewHelper
         if ($arguments['src'] !== 'async') {
             return $arguments['src'];
         }
-        $action = $context->getAttribute('plugin')?->actionName ?? null;
+        $arguments = [
+            'topwire' => [
+                'frameId' => $arguments['id'],
+                'wrapResponse' => $arguments['wrapResponse'],
+                'type' => 'typoScript',
+                'typoScriptPath' => $context->renderingPath->jsonSerialize(),
+                'recordUid' => $context->contextRecord->id,
+                'tableName' => $context->contextRecord->tableName,
+            ],
+        ];
+        $pluginAttribute = $context->getAttribute('plugin');
+        if ($pluginAttribute instanceof Plugin && $pluginAttribute->actionName !== null) {
+            $arguments[$pluginAttribute->pluginNamespace] = [
+                'action' => $pluginAttribute->actionName,
+            ];
+        }
         return $renderingContext->getUriBuilder()
             ->setTargetPageUid($context->contextRecord->pageId)
-            ->setArguments([
-                'topwire' => [
-                    'frameId' => $arguments['id'],
-                    'wrapResponse' => $arguments['wrapResponse'],
-                    'type' => 'typoScript',
-                    'typoScriptPath' => $context->renderingPath->jsonSerialize(),
-                    'recordUid' => $context->contextRecord->id,
-                    'tableName' => $context->contextRecord->tableName,
-                ],
-            ])
-            ->uriFor(actionName: $action);
+            ->setArguments($arguments)
+            ->build();
     }
 }
