@@ -20,6 +20,6 @@ class TopwireFormResponseFix implements MiddlewareInterface
         ) {
             return $response;
         }
-        return $response->withStatus('422', 'Form invalid');
+        return $response->withStatus(422, 'Form invalid');
     }
 }

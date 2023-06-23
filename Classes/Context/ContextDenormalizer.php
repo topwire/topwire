@@ -21,7 +21,7 @@ class ContextDenormalizer
             renderingPath: new RenderingPath($data['renderingPath']),
             contextRecord: new ContextRecord(...$data['contextRecord']),
         );
-        if (isset($data['attributes']) && is_array($data['attributes'])) {
+        if (isset($data['attributes'])) {
             foreach ($data['attributes'] as $name => $attributeData) {
                 if (isset(self::attributeMap[$name])) {
                     /** @var Attribute $className */

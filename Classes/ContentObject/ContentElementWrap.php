@@ -54,7 +54,7 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
      */
     public function stdWrapPostProcess($content, array $configuration, ContentObjectRenderer &$parentObject)
     {
-        if (!$parentObject->stdWrapValue('turboFrameWrap', $configuration, 0)) {
+        if ((int)$parentObject->stdWrapValue('turboFrameWrap', $configuration, 0) === 0) {
             return $content;
         }
         if ($parentObject->getRequest()->getAttribute('topwire') instanceof TopwireContext) {
@@ -82,7 +82,7 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
             wrapResponse: true,
             scope: $scopeFrame ? $context->scope : null,
         );
-        $showWhenFrameMatches = $parentObject->stdWrapValue('showWhenFrameMatches', $configuration['turboFrameWrap.'] ?? [], false);
+        $showWhenFrameMatches = (bool)$parentObject->stdWrapValue('showWhenFrameMatches', $configuration['turboFrameWrap.'] ?? [], false);
         $requestedFrame = $parentObject->getRequest()->getAttribute('topwireFrame');
         if ($showWhenFrameMatches
             && (

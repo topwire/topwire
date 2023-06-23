@@ -20,10 +20,10 @@ class FrameRenderer
         if ($options?->morph === true) {
             $tagBuilder->addAttribute('data-topwire-morph', 'true');
         }
-        if (isset($options?->src) && $options?->src !== '') {
+        if (isset($options?->src) && $options->src !== '') {
             $tagBuilder->addAttribute('src', $options->src);
         }
-        if (isset($options?->target) && $options?->target !== '') {
+        if (isset($options?->target) && $options->target !== '') {
             $tagBuilder->addAttribute('target', $options->target);
         }
 
