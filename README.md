@@ -273,3 +273,7 @@ exists in the table and that the TypoScript defined in the path is also availabl
       to be able to override the place where partials for frame rendering are located
 * [ ] Triage scroll restoration issues with anchors
 * [ ] Implement cleaner solution for propagating context to PageLinkBuilder
+* [ ] Allow rendering *some* header values in a frame response, e.g. `<title>` tag
+      or `<meta name="turbo-visit-control" content="reload">` tag
+* [ ] Fix `action` argument of context view helper, when the action is uncached
+
