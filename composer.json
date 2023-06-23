@@ -42,7 +42,6 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.2",
-        "helhum/composer-mono": "@dev",
         "helhum/topwire-examples": "^1.0",
         "helhum/vite": "@dev",
         "phpstan/phpstan": "^1.0",
@@ -71,10 +70,9 @@
         }
     },
     "scripts": {
-        "build": "npm run build",
-        "composer-mono": [
-            "@composer up -d .websites/demo.topwire.dev",
-            "@composer ins --verbose --prefer-dist --no-progress --no-interaction --classmap-authoritative --no-suggest -d .websites/topwire.dev"
+        "build": [
+            "@composer ins -d .websites/topwire.dev --verbose --prefer-dist --no-progress --classmap-authoritative --no-suggest",
+            "npm run build"
         ]
     }
 }
