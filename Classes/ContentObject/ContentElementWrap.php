@@ -99,7 +99,7 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
             options: new FrameOptions(
                 propagateUrl: (bool)$parentObject->stdWrapValue('propagateUrl', $configuration['turboFrameWrap.'] ?? [], 0),
             ),
-            context: $context,
+            context: $scopeFrame ? $context : null,
         );
     }
 }
