@@ -8,6 +8,9 @@ use Helhum\Topwire\Context\TopwireContext;
 use Helhum\Topwire\Turbo\Frame;
 use Helhum\Topwire\Turbo\FrameOptions;
 use Helhum\Topwire\Turbo\FrameRenderer;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Request;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -97,7 +100,12 @@ class FrameViewHelper extends AbstractViewHelper
                 'action' => $pluginAttribute->actionName,
             ];
         }
-        return $renderingContext->getUriBuilder()
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $request = $renderingContext->getRequest();
+        assert($request instanceof Request);
+        $uriBuilder->setRequest($request);
+        return $uriBuilder
+            ->reset()
             ->setTargetPageUid($context->contextRecord->pageId)
             ->setArguments($arguments)
             ->build();
