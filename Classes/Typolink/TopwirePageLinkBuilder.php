@@ -41,10 +41,7 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
 
     /**
      * @param array<mixed> $linkDetails
-     * @param string $linkText
-     * @param string $target
      * @param array<mixed> $conf
-     * @return LinkResultInterface
      * @throws UnableToLinkException
      */
     public function build(array &$linkDetails, string $linkText, string $target, array $conf): LinkResultInterface
@@ -84,7 +81,6 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
 
     /**
      * @param array<mixed> $conf
-     * @return TopwireContext|null
      * @throws \JsonException
      */
     private function resolveContext(array $conf): ?TopwireContext
@@ -116,7 +112,7 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
 
     /**
      * @param array<mixed> $conf
-     * @return array<mixed>
+     * @return mixed[]|null
      * @throws \JsonException
      */
     private function resolveTopwireArguments(array $conf): ?array

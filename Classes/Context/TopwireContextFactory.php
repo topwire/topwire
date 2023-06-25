@@ -20,10 +20,7 @@ class TopwireContextFactory
     }
 
     /**
-     * @param ServerRequestInterface $request
      * @param array<string, mixed> $arguments
-     * @param ConfigurationManagerInterface|null $configurationManager
-     * @return TopwireContext
      */
     public function forRequest(
         ServerRequestInterface $request,
@@ -90,10 +87,6 @@ class TopwireContextFactory
     /**
      * Resolves the table name and uid for the record the rendering is based upon.
      * Falls back to current page if none is available
-     *
-     * @param string|null $contextRecordId
-     * @param int|null $pageUid
-     * @return ContextRecord
      */
     private function resolveContextRecord(?string $contextRecordId, ?int $pageUid = null): ContextRecord
     {

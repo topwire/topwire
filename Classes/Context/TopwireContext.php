@@ -82,7 +82,7 @@ class TopwireContext implements \JsonSerializable
         ];
         $attributes = array_filter(
             $this->attributes,
-            static fn (Attribute $attribute) => $attribute->jsonSerialize() !== null,
+            static fn (Attribute $attribute): bool => $attribute->jsonSerialize() !== null,
         );
         if ($attributes !== []) {
             $normalizedContext['attributes'] = $attributes;

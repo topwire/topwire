@@ -31,9 +31,6 @@ class FrameViewHelper extends AbstractViewHelper
 
     /**
      * @param array<mixed> $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     * @return string
      * @throws \JsonException
      */
     public static function renderStatic(
@@ -75,9 +72,6 @@ class FrameViewHelper extends AbstractViewHelper
 
     /**
      * @param array<mixed> $arguments
-     * @param RenderingContext $renderingContext
-     * @param ?TopwireContext $context
-     * @return string|null
      */
     private static function extractSourceUrl(array $arguments, RenderingContext $renderingContext, ?TopwireContext $context): ?string
     {

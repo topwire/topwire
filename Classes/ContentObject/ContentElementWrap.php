@@ -16,7 +16,6 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
     /**
      * @param string $content
      * @param array<mixed> $configuration
-     * @param ContentObjectRenderer $parentObject
      * @return string
      */
     public function stdWrapPreProcess($content, array $configuration, ContentObjectRenderer &$parentObject)
@@ -27,7 +26,6 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
     /**
      * @param string $content
      * @param array<mixed> $configuration
-     * @param ContentObjectRenderer $parentObject
      * @return string
      */
     public function stdWrapOverride($content, array $configuration, ContentObjectRenderer &$parentObject)
@@ -38,7 +36,6 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
     /**
      * @param string $content
      * @param array<mixed> $configuration
-     * @param ContentObjectRenderer $parentObject
      * @return string
      */
     public function stdWrapProcess($content, array $configuration, ContentObjectRenderer &$parentObject)
@@ -49,7 +46,6 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
     /**
      * @param string $content
      * @param array<mixed> $configuration
-     * @param ContentObjectRenderer $parentObject
      * @return string
      */
     public function stdWrapPostProcess($content, array $configuration, ContentObjectRenderer &$parentObject)

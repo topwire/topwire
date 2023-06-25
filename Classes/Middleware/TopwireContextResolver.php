@@ -27,7 +27,7 @@ class TopwireContextResolver implements MiddlewareInterface
             $context = TopwireContext::fromUntrustedString($contextString, new ContextDenormalizer());
         }
         $pageArguments = $request->getAttribute('routing');
-        if ($context === null
+        if (!$context instanceof TopwireContext
             || !$pageArguments instanceof PageArguments
         ) {
             return $this->addVaryHeader($handler->handle($request->withAttribute('topwire', null)));
@@ -90,7 +90,7 @@ class TopwireContextResolver implements MiddlewareInterface
 
     private function trackPageBoundaries(ResponseInterface $response, ?TopwireContext $context): ResponseInterface
     {
-        if ($context === null || $response->getHeaderLine('Location') === '') {
+        if (!$context instanceof TopwireContext || $response->getHeaderLine('Location') === '') {
             return $response;
         }
         $cacheIdentifier = $this->getCacheIdentifier($context);

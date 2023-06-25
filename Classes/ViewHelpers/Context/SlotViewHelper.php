@@ -24,9 +24,6 @@ class SlotViewHelper extends AbstractViewHelper
 
     /**
      * @param array<mixed> $arguments
-     * @param \Closure $renderChildrenClosure
-     * @param RenderingContextInterface $renderingContext
-     * @return string
      * @throws \JsonException
      */
     public static function renderStatic(
@@ -58,11 +55,6 @@ class SlotViewHelper extends AbstractViewHelper
             );
     }
 
-    /**
-     * @param RenderingContext $renderingContext
-     * @param TopwireContext $context
-     * @return ServerRequestInterface
-     */
     private static function addActionNameToRequest(RenderingContext $renderingContext, TopwireContext $context): ServerRequestInterface
     {
         $request = $renderingContext->getRequest();

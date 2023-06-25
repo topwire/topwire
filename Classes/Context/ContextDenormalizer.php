@@ -12,7 +12,6 @@ class ContextDenormalizer
 
     /**
      * @param array{renderingPath: string, contextRecord: array{tableName: string, id: int, pageId: int}, attributes?: array<string, mixed>} $data
-     * @return TopwireContext
      * @throws Exception\TableNameNotFound
      */
     public function denormalize(array $data): TopwireContext

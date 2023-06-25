@@ -14,7 +14,6 @@ class TopwireContentObject extends AbstractContentObject
 
     /**
      * @param array<mixed> $conf
-     * @return string
      */
     public function render($conf = []): string
     {
@@ -70,7 +69,6 @@ class TopwireContentObject extends AbstractContentObject
     }
 
     /**
-     * @param TopwireContext $context
      * @return array<string, mixed>
      */
     private function transformToRecordsConfiguration(TopwireContext $context): array

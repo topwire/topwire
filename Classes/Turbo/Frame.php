@@ -22,7 +22,6 @@ class Frame implements Attribute
     /**
      * @param array<string, mixed> $data
      * @param array<string, mixed> $context
-     * @return self
      */
     public static function denormalize(array $data, array $context = []): self
     {
