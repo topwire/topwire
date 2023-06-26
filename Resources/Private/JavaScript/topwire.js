@@ -17,15 +17,15 @@ document.addEventListener('turbo:before-fetch-request', async (event) => {
         event.detail.resume()
         return
     }
-    if (turboFrame?.dataset?.topwireMorph) {
-        const morphListener = (event) => {
-            event.detail.render = (currentElement, newElement) => {
-                morph(currentElement, newElement)
-            }
-        }
-        turboFrame.addEventListener('turbo:before-frame-render', morphListener, {once: true})
-    }
     headers['Topwire-Context'] = turboFrame.dataset.topwireContext
     event.detail.fetchOptions.headers = headers
     event.detail.resume()
+})
+
+document.addEventListener('turbo:before-frame-render', async (event) => {
+    if (event.target.dataset?.topwireMorph) {
+        event.detail.render = (currentElement, newElement) => {
+            morph(currentElement, newElement)
+        }
+    }
 })
