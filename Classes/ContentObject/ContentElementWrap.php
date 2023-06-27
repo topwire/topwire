@@ -80,7 +80,8 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
         );
         $showWhenFrameMatches = (bool)$parentObject->stdWrapValue('showWhenFrameMatches', $configuration['turboFrameWrap.'] ?? [], false);
         $requestedFrame = $parentObject->getRequest()->getAttribute('topwireFrame');
-        if ($showWhenFrameMatches
+        if ($scopeFrame
+            && $showWhenFrameMatches
             && (
                 !$requestedFrame instanceof Frame
                 || $requestedFrame->id !== $frame->id
