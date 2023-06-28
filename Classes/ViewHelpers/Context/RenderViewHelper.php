@@ -16,7 +16,7 @@ use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
-class SlotViewHelper extends AbstractViewHelper
+class RenderViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
 

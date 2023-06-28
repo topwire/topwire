@@ -84,7 +84,7 @@ lib.tsExample.typolink.returnLast = url
     data-namespace-typo3-fluid="true">
 
 <topwire:context.plugin extensionName="FeLogin" pluginName="Login">
-    <topwire:context.slot />
+    <topwire:context.render />
 </topwire:context.plugin>
 
 </html>
@@ -102,7 +102,7 @@ lib.tsExample.typolink.returnLast = url
     pluginName="MyPlugin" 
     action="list"
 >
-    <topwire:context.slot />
+    <topwire:context.render />
 </topwire:context.plugin>
 
 </html>
@@ -121,7 +121,7 @@ lib.tsExample.typolink.returnLast = url
     action="list" 
     section="MySection"
 >
-    <topwire:context.slot />
+    <topwire:context.render />
 </topwire:context.plugin>
 
 </html>
@@ -136,7 +136,7 @@ lib.tsExample.typolink.returnLast = url
 
 <topwire:context.plugin extensionName="FeLogin" pluginName="Login">
     <topwire:turbo.frame id="other_plugin" wrapResponse="true">
-        <topwire:context.slot />
+        <topwire:context.render />
     </topwire:turbo.frame>
 </topwire:context.plugin>
 
@@ -168,7 +168,7 @@ lib.tsExample.typolink.returnLast = url
 
 <topwire:context.contentElement uid="148">
     <topwire:turbo.frame id="content_element" wrapResponse="true">
-        <topwire:context.slot />
+        <topwire:context.render />
     </topwire:turbo.frame>
 </topwire:context.contentElement>
 
@@ -200,7 +200,7 @@ lib.tsExample.typolink.returnLast = url
 
 <topwire:context.typoScript typoScriptPath="lib.tsExample">
     <topwire:turbo.frame id="typo_script" wrapResponse="true">
-        <topwire:context.slot />
+        <topwire:context.render />
     </topwire:turbo.frame>
 </topwire:context.typoScript>
 
