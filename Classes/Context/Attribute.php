@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Helhum\Topwire\Context;
+namespace Topwire\Context;
 
 interface Attribute extends \JsonSerializable
 {

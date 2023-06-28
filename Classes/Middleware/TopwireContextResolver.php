@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\Middleware;
+namespace Topwire\Middleware;
 
-use Helhum\Topwire\Context\ContextDenormalizer;
-use Helhum\Topwire\Context\TopwireContext;
+use Topwire\Context\ContextDenormalizer;
+use Topwire\Context\TopwireContext;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

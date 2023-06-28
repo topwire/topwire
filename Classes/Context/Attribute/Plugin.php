@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Helhum\Topwire\Context\Attribute;
+namespace Topwire\Context\Attribute;
 
-use Helhum\Topwire\Context\Attribute;
+use Topwire\Context\Attribute;
 
 class Plugin implements Attribute
 {

@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\Context\Exception;
+namespace Topwire\Context\Exception;
 
-use Helhum\Topwire\TopwireException;
+use Topwire\TopwireException;
 
 class InvalidTopwireContext extends TopwireException
 {

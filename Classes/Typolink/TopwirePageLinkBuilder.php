@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\Typolink;
+namespace Topwire\Typolink;
 
-use Helhum\Topwire\Context\TopwireContext;
-use Helhum\Topwire\Context\TopwireContextFactory;
-use Helhum\Topwire\Exception\InvalidConfiguration;
-use Helhum\Topwire\Turbo\Frame;
+use Topwire\Context\TopwireContext;
+use Topwire\Context\TopwireContextFactory;
+use Topwire\Exception\InvalidConfiguration;
+use Topwire\Turbo\Frame;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;

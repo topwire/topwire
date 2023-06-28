@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\ViewHelpers\Turbo;
+namespace Topwire\ViewHelpers\Turbo;
 
-use Helhum\Topwire\Context\Attribute\Plugin;
-use Helhum\Topwire\Context\ContextStack;
-use Helhum\Topwire\Context\TopwireContext;
-use Helhum\Topwire\Turbo\Frame;
-use Helhum\Topwire\Turbo\FrameOptions;
-use Helhum\Topwire\Turbo\FrameRenderer;
+use Topwire\Context\Attribute\Plugin;
+use Topwire\Context\ContextStack;
+use Topwire\Context\TopwireContext;
+use Topwire\Turbo\Frame;
+use Topwire\Turbo\FrameOptions;
+use Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;

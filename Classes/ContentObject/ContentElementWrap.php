@@ -1,12 +1,12 @@
 <?php
-namespace Helhum\Topwire\ContentObject;
+namespace Topwire\ContentObject;
 
-use Helhum\Topwire\ContentObject\Exception\InvalidTableContext;
-use Helhum\Topwire\Context\TopwireContext;
-use Helhum\Topwire\Context\TopwireContextFactory;
-use Helhum\Topwire\Turbo\Frame;
-use Helhum\Topwire\Turbo\FrameOptions;
-use Helhum\Topwire\Turbo\FrameRenderer;
+use Topwire\ContentObject\Exception\InvalidTableContext;
+use Topwire\Context\TopwireContext;
+use Topwire\Context\TopwireContextFactory;
+use Topwire\Turbo\Frame;
+use Topwire\Turbo\FrameOptions;
+use Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;

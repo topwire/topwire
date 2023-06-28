@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\ContentObject\Exception;
+namespace Topwire\ContentObject\Exception;
 
-use Helhum\Topwire\TopwireException;
+use Topwire\TopwireException;
 
 class InvalidTableContext extends TopwireException
 {

@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\ViewHelpers\Context;
+namespace Topwire\ViewHelpers\Context;
 
-use Helhum\Topwire\ViewHelpers\ContextViewHelper;
+use Topwire\ViewHelpers\ContextViewHelper;
 
 /**
  * This is just an alias of ContextViewHelper,

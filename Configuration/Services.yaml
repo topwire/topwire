@@ -4,17 +4,17 @@ services:
         autoconfigure: true
         public: false
 
-    Helhum\Topwire\:
+    Topwire\:
         resource: '../Classes/*'
 
-    Helhum\Topwire\Fluid\Parser\TopwireContextParser:
+    Topwire\Fluid\Parser\TopwireContextParser:
         public: true
 
-    Helhum\Topwire\Middleware\TopwireContextResolver:
+    Topwire\Middleware\TopwireContextResolver:
         arguments:
             $cache: '@cache.pages'
 
-    Helhum\Topwire\ContentObject\TopwireContentObject:
+    Topwire\ContentObject\TopwireContentObject:
         tags:
             - name: frontend.contentobject
               identifier: 'TOPWIRE'

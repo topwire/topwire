@@ -1,8 +1,8 @@
 <?php
 
-use Helhum\Topwire\ContentObject\ContentElementWrap;
-use Helhum\Topwire\ContentObject\TopwireContentObject;
-use Helhum\Topwire\Typolink\TopwirePageLinkBuilder;
+use Topwire\ContentObject\ContentElementWrap;
+use Topwire\ContentObject\TopwireContentObject;
+use Topwire\Typolink\TopwirePageLinkBuilder;
 use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
 
 (static function (): void {

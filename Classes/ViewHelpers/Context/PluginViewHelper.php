@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\ViewHelpers\Context;
+namespace Topwire\ViewHelpers\Context;
 
-use Helhum\Topwire\Context\Attribute\Section;
-use Helhum\Topwire\Context\ContextStack;
-use Helhum\Topwire\Context\TopwireContextFactory;
+use Topwire\Context\Attribute\Section;
+use Topwire\Context\ContextStack;
+use Topwire\Context\TopwireContextFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;

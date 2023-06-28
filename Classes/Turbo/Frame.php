@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\Turbo;
+namespace Topwire\Turbo;
 
-use Helhum\Topwire\Context\Attribute;
+use Topwire\Context\Attribute;
 
 class Frame implements Attribute
 {

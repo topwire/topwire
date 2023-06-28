@@ -17,7 +17,7 @@ lib.tsExample.typolink.returnLast = url
 ```html
 <html
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
 <topwire:context.plugin>
@@ -49,7 +49,7 @@ lib.tsExample.typolink.returnLast = url
 ```html
 <html
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
 <topwire:turbo.frame id="my_plugin">
@@ -65,7 +65,7 @@ lib.tsExample.typolink.returnLast = url
 ```html
 <html
     xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
 <topwire:turbo.frame id="my_plugin">
@@ -80,7 +80,7 @@ lib.tsExample.typolink.returnLast = url
 
 ```html
 <html
-    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
 <topwire:context.plugin extensionName="FeLogin" pluginName="Login">
@@ -94,7 +94,7 @@ lib.tsExample.typolink.returnLast = url
 
 ```html
 <html
-    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
 <topwire:context.plugin 
@@ -112,7 +112,7 @@ lib.tsExample.typolink.returnLast = url
 
 ```html
 <html
-    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
 <topwire:context.plugin 
@@ -131,7 +131,7 @@ lib.tsExample.typolink.returnLast = url
 
 ```html
 <html
-    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
 <topwire:context.plugin extensionName="FeLogin" pluginName="Login">
@@ -147,7 +147,7 @@ lib.tsExample.typolink.returnLast = url
 
 ```html
 <html
-    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
 <topwire:context.plugin extensionName="FeLogin" pluginName="Login">
@@ -163,7 +163,7 @@ lib.tsExample.typolink.returnLast = url
 
 ```html
 <html
-    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
 <topwire:context.contentElement uid="148">
@@ -179,7 +179,7 @@ lib.tsExample.typolink.returnLast = url
 
 ```html
 <html
-    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
 <topwire:context.contentElement uid="148">
@@ -195,7 +195,7 @@ lib.tsExample.typolink.returnLast = url
 
 ```html
 <html
-    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
 <topwire:context.typoScript typoScriptPath="lib.tsExample">
@@ -211,7 +211,7 @@ lib.tsExample.typolink.returnLast = url
 
 ```html
 <html
-    xmlns:topwire="http://typo3.org/ns/Helhum/Topwire/ViewHelpers"
+    xmlns:topwire="http://typo3.org/ns/Topwire/ViewHelpers"
     data-namespace-typo3-fluid="true">
 
 <topwire:context.typoScript typoScriptPath="lib.tsExample">

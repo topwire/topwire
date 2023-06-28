@@ -29,12 +29,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Helhum\\Topwire\\": "Classes/"
+            "Topwire\\": "Classes/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Helhum\\Topwire\\Tests\\": "Tests/"
+            "Topwire\\Tests\\": "Tests/"
         }
     },
     "require": {

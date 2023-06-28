@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\ViewHelpers\Context;
+namespace Topwire\ViewHelpers\Context;
 
-use Helhum\Topwire\Context\ContextStack;
-use Helhum\Topwire\Context\TopwireContextFactory;
+use Topwire\Context\ContextStack;
+use Topwire\Context\TopwireContextFactory;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;

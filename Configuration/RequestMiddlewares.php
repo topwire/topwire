@@ -1,8 +1,8 @@
 <?php
 
-use Helhum\Topwire\Middleware\TopwireContextResolver;
-use Helhum\Topwire\Middleware\TopwireFormResponseFix;
-use Helhum\Topwire\Middleware\TopwireRendering;
+use Topwire\Middleware\TopwireContextResolver;
+use Topwire\Middleware\TopwireFormResponseFix;
+use Topwire\Middleware\TopwireRendering;
 
 return [
     'frontend' => [

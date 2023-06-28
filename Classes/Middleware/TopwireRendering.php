@@ -1,9 +1,9 @@
 <?php
-namespace Helhum\Topwire\Middleware;
+namespace Topwire\Middleware;
 
-use Helhum\Topwire\ContentObject\TopwireContentObject;
-use Helhum\Topwire\Context\TopwireContext;
-use Helhum\Topwire\Exception\InvalidContentType;
+use Topwire\ContentObject\TopwireContentObject;
+use Topwire\Context\TopwireContext;
+use Topwire\Exception\InvalidContentType;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

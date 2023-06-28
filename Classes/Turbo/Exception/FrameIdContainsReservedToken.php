@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\Turbo\Exception;
+namespace Topwire\Turbo\Exception;
 
-use Helhum\Topwire\TopwireException;
+use Topwire\TopwireException;
 
 class FrameIdContainsReservedToken extends TopwireException
 {

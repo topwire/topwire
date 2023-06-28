@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\Exception;
+namespace Topwire\Exception;
 
-use Helhum\Topwire\TopwireException;
+use Topwire\TopwireException;
 
 class InvalidConfiguration extends TopwireException
 {

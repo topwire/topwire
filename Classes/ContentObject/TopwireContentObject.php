@@ -1,10 +1,10 @@
 <?php
-namespace Helhum\Topwire\ContentObject;
+namespace Topwire\ContentObject;
 
-use Helhum\Topwire\Context\TopwireContext;
-use Helhum\Topwire\Turbo\Frame;
-use Helhum\Topwire\Turbo\FrameOptions;
-use Helhum\Topwire\Turbo\FrameRenderer;
+use Topwire\Context\TopwireContext;
+use Topwire\Turbo\Frame;
+use Topwire\Turbo\FrameOptions;
+use Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 

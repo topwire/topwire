@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\Turbo;
+namespace Topwire\Turbo;
 
-use Helhum\Topwire\Context\TopwireContext;
+use Topwire\Context\TopwireContext;
 use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
 class FrameRenderer

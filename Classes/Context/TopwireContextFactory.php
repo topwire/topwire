@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\Context;
+namespace Topwire\Context;
 
-use Helhum\Topwire\Context\Attribute\Plugin;
+use Topwire\Context\Attribute\Plugin;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;

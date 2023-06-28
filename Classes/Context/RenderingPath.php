@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\Context;
+namespace Topwire\Context;
 
 class RenderingPath implements \JsonSerializable
 {

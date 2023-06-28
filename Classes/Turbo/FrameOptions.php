@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\Turbo;
+namespace Topwire\Turbo;
 
 class FrameOptions
 {

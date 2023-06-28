@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\Context;
+namespace Topwire\Context;
 
-use Helhum\Topwire\Context\Exception\TableNameNotFound;
+use Topwire\Context\Exception\TableNameNotFound;
 
 class ContextRecord implements \JsonSerializable
 {

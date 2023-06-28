@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\Context;
+namespace Topwire\Context;
 
-use Helhum\Topwire\ViewHelpers\ContextViewHelper;
+use Topwire\ViewHelpers\ContextViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\ViewHelperVariableContainer;
 
 class ContextStack

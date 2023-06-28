@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\ViewHelpers\Context;
+namespace Topwire\ViewHelpers\Context;
 
-use Helhum\Topwire\TopwireException;
+use Topwire\TopwireException;
 
 class InvalidNestingOverride extends TopwireException
 {

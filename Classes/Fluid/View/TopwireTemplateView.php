@@ -1,10 +1,10 @@
 <?php
 
-namespace Helhum\Topwire\Fluid\View;
+namespace Topwire\Fluid\View;
 
-use Helhum\Topwire\Context\Attribute\Section;
-use Helhum\Topwire\Context\TopwireContext;
-use Helhum\Topwire\Turbo\Frame;
+use Topwire\Context\Attribute\Section;
+use Topwire\Context\TopwireContext;
+use Topwire\Turbo\Frame;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Fluid\View\AbstractTemplateView;
 use TYPO3Fluid\Fluid\View\Exception\InvalidSectionException;

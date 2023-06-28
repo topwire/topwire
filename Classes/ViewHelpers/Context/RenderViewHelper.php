@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
-namespace Helhum\Topwire\ViewHelpers\Context;
+namespace Topwire\ViewHelpers\Context;
 
-use Helhum\Topwire\ContentObject\TopwireContentObject;
-use Helhum\Topwire\Context\Attribute\Plugin;
-use Helhum\Topwire\Context\ContextStack;
-use Helhum\Topwire\Context\Exception\InvalidTopwireContext;
-use Helhum\Topwire\Context\TopwireContext;
+use Topwire\ContentObject\TopwireContentObject;
+use Topwire\Context\Attribute\Plugin;
+use Topwire\Context\ContextStack;
+use Topwire\Context\Exception\InvalidTopwireContext;
+use Topwire\Context\TopwireContext;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
