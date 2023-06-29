@@ -1,5 +1,5 @@
 {
-    "name": "helhum/topwire",
+    "name": "topwire/topwire",
     "repositories": {
         "local-packages": {
             "url": ".packages/*",
@@ -8,7 +8,7 @@
     },
     "type": "typo3-cms-extension",
     "description": "Turbo for TYPO3",
-    "homepage": "https://github.com/helhum/topwire",
+    "homepage": "https://topwire.dev",
     "license": [
         "GPL-2.0-or-later"
     ],
@@ -65,7 +65,7 @@
                 "versions": {
                     "helhum/composer-mono": "1.0.0",
                     "topwire/examples": "1.0.0",
-                    "helhum/topwire": "1.0.0"
+                    "topwire/topwire": "1.0.0"
                 }
             }
         }

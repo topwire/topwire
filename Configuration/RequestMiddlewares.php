@@ -6,14 +6,14 @@ use Topwire\Middleware\TopwireRendering;
 
 return [
     'frontend' => [
-        'helhum/topwire-form-response-fix' => [
+        'topwire/form-response-fix' => [
             'target' => TopwireFormResponseFix::class,
             'description' => '',
             'before' => [
                 'typo3/cms-frontend/timetracker',
             ],
         ],
-        'helhum/topwire-context-resolver' => [
+        'topwire/context-resolver' => [
             'target' => TopwireContextResolver::class,
             'description' => '',
             'after' => [
@@ -23,7 +23,7 @@ return [
                 'typo3/cms-frontend/tsfe',
             ],
         ],
-        'helhum/topwire-rendering' => [
+        'topwire/rendering' => [
             'target' => TopwireRendering::class,
             'description' => '',
             'after' => [
