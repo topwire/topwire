@@ -42,7 +42,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.2",
-        "helhum/topwire-examples": "^1.0",
+        "topwire/examples": "^1.0",
         "helhum/vite": "@dev",
         "phpstan/phpstan": "^1.0",
         "phpstan/phpstan-deprecation-rules": "^1.0",
@@ -64,7 +64,7 @@
                 "apps-dir": ".websites/*",
                 "versions": {
                     "helhum/composer-mono": "1.0.0",
-                    "helhum/topwire-examples": "1.0.0",
+                    "topwire/examples": "1.0.0",
                     "helhum/topwire": "1.0.0"
                 }
             }
