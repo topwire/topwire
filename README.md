@@ -1,3 +1,24 @@
+## Installation
+
+```bash
+composer require topwire/topwire
+```
+
+## Configuration
+
+Add the following TypoScript to your site:
+
+```
+page.includeJSLibs.topwire = EXT:topwire/Resources/Public/JavaScript/topwire.js
+page.includeJSLibs.topwire.type = module
+page.includeJSLibs.topwire.async = 1
+page.includeJSLibs.topwire.defer = 1
+page.includeJSLibs.topwire.disableCompression = 1
+page.includeJSLibs.topwire.excludeFromConcatenation = 1
+```
+
+Alternatively you can import this module in your frontend build chain.
+
 ## Examples
 
 ### Generating links for partial rendering
