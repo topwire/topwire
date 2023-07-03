@@ -272,7 +272,7 @@ exists in the table and that the TypoScript defined in the path is also availabl
 * [x] Maybe optionally allow wrapping server response in turbo frame to 
       not require changing the plugin itself
 * [ ] Implement other features of frames or make it possible to use arbitrary ones
-* [ ] Register content object also as service for TYPO3 12 compatibility
+* [x] Register content object also as service for TYPO3 12 compatibility
 * [x] Add a way to address frames with the dynamically generated ids
 * [x] Implement URI generation for addressing plugin rendering via URLs
 * [x] Re-evaluate responsibilities of Frame and TopwireContext
