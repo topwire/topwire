@@ -93,6 +93,8 @@ class TopwireContextFactory
         if ($contextRecordId === null
             || $contextRecordId === 'currentPage'
             || substr_count($contextRecordId, ':') !== 1
+            || str_starts_with($contextRecordId, ':')
+            || str_ends_with($contextRecordId, ':')
         ) {
             return new ContextRecord(
                 'pages',
@@ -101,7 +103,7 @@ class TopwireContextFactory
             );
         }
         [$tableName, $uid] = explode(':', $contextRecordId);
-        if (empty($tableName) || empty($uid) || !MathUtility::canBeInterpretedAsInteger($uid)) {
+        if (!MathUtility::canBeInterpretedAsInteger($uid)) {
             return new ContextRecord(
                 'pages',
                 $this->typoScriptFrontendController->id,

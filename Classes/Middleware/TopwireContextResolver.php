@@ -23,7 +23,7 @@ class TopwireContextResolver implements MiddlewareInterface
     {
         $context = null;
         $contextString = $request->getQueryParams()[TopwireContext::argumentName] ?? $request->getHeaderLine(TopwireContext::headerName);
-        if (!empty($contextString)) {
+        if ($contextString !== '') {
             $context = TopwireContext::fromUntrustedString($contextString, new ContextDenormalizer());
         }
         $pageArguments = $request->getAttribute('routing');

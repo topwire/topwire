@@ -102,7 +102,7 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
         };
         $frame = new Frame(
             baseId: $topwireArguments['frameId'] ?? 'link',
-            wrapResponse: !empty($topwireArguments['wrapResponse']),
+            wrapResponse: isset($topwireArguments['wrapResponse']) && (bool)(int)$topwireArguments['wrapResponse'],
             scope: $context->scope,
         );
         return $context->withAttribute('frame', $frame);
