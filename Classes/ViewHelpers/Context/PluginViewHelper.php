@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Topwire\ViewHelpers\Context;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Topwire\Context\Attribute\Section;
 use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContextFactory;
@@ -38,12 +39,13 @@ class PluginViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ): string {
         assert($renderingContext instanceof RenderingContext);
-        $frontendController = $renderingContext->getRequest()->getAttribute('frontend.controller');
+        $request = $renderingContext->getRequest();
+        assert($request instanceof ServerRequestInterface);
+        $frontendController = $request->getAttribute('frontend.controller');
         assert($frontendController instanceof TypoScriptFrontendController);
         $contextFactory = new TopwireContextFactory(
             $frontendController
         );
-        $request = $renderingContext->getRequest();
         $context = $contextFactory->forRequest($request, $arguments);
         if (isset($arguments['section'])) {
             $context = $context->withAttribute('section', new Section($arguments['section']));

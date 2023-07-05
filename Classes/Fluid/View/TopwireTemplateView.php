@@ -15,7 +15,7 @@ class TopwireTemplateView extends AbstractTemplateView
     {
         $renderingContext = $this->getCurrentRenderingContext();
         assert($renderingContext instanceof RenderingContext);
-        $context = $renderingContext->getRequest()->getAttribute('topwire');
+        $context = $renderingContext->getRequest()?->getAttribute('topwire');
         if (!$context instanceof TopwireContext) {
             return parent::render($actionName);
         }

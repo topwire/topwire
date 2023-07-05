@@ -96,23 +96,23 @@ class TopwireContextFactory
         ) {
             return new ContextRecord(
                 'pages',
-                (int)$this->typoScriptFrontendController->id,
-                $pageUid ?? (int)$this->typoScriptFrontendController->id,
+                $this->typoScriptFrontendController->id,
+                $pageUid ?? $this->typoScriptFrontendController->id,
             );
         }
         [$tableName, $uid] = explode(':', $contextRecordId);
         if (empty($tableName) || empty($uid) || !MathUtility::canBeInterpretedAsInteger($uid)) {
             return new ContextRecord(
                 'pages',
-                (int)$this->typoScriptFrontendController->id,
-                $pageUid ?? (int)$this->typoScriptFrontendController->id,
+                $this->typoScriptFrontendController->id,
+                $pageUid ?? $this->typoScriptFrontendController->id,
             );
         }
         // TODO: maybe check if the record is available
         return new ContextRecord(
             $tableName,
             (int)$uid,
-            $pageUid ?? (int)$this->typoScriptFrontendController->id,
+            $pageUid ?? $this->typoScriptFrontendController->id,
         );
     }
 }

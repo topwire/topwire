@@ -32,7 +32,7 @@ class ContentElementViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ): string {
         assert($renderingContext instanceof RenderingContext);
-        $frontendController = $renderingContext->getRequest()->getAttribute('frontend.controller');
+        $frontendController = $renderingContext->getRequest()?->getAttribute('frontend.controller');
         assert($frontendController instanceof TypoScriptFrontendController);
         $contextFactory = new TopwireContextFactory(
             $frontendController

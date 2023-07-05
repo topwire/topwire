@@ -9,7 +9,6 @@ use Topwire\Turbo\Frame;
 use Topwire\Turbo\FrameOptions;
 use Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -101,9 +100,6 @@ class FrameViewHelper extends AbstractViewHelper
             ];
         }
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $request = $renderingContext->getRequest();
-        assert($request instanceof Request);
-        $uriBuilder->setRequest($request);
         return $uriBuilder
             ->reset()
             ->setTargetPageUid($context->contextRecord->pageId)

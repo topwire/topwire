@@ -10,6 +10,7 @@ use Topwire\Context\TopwireContext;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -58,6 +59,7 @@ class RenderViewHelper extends AbstractViewHelper
     private static function addActionNameToRequest(RenderingContext $renderingContext, TopwireContext $context): ServerRequestInterface
     {
         $request = $renderingContext->getRequest();
+        assert($request instanceof ServerRequestInterface);
         $plugin = $context->getAttribute('plugin');
         if (!$plugin instanceof Plugin
             || $plugin->actionName === null
@@ -68,12 +70,15 @@ class RenderViewHelper extends AbstractViewHelper
         if (!$pageArguments instanceof PageArguments) {
             return $request;
         }
-
+        $extbaseArguments = [];
+        if ($request instanceof Request) {
+            $extbaseArguments = $request->getArguments();
+        }
         $newRootArguments = array_merge(
             $pageArguments->getRouteArguments(),
             [
                 $plugin->pluginNamespace => array_replace(
-                    $request->getArguments(),
+                    $extbaseArguments,
                     [
                         'action' => $plugin->actionName,
                     ]

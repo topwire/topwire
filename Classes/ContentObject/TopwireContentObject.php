@@ -41,12 +41,12 @@ class TopwireContentObject extends AbstractContentObject
     private function renderContentWithoutRecursion(TopwireContext $context): string
     {
         $actionRecursionPrefix = $context->getAttribute('plugin')?->actionName ?? null;
-        $frontendController = $this->request?->getAttribute('frontend.controller');
+        $frontendController = $this->request->getAttribute('frontend.controller');
         if (!isset($actionRecursionPrefix)
             || !$frontendController instanceof TypoScriptFrontendController
         ) {
             // Use default recursion handling of TYPO3
-            return $this->cObj->cObjGetSingle(
+            return $this->getContentObjectRenderer()->cObjGetSingle(
                 'RECORDS',
                 $this->transformToRecordsConfiguration($context)
             );
@@ -59,7 +59,7 @@ class TopwireContentObject extends AbstractContentObject
             return '';
         }
         $frontendController->currentRecord = $requestedRenderingRecordId;
-        $content = $this->cObj->cObjGetSingle(
+        $content = $this->getContentObjectRenderer()->cObjGetSingle(
             'RECORDS',
             $this->transformToRecordsConfiguration($context)
         );

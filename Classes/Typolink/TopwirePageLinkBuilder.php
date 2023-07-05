@@ -48,9 +48,7 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
     {
         $conf = $this->amendUrlParams($conf);
         if (isset($this->originalPageLinkBuilder)) {
-            $result = $this->originalPageLinkBuilder->build($linkDetails, $linkText, $target, $conf);
-            assert($result instanceof LinkResultInterface);
-            return $result;
+            return $this->originalPageLinkBuilder->build($linkDetails, $linkText, $target, $conf);
         }
         return parent::build($linkDetails, $linkText, $target, $conf);
     }

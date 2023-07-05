@@ -12,6 +12,7 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectStdWrapHookInterface;
+use TYPO3\CMS\Frontend\ContentObject\Exception\ContentRenderingException;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class ContentElementWrap implements ContentObjectStdWrapHookInterface
@@ -100,6 +101,11 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
         );
     }
 
+    /**
+     * @param array<mixed> $configuration
+     * @throws InvalidTableContext
+     * @throws ContentRenderingException
+     */
     private function determineRenderingPath(TypoScriptFrontendController $controller, ContentObjectRenderer $cObj, array $configuration): string
     {
         $frontendTypoScript = $cObj->getRequest()->getAttribute('frontend.typoscript');
@@ -111,7 +117,7 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
         if (!isset($setup['tt_content'], $configuration['turboFrameWrap.'])) {
             throw new InvalidTableContext('"stdWrap.turboFrameWrap" can only be used for table "tt_content", typoscript setup missing!', 1687873940);
         }
-        $frameWrapConfig = $configuration['turboFrameWrap.'] ?? [];
+        $frameWrapConfig = $configuration['turboFrameWrap.'];
         $paths = [
             'tt_content.',
             'tt_content./' . $cObj->data['CType'] . '.',
