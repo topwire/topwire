@@ -23,9 +23,15 @@ document.addEventListener('turbo:before-fetch-request', async (event) => {
 })
 
 document.addEventListener('turbo:before-frame-render', async (event) => {
-    if (event.target.dataset?.topwireMorph) {
-        event.detail.render = (currentElement, newElement) => {
-            morph(currentElement, newElement)
+    const originalRender = event.detail.render;
+    event.detail.render = (currentElement, newElement) => {
+        let render = originalRender;
+        if (event.target.dataset?.topwireMorph) {
+            render = morph
+        }
+        render(currentElement, newElement)
+        if (newElement.dataset?.topwirePageTitle && (currentElement.dataset?.turboAction === 'advance' || currentElement.dataset?.turboAction === 'replace')) {
+            document.querySelector('title').innerText = newElement.dataset?.topwirePageTitle
         }
     }
 })

@@ -26,6 +26,9 @@ class FrameRenderer
         if (isset($options?->target) && $options->target !== '') {
             $tagBuilder->addAttribute('target', $options->target);
         }
+        if (isset($options?->pageTitle) && $options->pageTitle !== '') {
+            $tagBuilder->addAttribute('data-topwire-page-title', $options->pageTitle);
+        }
 
         return $tagBuilder->render();
     }

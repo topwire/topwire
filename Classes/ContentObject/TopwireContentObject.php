@@ -30,10 +30,15 @@ class TopwireContentObject extends AbstractContentObject
             return $content;
         }
 
+        $frameOptions = new FrameOptions();
+        $pageTitle = $this->getTypoScriptFrontendController()->generatePageTitle();
+        if ($pageTitle !== '') {
+            $frameOptions = new FrameOptions(pageTitle: $pageTitle);
+        }
         return (new FrameRenderer())->render(
             frame: $frame,
             content: $content,
-            options: new FrameOptions(),
+            options: $frameOptions,
             context: $context,
         );
     }
