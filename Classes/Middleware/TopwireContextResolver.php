@@ -2,13 +2,13 @@
 declare(strict_types=1);
 namespace Topwire\Middleware;
 
-use Topwire\Context\ContextDenormalizer;
-use Topwire\Context\TopwireContext;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Topwire\Context\ContextDenormalizer;
+use Topwire\Context\TopwireContext;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Routing\PageArguments;

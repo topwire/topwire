@@ -1,13 +1,13 @@
 <?php
 namespace Topwire\Middleware;
 
-use Topwire\ContentObject\TopwireContentObject;
-use Topwire\Context\TopwireContext;
-use Topwire\Exception\InvalidContentType;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Topwire\ContentObject\TopwireContentObject;
+use Topwire\Context\TopwireContext;
+use Topwire\Exception\InvalidContentType;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**

@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace Topwire\ViewHelpers\Context;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Topwire\ContentObject\TopwireContentObject;
 use Topwire\Context\Attribute\Plugin;
 use Topwire\Context\ContextStack;
 use Topwire\Context\Exception\InvalidTopwireContext;
 use Topwire\Context\TopwireContext;
-use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Request;

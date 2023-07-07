@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace Topwire\Context;
 
-use Topwire\Context\Attribute\Plugin;
 use Psr\Http\Message\ServerRequestInterface;
+use Topwire\Context\Attribute\Plugin;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
