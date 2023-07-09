@@ -30,6 +30,7 @@ class FrameViewHelper extends AbstractViewHelper
         $this->registerArgument('morph', 'bool', 'Whether the response HTML should be morphed instead of fully replaced', false, false);
         $this->registerArgument('propagateUrl', 'bool', 'Whether the URL should be pushed to browser history', false, false);
         $this->registerArgument('target', 'string', 'Turbo target for links and forms within this frame');
+        $this->registerArgument('additionalAttributes', 'array', 'Additional attributes for the turbo-frame tag', false, []);
     }
 
     /**
@@ -79,6 +80,7 @@ class FrameViewHelper extends AbstractViewHelper
                 propagateUrl: $arguments['propagateUrl'],
                 morph: $arguments['morph'],
                 pageTitle: $pageTitle,
+                additionalAttributes: $arguments['additionalAttributes'],
             ),
             context: $context,
         );

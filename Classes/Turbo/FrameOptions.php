@@ -4,6 +4,9 @@ namespace Topwire\Turbo;
 
 class FrameOptions
 {
+    /**
+     * @param array<string, string> $additionalAttributes
+     */
     public function __construct(
         public readonly bool $wrapResponse = false,
         public readonly ?string $src = null,
@@ -11,6 +14,7 @@ class FrameOptions
         public readonly bool $propagateUrl = false,
         public readonly bool $morph = false,
         public readonly ?string $pageTitle = null,
+        public readonly array $additionalAttributes = [],
     ) {
     }
 }
