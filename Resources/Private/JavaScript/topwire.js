@@ -1,7 +1,7 @@
 import * as Turbo from '@hotwired/turbo'
 import { morph } from '@alpinejs/morph'
 
-Turbo.session.drive = true
+Turbo.session.drive = false
 
 document.addEventListener('turbo:before-fetch-request', async (event) => {
     event.preventDefault()
@@ -35,3 +35,5 @@ document.addEventListener('turbo:before-frame-render', async (event) => {
         }
     }
 })
+
+export default Turbo
