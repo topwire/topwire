@@ -26,8 +26,11 @@ document.addEventListener('turbo:before-frame-render', async (event) => {
     const originalRender = event.detail.render;
     event.detail.render = (currentElement, newElement) => {
         let render = originalRender;
-        if (event.target.dataset?.topwireMorph) {
+        if (currentElement.dataset?.topwireMorph) {
             render = morph
+            if (!newElement.dataset?.topwireMorph) {
+                newElement.setAttribute('data-topwire-morph', currentElement.dataset?.topwireMorph)
+            }
         }
         render(currentElement, newElement)
         if (newElement.dataset?.topwirePageTitle && (currentElement.dataset?.turboAction === 'advance' || currentElement.dataset?.turboAction === 'replace')) {
