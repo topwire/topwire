@@ -293,7 +293,9 @@ exists in the table and that the TypoScript defined in the path is also availabl
       that returns the TopwireTemplateView. Allow defining the resulting view class,
       to be able to override the place where partials for frame rendering are located
 * [ ] Triage scroll restoration issues with anchors
-* [ ] Implement cleaner solution for propagating context to PageLinkBuilder
+* [ ] Implement cleaner solution for propagating context to PageLinkBuilder and add 
+      that to all context view helpers, not only plugin. Also implement that for UriBuilder
+      to be able to create Topwire links easily in Extbase Controller actions
 * [x] Allow updating `<title>` tag in a frame response with `data-turbo-action="advance"`. 
 * [ ] Allow updating meta tags in a frame response with `data-turbo-action="advance"`, eg.
       `<meta name="turbo-visit-control" content="reload">` or canonical url.
