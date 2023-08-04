@@ -83,7 +83,7 @@ class TopwireContextResolver implements MiddlewareInterface
         if (Environment::getContext()->isDevelopment()) {
             return true;
         }
-        $allowedUris = $this->cache->get('topwire_' . $context->contextRecord->pageId);
+        $allowedUris = $this->cache->get($this->getCacheIdentifier($context));
         $allowedUris = $allowedUris === false ? [] : $allowedUris;
         return isset($allowedUris[(string)$request->getUri()]);
     }
@@ -94,7 +94,7 @@ class TopwireContextResolver implements MiddlewareInterface
             return $response;
         }
         $cacheIdentifier = $this->getCacheIdentifier($context);
-        $allowedUris = $this->cache->get('topwire_' . $context->contextRecord->pageId);
+        $allowedUris = $this->cache->get($cacheIdentifier);
         $allowedUris = $allowedUris === false ? [] : $allowedUris;
         $allowedUris[$response->getHeaderLine('Location')] = true;
         $this->cache->set(
