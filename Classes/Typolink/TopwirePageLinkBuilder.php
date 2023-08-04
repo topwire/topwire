@@ -8,6 +8,7 @@ use Topwire\Exception\InvalidConfiguration;
 use Topwire\Turbo\Frame;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\HttpUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Typolink\AbstractTypolinkBuilder;
@@ -92,13 +93,20 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
         if (isset($topwireArguments['tableName'], $topwireArguments['recordUid'])) {
             $contextRecordId = $topwireArguments['tableName'] . ':' . $topwireArguments['recordUid'];
         }
+        $contextPageId = $this->contentObjectRenderer->getTypoScriptFrontendController()?->id;
+        if ($contextPageId !== null) {
+            $contextPageId = (int)$contextPageId;
+        }
+        if (MathUtility::canBeInterpretedAsInteger($topwireArguments['pageId'])) {
+            $contextPageId = (int)$topwireArguments['pageId'];
+        }
         $frontendController = $this->getTypoScriptFrontendController();
         $contextFactory = new TopwireContextFactory($frontendController);
         $context = match ($topwireArguments['type']) {
             'context' => $this->contentObjectRenderer->getRequest()->getAttribute('topwire') ?? throw new InvalidConfiguration('Topwire tye was set to "context", but no context could be resolved', 1676815069),
-            'plugin' => $contextFactory->forPlugin($topwireArguments['extensionName'], $topwireArguments['pluginName'], $contextRecordId),
+            'plugin' => $contextFactory->forPlugin($topwireArguments['extensionName'], $topwireArguments['pluginName'], $contextRecordId, $contextPageId),
             'contentElement' => $contextFactory->forPath('tt_content', 'tt_content:' . $topwireArguments['uid']),
-            'typoScript' => $contextFactory->forPath($topwireArguments['typoScriptPath'], $contextRecordId),
+            'typoScript' => $contextFactory->forPath($topwireArguments['typoScriptPath'], $contextRecordId, $contextPageId),
         };
         $frame = new Frame(
             baseId: $topwireArguments['frameId'] ?? 'link',

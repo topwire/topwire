@@ -54,17 +54,17 @@ class TopwireContextFactory
         ))->withAttribute('plugin', $plugin);
     }
 
-    public function forPlugin(string $extensionName, string $pluginName, ?string $contextRecordId): TopwireContext
+    public function forPlugin(string $extensionName, string $pluginName, ?string $contextRecordId, ?int $contextPageId = null): TopwireContext
     {
         return new TopwireContext(
             $this->resolveRenderingPath($extensionName, $pluginName, null),
-            $this->resolveContextRecord($contextRecordId),
+            $this->resolveContextRecord($contextRecordId, $contextPageId),
         );
     }
 
-    public function forPath(string $renderingPath, ?string $contextRecordId): TopwireContext
+    public function forPath(string $renderingPath, ?string $contextRecordId, ?int $contextPageId = null): TopwireContext
     {
-        $contextRecord = $this->resolveContextRecord($contextRecordId);
+        $contextRecord = $this->resolveContextRecord($contextRecordId, $contextPageId);
         return new TopwireContext(
             new RenderingPath($renderingPath),
             $contextRecord
