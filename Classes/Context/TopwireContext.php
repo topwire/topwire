@@ -52,6 +52,13 @@ class TopwireContext implements \JsonSerializable
             ->hashedString;
     }
 
+    public function withContextRecord(ContextRecord $contextRecord): self
+    {
+        $context = new self($this->renderingPath, $contextRecord);
+        $context->attributes = $this->attributes;
+        return $context;
+    }
+
     public function withAttribute(
         string $name,
         Attribute $attribute,

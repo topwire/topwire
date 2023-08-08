@@ -3,6 +3,7 @@
 use Topwire\ContentObject\ContentElementWrap;
 use Topwire\ContentObject\TopwireContentObject;
 use Topwire\Typolink\TopwirePageLinkBuilder;
+use Topwire\Typolink\TopwirePageLinkModifier;
 use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
 
 (static function (): void {
@@ -13,4 +14,6 @@ use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
         $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['overriddenDefault'] = $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['page'];
     }
     $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['page'] = TopwirePageLinkBuilder::class;
+    // @deprecated can be removed when TYPO3 11 compat is removed
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typolinkProcessing']['typolinkModifyParameterForPageLinks'][TopwirePageLinkModifier::class] = TopwirePageLinkModifier::class;
 })();

@@ -16,5 +16,11 @@ services:
 
     Topwire\ContentObject\TopwireContentObject:
         tags:
-            - name: frontend.contentobject
+            - name: 'frontend.contentobject'
               identifier: 'TOPWIRE'
+
+    Topwire\Typolink\TopwirePageLinkModifier:
+        tags:
+            - name: 'event.listener'
+              method: 'modifyQueryParameters'
+              identifier: 'TopwirePageLinkModifier'
