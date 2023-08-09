@@ -16,6 +16,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 class TopwireRendering implements MiddlewareInterface
 {
     private const defaultContentType = 'text/html';
+    private const turboStreamContentType = 'text/vnd.turbo-stream.html';
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -41,24 +42,26 @@ class TopwireRendering implements MiddlewareInterface
 
     private function validateContentType(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        if (!$request->hasHeader('Turbo-Frame')
+        $contentTypeHeader = $response->getHeaderLine('Content-Type');
+        $isStreamResponseAllowed = str_contains($request->getHeaderLine('Accept'), self::turboStreamContentType);
+        if ($contentTypeHeader === ''
             || $response->getStatusCode() !== 200
-            || !$response->hasHeader('Content-Type')
+            || !$request->hasHeader('Turbo-Frame')
+            || str_starts_with($contentTypeHeader, self::defaultContentType)
+            || ($isStreamResponseAllowed && str_starts_with($contentTypeHeader, self::turboStreamContentType))
         ) {
             return $response;
         }
-        $contentTypeHeader = $response->getHeaderLine('Content-Type');
-        if (!str_starts_with($contentTypeHeader, self::defaultContentType)) {
-            throw new InvalidContentType(
-                sprintf(
-                    'Turbo requests must return content/type "text/html", got "%s". '
-                    . 'Maybe forgot to add data-turbo="false" attribute for links leading to this error? '
-                    . 'Alternatively you can rewrite the current URL to have a file extension',
-                    $contentTypeHeader
-                ),
-                1671308188
-            );
-        }
-        return $response;
+        throw new InvalidContentType(
+            sprintf(
+                'Turbo frame requests must return content/type "%s",%s got "%s". '
+                . 'Maybe forgot to add data-turbo="false" attribute for links leading to this error? '
+                . 'Alternatively you can rewrite the current URL to have a file extension',
+                self::defaultContentType,
+                $isStreamResponseAllowed ? sprintf(' or "%s"', self::turboStreamContentType) : '',
+                $contentTypeHeader
+            ),
+            1671308188
+        );
     }
 }
