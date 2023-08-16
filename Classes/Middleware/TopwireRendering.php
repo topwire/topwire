@@ -54,7 +54,7 @@ class TopwireRendering implements MiddlewareInterface
         }
         throw new InvalidContentType(
             sprintf(
-                'Turbo frame requests must return content/type "%s",%s got "%s". '
+                'Turbo frame requests must return content/type "%s"%s, got "%s". '
                 . 'Maybe forgot to add data-turbo="false" attribute for links leading to this error? '
                 . 'Alternatively you can rewrite the current URL to have a file extension',
                 self::defaultContentType,
