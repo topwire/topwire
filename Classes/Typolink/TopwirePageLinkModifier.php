@@ -31,7 +31,7 @@ class TopwirePageLinkModifier implements TypolinkModifyLinkConfigForPageLinksHoo
             $pageLinkContext,
             $linkConfiguration,
             $queryParameters,
-            $linkDetails['pageuid'] ?? null
+            ($linkDetails['pageuid'] ?? null) !== null ? (int)$linkDetails['pageuid'] : null
         );
         $linkConfigurationEvent->setQueryParameters($queryParameters);
     }
@@ -55,7 +55,7 @@ class TopwirePageLinkModifier implements TypolinkModifyLinkConfigForPageLinksHoo
             $pageLinkContext,
             $linkConfiguration,
             $queryParameters,
-            $linkDetails['pageuid'] ?? null
+            ($linkDetails['pageuid'] ?? null) !== null ? (int)$linkDetails['pageuid'] : null
         );
         $linkConfiguration['additionalParams'] = '&' . HttpUtility::buildQueryString($queryParameters);
         return $linkConfiguration;
