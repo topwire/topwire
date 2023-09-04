@@ -129,7 +129,7 @@ class TopwirePageLinkModifier implements TypolinkModifyLinkConfigForPageLinksHoo
     {
         $context = $request->getAttribute('topwire');
         if (!$context instanceof TopwireContext) {
-            throw new InvalidConfiguration('Topwire tye was set to "context", but no context could be resolved', 1676815069);
+            throw new InvalidConfiguration('Topwire type was set to "context", but no context could be resolved', 1676815069);
         }
         if ($contextPageId === null) {
             return $context;
