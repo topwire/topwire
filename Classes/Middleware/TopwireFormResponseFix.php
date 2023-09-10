@@ -16,6 +16,7 @@ class TopwireFormResponseFix implements MiddlewareInterface
         $response = $handler->handle($request);
         if ($request->getMethod() !== 'POST'
             || $response->hasHeader('Location')
+            || $request->hasHeader('Turbo-Frame')
             || !str_contains($request->getHeaderLine('Accept'), 'text/vnd.turbo-stream.html')
         ) {
             return $response;
