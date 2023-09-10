@@ -9,6 +9,7 @@ use Topwire\Context\TopwireContextFactory;
 use Topwire\Exception\InvalidConfiguration;
 use Topwire\Turbo\Frame;
 use TYPO3\CMS\Core\Utility\HttpUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Frontend\ContentObject\TypolinkModifyLinkConfigForPageLinksHookInterface;
 use TYPO3\CMS\Frontend\Event\ModifyPageLinkConfigurationEvent;
 
@@ -83,8 +84,10 @@ class TopwirePageLinkModifier implements TypolinkModifyLinkConfigForPageLinksHoo
      * @throws InvalidConfiguration
      * @throws \JsonException
      */
-    private function buildQueryParameters(TopwirePageLinkContext $pageLinkContext, array $linkConfiguration, array $queryParameters, ?int $contextPageId = null): array
+    private function buildQueryParameters(TopwirePageLinkContext $pageLinkContext, array $linkConfiguration, array $queryParameters, int|string|null $contextPageId = null): array
     {
+        // @deprecated can be removed when TYPO3 v11 support is removed.
+        $contextPageId = MathUtility::canBeInterpretedAsInteger($contextPageId) ? (int)$contextPageId : null;
         $context = $this->resolveContext($pageLinkContext, $linkConfiguration, $queryParameters, $contextPageId);
         unset($queryParameters[self::virtualLinkNamespace]);
         $queryParameters[self::linkNamespace] = $context->toHashedString();
