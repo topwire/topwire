@@ -75,7 +75,7 @@ class FrameViewHelper extends AbstractViewHelper
             frame: $frame,
             content: $content,
             options: new FrameOptions(
-                src: self::extractSourceUrl($arguments, $renderingContext, $context),
+                src: self::extractSourceUrl($arguments, $request, $context),
                 target: $arguments['target'],
                 propagateUrl: $arguments['propagateUrl'],
                 morph: $arguments['morph'],
@@ -89,7 +89,7 @@ class FrameViewHelper extends AbstractViewHelper
     /**
      * @param array<mixed> $arguments
      */
-    private static function extractSourceUrl(array $arguments, RenderingContext $renderingContext, ?TopwireContext $context): ?string
+    private static function extractSourceUrl(array $arguments, ServerRequestInterface $request, ?TopwireContext $context): ?string
     {
         if (!isset($context, $arguments['src'])) {
             return null;
@@ -97,27 +97,19 @@ class FrameViewHelper extends AbstractViewHelper
         if ($arguments['src'] !== 'async') {
             return $arguments['src'];
         }
-        $arguments = [
-            'topwire' => [
-                'frameId' => $arguments['id'],
-                'wrapResponse' => $arguments['wrapResponse'],
-                'type' => 'typoScript',
-                'typoScriptPath' => $context->renderingPath->jsonSerialize(),
-                'recordUid' => $context->contextRecord->id,
-                'tableName' => $context->contextRecord->tableName,
-            ],
-        ];
+        $linkArguments = [];
         $pluginAttribute = $context->getAttribute('plugin');
         if ($pluginAttribute instanceof Plugin && $pluginAttribute->actionName !== null) {
-            $arguments[$pluginAttribute->pluginNamespace] = [
+            $linkArguments[$pluginAttribute->pluginNamespace] = [
                 'action' => $pluginAttribute->actionName,
             ];
         }
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         return $uriBuilder
             ->reset()
+            ->setRequest($request)
             ->setTargetPageUid($context->contextRecord->pageId)
-            ->setArguments($arguments)
+            ->setArguments($linkArguments)
             ->build();
     }
 }
