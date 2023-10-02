@@ -10,6 +10,10 @@ services:
     Topwire\Fluid\Parser\TopwireContextParser:
         public: true
 
+    Topwire\Fluid\View\TopwireTemplateView:
+        public: true
+        shared: false
+
     Topwire\Middleware\TopwireContextResolver:
         arguments:
             $cache: '@cache.pages'
