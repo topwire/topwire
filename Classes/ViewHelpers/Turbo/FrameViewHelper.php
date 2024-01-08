@@ -9,6 +9,7 @@ use Topwire\Context\TopwireContext;
 use Topwire\Turbo\Frame;
 use Topwire\Turbo\FrameOptions;
 use Topwire\Turbo\FrameRenderer;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
@@ -104,12 +105,8 @@ class FrameViewHelper extends AbstractViewHelper
                 'action' => $pluginAttribute->actionName,
             ];
         }
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        return $uriBuilder
-            ->reset()
-            ->setRequest($request)
-            ->setTargetPageUid($context->contextRecord->pageId)
-            ->setArguments($linkArguments)
-            ->build();
+        $site = $request->getAttribute('site');
+        assert($site instanceof Site);
+        return (string)$site->getRouter()->generateUri($context->contextRecord->pageId, $linkArguments);
     }
 }
