@@ -84,6 +84,7 @@
     },
     "scripts": {
         "build": [
+            "npm ci",
             "npm run build"
         ],
         "post-update-cmd": [
