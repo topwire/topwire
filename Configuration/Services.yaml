@@ -23,6 +23,11 @@ services:
             - name: 'frontend.contentobject'
               identifier: 'TOPWIRE'
 
+    Topwire\ContentObject\TopwireUserContentObject:
+        tags:
+            - name: 'frontend.contentobject'
+              identifier: 'USER'
+
     Topwire\Typolink\TopwirePageLinkModifier:
         tags:
             - name: 'event.listener'

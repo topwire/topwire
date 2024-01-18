@@ -299,4 +299,4 @@ exists in the table and that the TypoScript defined in the path is also availabl
 * [x] Allow updating `<title>` tag in a frame response with `data-turbo-action="advance"`. 
 * [ ] Allow updating meta tags in a frame response with `data-turbo-action="advance"`, eg.
       `<meta name="turbo-visit-control" content="reload">` or canonical url.
-* [ ] Fix `action` argument of context view helper, when the action is uncached
+* [x] Fix `action` argument of context view helper, when the action is uncached
