@@ -10,11 +10,13 @@ Add the following TypoScript to your site:
 
 ```
 page.includeJSLibs.topwire = EXT:topwire/Resources/Public/JavaScript/topwire.js
-page.includeJSLibs.topwire.type = module
-page.includeJSLibs.topwire.async = 1
-page.includeJSLibs.topwire.defer = 1
-page.includeJSLibs.topwire.disableCompression = 1
-page.includeJSLibs.topwire.excludeFromConcatenation = 1
+page.includeJSLibs.topwire {
+    type = module
+    async = 1
+    defer = 1
+    disableCompression = 1
+    excludeFromConcatenation = 1
+}
 ```
 
 Alternatively you can import this module in your frontend build chain.
@@ -26,12 +28,18 @@ Alternatively you can import this module in your frontend build chain.
 #### `lib.typoscript`
 ```
 lib.tsExample = TEXT
-lib.tsExample.typolink.htmlSpecialChars = 1
-lib.tsExample.typolink.parameter.data = page:uid
-lib.tsExample.typolink.topwire.type = plugin
-lib.tsExample.typolink.topwire.extensionName = TopwireExamples
-lib.tsExample.typolink.topwire.pluginName = Json
-lib.tsExample.typolink.returnLast = url
+lib.tsExample {
+    typolink {
+        parameter.data = page:uid
+        topwire {
+            type = plugin
+            extensionName = TopwireExamples
+            pluginName = Json
+        }
+        returnLast = url
+        htmlSpecialChars = 1
+    }
+}
 ```
 
 #### `Fluid.html`
