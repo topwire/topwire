@@ -37,8 +37,8 @@ lib.tsExample {
             pluginName = Json
         }
         returnLast = url
-        htmlSpecialChars = 1
     }
+    htmlSpecialChars = 1
 }
 ```
 
