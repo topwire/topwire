@@ -45,8 +45,8 @@
     },
     "require": {
         "php": ">=8.1",
-        "typo3/cms-core": "^11.5.29 || ^12.4.5",
-        "helhum/typo3-console": "^7 || ^8"
+        "typo3/cms-core": "^12.4.5 || ^13.4.1",
+        "helhum/typo3-console": "^8"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.2",
