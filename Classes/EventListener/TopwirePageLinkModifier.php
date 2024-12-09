@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Topwire\Typolink;
+namespace Topwire\EventListener;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Topwire\Context\ContextRecord;
@@ -8,12 +8,10 @@ use Topwire\Context\TopwireContext;
 use Topwire\Context\TopwireContextFactory;
 use Topwire\Exception\InvalidConfiguration;
 use Topwire\Turbo\Frame;
-use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
-use TYPO3\CMS\Frontend\ContentObject\TypolinkModifyLinkConfigForPageLinksHookInterface;
 use TYPO3\CMS\Frontend\Event\ModifyPageLinkConfigurationEvent;
 
-class TopwirePageLinkModifier implements TypolinkModifyLinkConfigForPageLinksHookInterface
+class TopwirePageLinkModifier
 {
     private const virtualLinkNamespace = 'topwire';
     private const configNamespace = self::virtualLinkNamespace . '.';
@@ -35,31 +33,6 @@ class TopwirePageLinkModifier implements TypolinkModifyLinkConfigForPageLinksHoo
             $linkDetails['pageuid'] ?? null
         );
         $linkConfigurationEvent->setQueryParameters($queryParameters);
-    }
-
-    /**
-     * @deprecated can be removed when TYPO3 11 compat is removed
-     *
-     * @param array<mixed> $linkConfiguration
-     * @param array<mixed> $linkDetails
-     * @param array<mixed> $pageRow
-     * @return array<mixed>
-     */
-    public function modifyPageLinkConfiguration(array $linkConfiguration, array $linkDetails, array $pageRow): array
-    {
-        parse_str($linkConfiguration['additionalParams'] ?? '', $queryParameters);
-        $pageLinkContext = $this->extractTopwireLinkContext($linkConfiguration, $queryParameters, $linkDetails);
-        if (!$pageLinkContext instanceof TopwirePageLinkContext) {
-            return $linkConfiguration;
-        }
-        $queryParameters = $this->buildQueryParameters(
-            $pageLinkContext,
-            $linkConfiguration,
-            $queryParameters,
-            $linkDetails['pageuid'] ?? null
-        );
-        $linkConfiguration['additionalParams'] = '&' . HttpUtility::buildQueryString($queryParameters);
-        return $linkConfiguration;
     }
 
     /**
