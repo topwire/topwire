@@ -80,12 +80,8 @@ class RenderViewHelper extends AbstractViewHelper
         }
 
         $routeArguments = $pageArguments->getRouteArguments();
-        $pluginNamespace = $plugin->pluginNamespace;
-
-        if (!is_array($routeArguments[$pluginNamespace] ?? null)) {
-            $routeArguments[$pluginNamespace] = [];
-        }
-        $routeArguments[$pluginNamespace]['action'] = $plugin->actionName;
+        $routeArguments[$plugin->pluginNamespace] ??= [];
+        $routeArguments[$plugin->pluginNamespace]['action'] = $plugin->actionName;
 
         $modifiedPageArguments = new PageArguments(
             $pageArguments->getPageId(),
