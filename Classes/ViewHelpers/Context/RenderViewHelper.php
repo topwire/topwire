@@ -80,25 +80,15 @@ class RenderViewHelper extends AbstractViewHelper
         if (!$pageArguments instanceof PageArguments) {
             return $request;
         }
-        $extbaseArguments = [];
-        if ($request instanceof Request) {
-            $extbaseArguments = $request->getArguments();
-        }
-        $newRouteArguments = array_merge(
-            $pageArguments->getRouteArguments(),
-            [
-                $plugin->pluginNamespace => array_replace(
-                    $extbaseArguments,
-                    [
-                        'action' => $plugin->actionName,
-                    ]
-                ),
-            ]
-        );
+
+        $routeArguments = $pageArguments->getRouteArguments();
+        $routeArguments[$plugin->pluginNamespace] ??= [];
+        $routeArguments[$plugin->pluginNamespace]['action'] = $plugin->actionName;
+
         $modifiedPageArguments = new PageArguments(
             $pageArguments->getPageId(),
             $pageArguments->getPageType(),
-            $newRouteArguments,
+            $routeArguments,
             $pageArguments->getStaticArguments(),
             $pageArguments->getDynamicArguments()
         );
