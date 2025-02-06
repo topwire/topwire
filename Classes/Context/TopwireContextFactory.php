@@ -4,41 +4,36 @@ namespace Topwire\Context;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Topwire\Context\Attribute\Plugin;
+use Topwire\TopwireException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Service\ExtensionService;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class TopwireContextFactory
 {
-    private TypoScriptFrontendController $typoScriptFrontendController;
-
-    public function __construct(TypoScriptFrontendController $typoScriptFrontendController)
+    public function __construct(private readonly ServerRequestInterface $request)
     {
-        $this->typoScriptFrontendController = $typoScriptFrontendController;
     }
 
     /**
      * @param array<string, mixed> $arguments
      */
     public function forRequest(
-        ServerRequestInterface $request,
         array $arguments,
         ?ConfigurationManagerInterface $configurationManager = null,
     ): TopwireContext {
-        $extensionName = $arguments['extensionName'] ?? $request->getAttribute('extbase')?->getControllerExtensionName();
-        $pluginName = $arguments['pluginName'] ?? $request->getAttribute('extbase')?->getPluginName();
+        $extensionName = $arguments['extensionName'] ?? $this->request->getAttribute('extbase')?->getControllerExtensionName();
+        $pluginName = $arguments['pluginName'] ?? $this->request->getAttribute('extbase')?->getPluginName();
         $actionName = $arguments['action'] ?? null;
-        $configurationManager ??= GeneralUtility::makeInstance(ConfigurationManagerInterface::class);
-        $extensionService = new ExtensionService();
-        $extensionService->injectConfigurationManager($configurationManager);
-        $pluginNamespace = $extensionService->getPluginNamespace($extensionName, $pluginName);
+        $pluginNamespace = GeneralUtility::makeInstance(ExtensionService::class)->getPluginNamespace($extensionName, $pluginName);
 
         // @todo: decide whether this needs to be changed, or set via argument, or maybe even removed completely
         $isOverride = isset($arguments['extensionName']);
-        $contentRecordId = $isOverride ? null : $configurationManager->getContentObject()?->currentRecord;
-
+        $contentRecordId = $isOverride ? null : $this->request->getAttribute('currentContentObject')->currentRecord ?? null;
+        if ($contentRecordId !== null) {
+            $contentRecordId = (string)$contentRecordId;
+        }
         $plugin = new Plugin(
             extensionName: $extensionName,
             pluginName: $pluginName,
@@ -73,11 +68,13 @@ class TopwireContextFactory
 
     private function resolveRenderingPath(string $extensionName, string $pluginName, ?string $pluginSignature): RenderingPath
     {
-        $contentRenderingConfig = $this->typoScriptFrontendController->tmpl->setup['tt_content.'];
+        $contentRenderingConfig = $this->request->getAttribute('frontend.typoscript')->getSetupArray()['tt_content.'] ?? [];
+
         $pluginSignature ??= strtolower(str_replace(' ', '', ucwords(str_replace('_', ' ', $extensionName))) . '_' . $pluginName);
         if (isset($contentRenderingConfig[$pluginSignature . '.']['20'])) {
             return new RenderingPath(sprintf('tt_content.%s.20', $pluginSignature));
         }
+        // TODO: drop support for list in the future
         if (isset($contentRenderingConfig['list.']['20.'][$pluginSignature])) {
             return new RenderingPath(sprintf('tt_content.list.20.%s', $pluginSignature));
         }
@@ -90,6 +87,10 @@ class TopwireContextFactory
      */
     private function resolveContextRecord(?string $contextRecordId, ?int $pageUid = null): ContextRecord
     {
+        $pageUid ??= $this->request->getAttribute('routing')?->getPageId();
+        if ($pageUid === null) {
+            throw new TopwireException('No page uid available', 1738873179);
+        }
         if ($contextRecordId === null
             || $contextRecordId === 'currentPage'
             || substr_count($contextRecordId, ':') !== 1
@@ -98,23 +99,23 @@ class TopwireContextFactory
         ) {
             return new ContextRecord(
                 'pages',
-                $this->typoScriptFrontendController->id,
-                $pageUid ?? $this->typoScriptFrontendController->id,
+                $pageUid,
+                $pageUid,
             );
         }
         [$tableName, $uid] = explode(':', $contextRecordId);
         if (!MathUtility::canBeInterpretedAsInteger($uid)) {
             return new ContextRecord(
                 'pages',
-                $this->typoScriptFrontendController->id,
-                $pageUid ?? $this->typoScriptFrontendController->id,
+                $pageUid,
+                $pageUid,
             );
         }
         // TODO: maybe check if the record is available
         return new ContextRecord(
             $tableName,
             (int)$uid,
-            $pageUid ?? $this->typoScriptFrontendController->id,
+            $pageUid,
         );
     }
 }
