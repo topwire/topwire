@@ -1,6 +1,7 @@
 <?php
 namespace Topwire\ContentObject;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Topwire\ContentObject\Exception\InvalidTableContext;
 use Topwire\Context\TopwireContext;
 use Topwire\Context\TopwireContextFactory;
@@ -64,13 +65,11 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
         if ($parentObject->getCurrentTable() !== 'tt_content') {
             throw new InvalidTableContext('"stdWrap.turboFrameWrap" can only be used for table "tt_content"', 1671124640);
         }
-        $controller = $parentObject->getTypoScriptFrontendController();
-        assert($controller instanceof TypoScriptFrontendController);
 
-        $path = $configuration['turboFrameWrap.']['path'] ?? $this->determineRenderingPath($controller, $parentObject, $configuration);
+        $path = $configuration['turboFrameWrap.']['path'] ?? $this->determineRenderingPath($parentObject, $configuration);
         $record = $parentObject->currentRecord;
 
-        $contextFactory = new TopwireContextFactory($controller);
+        $contextFactory = new TopwireContextFactory($parentObject->getRequest());
         $context = $contextFactory->forPath($path, $record);
         $scopeFrame = (bool)$parentObject->stdWrapValue('scopeFrame', $configuration['turboFrameWrap.'] ?? [], 1);
         $frameId = $parentObject->stdWrapValue('frameId', $configuration['turboFrameWrap.'] ?? [], null);
@@ -107,14 +106,11 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
      * @throws InvalidTableContext
      * @throws ContentRenderingException
      */
-    private function determineRenderingPath(TypoScriptFrontendController $controller, ContentObjectRenderer $cObj, array $configuration): string
+    private function determineRenderingPath(ContentObjectRenderer $cObj, array $configuration): string
     {
         $frontendTypoScript = $cObj->getRequest()->getAttribute('frontend.typoscript');
-        $setup = $frontendTypoScript?->getSetupArray();
-        if (!$frontendTypoScript instanceof FrontendTypoScript) {
-            // TYPO3 v11 compatibility
-            $setup = $controller->tmpl->setup;
-        }
+        $setup = $frontendTypoScript?->getSetupArray() ?? [];
+
         if (!isset($setup['tt_content'], $configuration['turboFrameWrap.'])) {
             throw new InvalidTableContext('"stdWrap.turboFrameWrap" can only be used for table "tt_content", typoscript setup missing!', 1687873940);
         }

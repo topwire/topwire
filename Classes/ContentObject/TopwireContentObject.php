@@ -35,7 +35,7 @@ class TopwireContentObject extends AbstractContentObject
         }
 
         $frameOptions = new FrameOptions();
-        $pageTitle = $this->getTypoScriptFrontendController()->generatePageTitle();
+        $pageTitle = $this->getTypoScriptFrontendController()->generatePageTitle($this->request);
         if ($pageTitle !== '') {
             $frameOptions = new FrameOptions(pageTitle: $pageTitle);
         }
@@ -49,7 +49,7 @@ class TopwireContentObject extends AbstractContentObject
 
     private function renderContentWithoutRecursion(TopwireContext $context): string
     {
-        $actionRecursionPrefix = $context->getAttribute('plugin')?->actionName ?? null;
+        $actionRecursionPrefix = $context->getAttribute('plugin')->actionName ?? null;
         $frontendController = $this->request->getAttribute('frontend.controller');
         if (!isset($actionRecursionPrefix)
             || !$frontendController instanceof TypoScriptFrontendController
