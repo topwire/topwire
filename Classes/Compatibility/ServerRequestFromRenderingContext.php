@@ -7,7 +7,7 @@ namespace Topwire\Compatibility;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContext as FluidRenderingContext;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 
 /**
  * @deprecated can be removed, when Compatibility to TYPO3 v12 is removed
@@ -16,7 +16,7 @@ class ServerRequestFromRenderingContext
 {
     private readonly RenderingContext $renderingContext;
 
-    public function __construct(FluidRenderingContext $renderingContext)
+    public function __construct(RenderingContextInterface $renderingContext)
     {
         assert($renderingContext instanceof RenderingContext);
         $this->renderingContext = $renderingContext;

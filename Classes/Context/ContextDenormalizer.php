@@ -23,12 +23,9 @@ class ContextDenormalizer
         if (isset($data['attributes'])) {
             foreach ($data['attributes'] as $name => $attributeData) {
                 if (isset(self::attributeMap[$name])) {
-                    /** @var Attribute $className */
                     $className = self::attributeMap[$name];
                     $attribute = $className::denormalize($attributeData, ['context' => $context]);
-                    if ($attribute instanceof Attribute) {
-                        $context = $context->withAttribute($name, $attribute);
-                    }
+                    $context = $context->withAttribute($name, $attribute);
                 }
             }
         }
