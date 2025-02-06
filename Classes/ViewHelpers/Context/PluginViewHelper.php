@@ -41,12 +41,10 @@ class PluginViewHelper extends AbstractViewHelper
         assert($renderingContext instanceof RenderingContext);
         $request = $renderingContext->getRequest();
         assert($request instanceof ServerRequestInterface);
-        $frontendController = $request->getAttribute('frontend.controller');
-        assert($frontendController instanceof TypoScriptFrontendController);
         $contextFactory = new TopwireContextFactory(
-            $frontendController
+            $renderingContext->getRequest()
         );
-        $context = $contextFactory->forRequest($request, $arguments);
+        $context = $contextFactory->forRequest($arguments);
         if (isset($arguments['section'])) {
             $context = $context->withAttribute('section', new Section($arguments['section']));
         }

@@ -14,8 +14,4 @@ use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
         $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['overriddenDefault'] = $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['page'];
     }
     $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['page'] = TopwirePageLinkBuilder::class;
-    // @deprecated can be removed when TYPO3 11 compat is removed
-    $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'][TopwireUserContentObject::NAME] = TopwireUserContentObject::class;
-    $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'][TopwireContentObject::NAME] = TopwireContentObject::class;
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['typolinkProcessing']['typolinkModifyParameterForPageLinks'][TopwirePageLinkModifier::class] = TopwirePageLinkModifier::class;
 })();
