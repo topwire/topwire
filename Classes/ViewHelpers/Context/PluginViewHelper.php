@@ -48,14 +48,17 @@ class PluginViewHelper extends AbstractViewHelper
         if (isset($arguments['section'])) {
             $context = $context->withAttribute('section', new Section($arguments['section']));
         }
+
         $contextStack = new ContextStack($renderingContext->getViewHelperVariableContainer());
         $contextStack->push($context);
-        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
-        $configurationManager->getContentObject()?->setRequest($request->withAttribute('topwire', $context));
+
+        $contentObject = $request->getAttribute('currentContentObject');
+
+        $contentObject->setRequest($request->withAttribute('topwire', $context));
         $renderingContext->setRequest($request->withAttribute('topwire', $context));
         $renderedChildren = $renderChildrenClosure();
         $renderingContext->setRequest($request);
-        $configurationManager->getContentObject()?->setRequest($request);
+        $contentObject->setRequest($request);
         $contextStack->pop();
 
         return (string)$renderedChildren;
