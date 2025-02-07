@@ -3,23 +3,19 @@ declare(strict_types=1);
 namespace Topwire\Context;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Topwire\Context\Attribute\Plugin;
 use Topwire\TopwireException;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Service\ExtensionService;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 class TopwireContextFactory
 {
-    private ExtensionService $extensionService;
-
     public function __construct(private readonly ServerRequestInterface $request)
     {}
-
-    public function injectExtensionService(ExtensionService $extensionService): void
-    {
-        $this->extensionService = $extensionService;
-    }
 
     /**
      * @param array<string, mixed> $arguments
@@ -31,12 +27,12 @@ class TopwireContextFactory
         $extensionName = $arguments['extensionName'] ?? $this->request->getAttribute('extbase')?->getControllerExtensionName();
         $pluginName = $arguments['pluginName'] ?? $this->request->getAttribute('extbase')?->getPluginName();
         $actionName = $arguments['action'] ?? null;
-        $pluginNamespace = $this->extensionService->getPluginNamespace($extensionName, $pluginName);
+        $pluginNamespace = GeneralUtility::makeInstance(ExtensionService::class)->getPluginNamespace($extensionName, $pluginName);
 
         // @todo: decide whether this needs to be changed, or set via argument, or maybe even removed completely
         $isOverride = isset($arguments['extensionName']);
         $contentRecordId = $isOverride ? null : $this->request->getAttribute('currentContentObject')->data['uid'] ?? null;
-dump($this->request->getAttribute('currentContentObject')->data['uid']);
+
         $plugin = new Plugin(
             extensionName: $extensionName,
             pluginName: $pluginName,
