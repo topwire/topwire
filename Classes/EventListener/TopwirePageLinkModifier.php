@@ -3,13 +3,14 @@ declare(strict_types=1);
 namespace Topwire\EventListener;
 
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Utility\MathUtility;
+use TYPO3\CMS\Frontend\Event\ModifyPageLinkConfigurationEvent;
 use Topwire\Context\ContextRecord;
 use Topwire\Context\TopwireContext;
 use Topwire\Context\TopwireContextFactory;
 use Topwire\Exception\InvalidConfiguration;
 use Topwire\Turbo\Frame;
-use TYPO3\CMS\Core\Utility\MathUtility;
-use TYPO3\CMS\Frontend\Event\ModifyPageLinkConfigurationEvent;
+use Topwire\Typolink\TopwirePageLinkContext;
 
 class TopwirePageLinkModifier
 {
