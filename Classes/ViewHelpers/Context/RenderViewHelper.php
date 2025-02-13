@@ -84,7 +84,7 @@ class RenderViewHelper extends AbstractViewHelper
         if ($request instanceof Request) {
             $extbaseArguments = $request->getArguments();
         }
-        $newRootArguments = array_merge(
+        $newRouteArguments = array_merge(
             $pageArguments->getRouteArguments(),
             [
                 $plugin->pluginNamespace => array_replace(
@@ -98,7 +98,7 @@ class RenderViewHelper extends AbstractViewHelper
         $modifiedPageArguments = new PageArguments(
             $pageArguments->getPageId(),
             $pageArguments->getPageType(),
-            $newRootArguments,
+            $newRouteArguments,
             $pageArguments->getStaticArguments(),
             $pageArguments->getDynamicArguments()
         );
