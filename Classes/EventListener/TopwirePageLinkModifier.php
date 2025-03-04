@@ -9,9 +9,15 @@ use Topwire\Context\TopwireContextFactory;
 use Topwire\Exception\InvalidConfiguration;
 use Topwire\Turbo\Frame;
 use Topwire\Typolink\TopwirePageLinkContext;
+use TYPO3\CMS\Core\Attribute\AsEventListener;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Frontend\Event\ModifyPageLinkConfigurationEvent;
 
+#[AsEventListener(
+    identifier: 'TopwirePageLinkModifier',
+    event: ModifyPageLinkConfigurationEvent::class,
+    method: 'modifyQueryParameters',
+)]
 class TopwirePageLinkModifier
 {
     private const virtualLinkNamespace = 'topwire';
