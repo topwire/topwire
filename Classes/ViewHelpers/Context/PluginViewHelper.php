@@ -22,6 +22,10 @@ class PluginViewHelper extends AbstractViewHelper
         $this->registerArgument('pageUid', 'int', 'Uid of the page, on which the plugin will be rendered. If empty, the current page uid is used');
     }
 
+    public function __construct(private readonly ContextStack $contextStack)
+    {
+    }
+
     public function render(): string
     {
         $requestFromRenderingContext = new ServerRequestFromRenderingContext($this->renderingContext);
@@ -34,19 +38,15 @@ class PluginViewHelper extends AbstractViewHelper
         if (isset($this->arguments['section'])) {
             $context = $context->withAttribute('section', new Section($this->arguments['section']));
         }
-
-        $contextStack = new ContextStack($this->renderingContext->getViewHelperVariableContainer());
-        $contextStack->push($context);
-
+        $this->contextStack->push($context);
         $contentObject = $request->getAttribute('currentContentObject');
-
         $topwireRequest = $request->withAttribute('topwire', $context);
         $contentObject?->setRequest($topwireRequest);
         $requestFromRenderingContext->setRequest($topwireRequest);
         $renderedChildren = $this->renderChildren();
         $requestFromRenderingContext->setRequest($request);
         $contentObject?->setRequest($request);
-        $contextStack->pop();
+        $this->contextStack->pop();
 
         return (string)$renderedChildren;
     }

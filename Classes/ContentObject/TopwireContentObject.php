@@ -1,6 +1,7 @@
 <?php
 namespace Topwire\ContentObject;
 
+use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContext;
 use Topwire\Turbo\Frame;
 use Topwire\Turbo\FrameRenderer;
@@ -21,7 +22,7 @@ class TopwireContentObject extends AbstractContentObject
             $context = $this->request->getAttribute('topwire');
         }
         assert($context instanceof TopwireContext);
-        $content = $this->renderContentWithoutRecursion($context);
+        $content = $this->renderContent($context);
         $frame = $context->getAttribute('frame');
         if (!$frame instanceof Frame
             || !$frame->wrapResponse
@@ -39,34 +40,12 @@ class TopwireContentObject extends AbstractContentObject
         );
     }
 
-    private function renderContentWithoutRecursion(TopwireContext $context): string
+    private function renderContent(TopwireContext $context): string
     {
-        $actionRecursionPrefix = $context->getAttribute('plugin')->actionName ?? null;
-        $currentContentObject = $this->request->getAttribute('currentContentObject');
-        if (!isset($actionRecursionPrefix)
-            || !$currentContentObject
-        ) {
-            // Use default recursion handling of TYPO3
-            return $this->getContentObjectRenderer()->cObjGetSingle(
-                'RECORDS',
-                $this->transformToRecordsConfiguration($context)
-            );
-        }
-        // Prevent recursion, but allow rendering of the same plugin with a different action
-        // @see CONTENT and RECORDS content objects
-        $currentlyRenderingRecordId = $currentContentObject->currentRecord;
-        $requestedRenderingRecordId = $actionRecursionPrefix . $context->contextRecord->tableName . ':' . $context->contextRecord->id;
-        if (isset($currentContentObject->recordRegister[$requestedRenderingRecordId])) {
-            return '';
-        }
-        $currentContentObject->currentRecord = $requestedRenderingRecordId;
-        $content = $this->getContentObjectRenderer()->cObjGetSingle(
+        return $this->getContentObjectRenderer()->cObjGetSingle(
             'RECORDS',
             $this->transformToRecordsConfiguration($context)
         );
-        $currentContentObject->currentRecord = $currentlyRenderingRecordId;
-
-        return $content;
     }
 
     /**

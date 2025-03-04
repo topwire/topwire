@@ -15,6 +15,10 @@ class ContextViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
     protected $escapeChildren = true;
 
+    public function __construct(private readonly ContextStack $contextStack)
+    {
+    }
+
     public function initializeArguments(): void
     {
         $this->registerArgument('typoScriptPath', 'string', 'Target Extension Name (without `tx_` prefix and no underscores). If NULL the current extension name is used', true);
@@ -33,10 +37,9 @@ class ContextViewHelper extends AbstractViewHelper
             contextRecordId: $this->arguments['tableName'] . ':' . $this->arguments['recordUid'],
             contextPageId: $this->arguments['pageUid'] ?? null,
         );
-        $contextStack = new ContextStack($this->renderingContext->getViewHelperVariableContainer());
-        $contextStack->push($context);
+        $this->contextStack->push($context);
         $renderedChildren = $this->renderChildren();
-        $contextStack->pop();
+        $this->contextStack->pop();
 
         return (string)$renderedChildren;
     }

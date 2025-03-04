@@ -19,12 +19,16 @@ class RenderViewHelper extends AbstractViewHelper
 {
     protected $escapeOutput = false;
 
+    public function __construct(private readonly ContextStack $contextStack)
+    {
+    }
+
     /**
      * @throws InvalidTopwireContext
      */
     public function render(): string
     {
-        $context = (new ContextStack($this->renderingContext->getViewHelperVariableContainer()))->current();
+        $context = $this->contextStack->current();
         if (!$context instanceof TopwireContext) {
             throw new InvalidTopwireContext('Can only render as child of a Topwire context view helper', 1671623956);
         }

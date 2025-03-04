@@ -18,6 +18,10 @@ class FrameViewHelper extends AbstractViewHelper
 {
     protected $escapeOutput = false;
 
+    public function __construct(private readonly ContextStack $contextStack)
+    {
+    }
+
     public function initializeArguments(): void
     {
         $this->registerArgument('id', 'string', 'id of the frame', true);
@@ -32,8 +36,7 @@ class FrameViewHelper extends AbstractViewHelper
     public function render(): string
     {
         assert($this->renderingContext instanceof RenderingContext);
-        $stack = new ContextStack($this->renderingContext->getViewHelperVariableContainer());
-        $context = $stack->current();
+        $context = $this->contextStack->current();
         $frame = new Frame(
             baseId: $this->arguments['id'],
             wrapResponse: $this->arguments['wrapResponse'],
@@ -42,11 +45,11 @@ class FrameViewHelper extends AbstractViewHelper
         );
         if (isset($context)) {
             $context = $context->withAttribute('frame', $frame);
-            $stack->push($context);
+            $this->contextStack->push($context);
         }
         $content = $this->renderChildren();
         if (isset($context)) {
-            $stack->pop();
+            $this->contextStack->pop();
         }
         if ($content === null) {
             return $frame->id;

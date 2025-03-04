@@ -14,6 +14,10 @@ class ContentElementViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
     protected $escapeChildren = true;
 
+    public function __construct(private readonly ContextStack $contextStack)
+    {
+    }
+
     public function initializeArguments(): void
     {
         $this->registerArgument('uid', 'int', 'Uid of the content element that will be rendered', true);
@@ -33,10 +37,9 @@ class ContentElementViewHelper extends AbstractViewHelper
             contextRecordId: 'tt_content:' . $this->arguments['uid'],
             contextPageId: $this->arguments['pageUid'] === null ? null : (int)$this->arguments['pageUid'],
         );
-        $contextStack = new ContextStack($this->renderingContext->getViewHelperVariableContainer());
-        $contextStack->push($context);
+        $this->contextStack->push($context);
         $renderedChildren = $this->renderChildren();
-        $contextStack->pop();
+        $this->contextStack->pop();
 
         return (string)$renderedChildren;
     }
