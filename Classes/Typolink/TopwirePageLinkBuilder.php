@@ -17,7 +17,7 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
 
     public function __construct(
         ContentObjectRenderer $contentObjectRenderer,
-        TypoScriptFrontendController $typoScriptFrontendController = null
+        ?TypoScriptFrontendController $typoScriptFrontendController = null
     ) {
         parent::__construct($contentObjectRenderer, $typoScriptFrontendController);
         $defaultLinkBuilderClass = $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['overriddenDefault'] ?? null;
