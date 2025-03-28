@@ -31,7 +31,7 @@ class TopwireContextFactory
 
         // @todo: decide whether this needs to be changed, or set via argument, or maybe even removed completely
         $isOverride = isset($arguments['extensionName']);
-        $contentRecordId = $isOverride ? null : $this->request->getAttribute('currentContentObject')->data['uid'] ?? null;
+        $contentRecordId = $isOverride ? null : $this->request->getAttribute('currentContentObject')->currentRecord ?? null;
         if ($contentRecordId !== null) {
             $contentRecordId = (string)$contentRecordId;
         }
