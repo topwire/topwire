@@ -83,7 +83,7 @@ class TopwirePageLinkModifier
     {
         $topwireArguments = $this->resolveTopwireArguments($linkConfiguration, $queryParameters);
         assert(in_array($topwireArguments['type'], ['plugin', 'contentElement', 'typoScript', 'context'], true));
-        $contextRecordId = (string)$pageLinkContext->request->getAttribute('currentContentObject')?->data['uid'];
+        $contextRecordId = (string)$pageLinkContext->request->getAttribute('currentContentObject')?->currentRecord;
         if (isset($topwireArguments['tableName'], $topwireArguments['recordUid'])) {
             $contextRecordId = $topwireArguments['tableName'] . ':' . $topwireArguments['recordUid'];
         }
