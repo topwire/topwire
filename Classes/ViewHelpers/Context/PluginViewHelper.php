@@ -6,10 +6,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Topwire\Context\Attribute\Section;
 use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContextFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -38,11 +34,13 @@ class PluginViewHelper extends AbstractViewHelper
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
-        assert($renderingContext instanceof RenderingContext);
-        $request = $renderingContext->getRequest();
-        assert($request instanceof ServerRequestInterface);
+        if (!$renderingContext->hasAttribute(ServerRequestInterface::class)) {
+            return '';
+        }
+        $request = $renderingContext->getAttribute(ServerRequestInterface::class);
+
         $contextFactory = new TopwireContextFactory(
-            $renderingContext->getRequest()
+            $request
         );
         $context = $contextFactory->forRequest($arguments);
         if (isset($arguments['section'])) {
@@ -54,10 +52,11 @@ class PluginViewHelper extends AbstractViewHelper
 
         $contentObject = $request->getAttribute('currentContentObject');
 
-        $contentObject->setRequest($request->withAttribute('topwire', $context));
-        $renderingContext->setRequest($request->withAttribute('topwire', $context));
+        $topwireRequest = $request->withAttribute('topwire', $context);
+        $contentObject->setRequest($topwireRequest);
+        $renderingContext->setAttribute(ServerRequestInterface::class, $topwireRequest);
         $renderedChildren = $renderChildrenClosure();
-        $renderingContext->setRequest($request);
+        $renderingContext->setAttribute(ServerRequestInterface::class, $request);
         $contentObject->setRequest($request);
         $contextStack->pop();
 

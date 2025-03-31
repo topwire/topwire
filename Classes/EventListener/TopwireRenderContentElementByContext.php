@@ -1,9 +1,8 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Topwire\EventListener;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Topwire\ContentObject\TopwireContentObject;
 use Topwire\Context\TopwireContext;
 use TYPO3\CMS\Core\Attribute\AsEventListener;

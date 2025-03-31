@@ -3,14 +3,12 @@ declare(strict_types=1);
 namespace Topwire\Context;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Topwire\Context\Attribute\Plugin;
 use Topwire\TopwireException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Service\ExtensionService;
-use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 class TopwireContextFactory
 {
