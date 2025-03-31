@@ -1,10 +1,8 @@
 <?php
 
 use Topwire\ContentObject\ContentElementWrap;
-use Topwire\ContentObject\TopwireContentObject;
-use Topwire\ContentObject\TopwireUserContentObject;
 use Topwire\Typolink\TopwirePageLinkBuilder;
-use Topwire\Typolink\TopwirePageLinkModifier;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
 
 (static function (): void {
@@ -14,4 +12,16 @@ use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
         $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['overriddenDefault'] = $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['page'];
     }
     $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['page'] = TopwirePageLinkBuilder::class;
+
+    ExtensionManagementUtility::addTypoScript(
+        'topwire',
+        'setup',
+        "
+        [request && traverse(request.getHeaders(), 'topwire-context') == true]
+            # fake condition to influence the typoscript cache
+            # the TopwireRenderContentElementByContext event listener does
+            # work as expected
+        [global]
+        ",
+    );
 })();
