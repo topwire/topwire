@@ -17,7 +17,7 @@ use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
         'topwire',
         'setup',
         "
-        [request && traverse(request.getHeaders(), 'topwire-context') == true]
+        [request && (traverse(request.getHeaders(), 'topwire-context') == true || traverse(request.getQueryParams(), 'tx_topwire') == true)]
             # fake condition to influence the typoscript cache
             # the TopwireRenderContentElementByContext event listener does
             # work as expected
