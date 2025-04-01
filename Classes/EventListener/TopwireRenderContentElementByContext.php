@@ -13,6 +13,12 @@ use TYPO3\CMS\Core\TypoScript\AST\Node\RootNode;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Frontend\Event\ModifyTypoScriptConfigEvent;
 
+/**
+ * THIS MUST BE REMOVED AGAIN AS IT IS A HACK AND IT
+ * DOES NOT WORK PROPERLY WITH TYPOSCRIPT CACHING
+ * SEE WORKAROUND IN ext_localconf.php
+ */
+
 #[AsEventListener(
     identifier: 'TopwireRenderContentElementByContext',
     event: ModifyTypoScriptConfigEvent::class,

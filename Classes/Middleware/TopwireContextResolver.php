@@ -35,7 +35,6 @@ class TopwireContextResolver implements MiddlewareInterface
         }
         $cacheId = $context->cacheId;
         $frame = $context->getAttribute('frame');
-        $pageType = TopwireContentObject::PAGE_TYPE;
         if ($context->contextRecord->pageId !== $pageArguments->getPageId()) {
             // Crossing page boundaries happen, when the controller returns a redirect response
             // In this case, the context is invalid, needs to be reset and a full page render must happen

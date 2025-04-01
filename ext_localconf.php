@@ -17,10 +17,21 @@ use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
         'topwire',
         'setup',
         "
-        [request && (traverse(request.getHeaders(), 'topwire-context') == true || traverse(request.getQueryParams(), 'tx_topwire') == true)]
-            # fake condition to influence the typoscript cache
+        [request && ((traverse(request.getHeaders(), 'topwire-context') == true && request.getHeaders()['topwire-context'] !== '') || (traverse(request.getQueryParams(), 'tx_topwire') == true)  && request.getQueryParams()['tx_topwire'] !== '')]
+            # fake condition to influence the page cache
             # the TopwireRenderContentElementByContext event listener does
             # work as expected
+            # But this does not solve the problem that the typoscript cache is
+            # build based on this condition as we've modified the setup with
+            # dirty hack in the TopwireRenderContentElementByContext event listener
+            # To work around this the only way is to set the topwire content object manually
+            # by something like this:
+            #
+            # page >
+            # page = PAGE
+            # page.10 = TOPWIRE
+            #
+            # This is not a general solution as it specific to the installation
         [global]
         ",
     );
