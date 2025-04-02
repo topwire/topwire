@@ -32,7 +32,7 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
         } else {
             $this->originalPageLinkBuilder = null;
         }
-        $this->pageLinkContext = new TopwirePageLinkContext($contentObjectRenderer->getRequest());
+        $this->pageLinkContext = new TopwirePageLinkContext($contentObjectRenderer);
     }
 
     /**

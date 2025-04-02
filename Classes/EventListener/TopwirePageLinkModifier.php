@@ -83,13 +83,13 @@ class TopwirePageLinkModifier
     {
         $topwireArguments = $this->resolveTopwireArguments($linkConfiguration, $queryParameters);
         assert(in_array($topwireArguments['type'], ['plugin', 'contentElement', 'typoScript', 'context'], true));
-        $contextRecordId = (string)$pageLinkContext->request->getAttribute('currentContentObject')?->currentRecord;
+        $contextRecordId = $pageLinkContext->contentObjectRenderer->currentRecord;
         if (isset($topwireArguments['tableName'], $topwireArguments['recordUid'])) {
             $contextRecordId = $topwireArguments['tableName'] . ':' . $topwireArguments['recordUid'];
         }
-        $contextFactory = new TopwireContextFactory($pageLinkContext->request);
+        $contextFactory = new TopwireContextFactory($pageLinkContext->contentObjectRenderer->getRequest());
         $context = match ($topwireArguments['type']) {
-            'context' => $this->resolveFromRequest($pageLinkContext->request, $contextPageId),
+            'context' => $this->resolveFromRequest($pageLinkContext->contentObjectRenderer->getRequest(), $contextPageId),
             'plugin' => $contextFactory->forPlugin($topwireArguments['extensionName'], $topwireArguments['pluginName'], $contextRecordId, $contextPageId),
             'contentElement' => $contextFactory->forPath('tt_content', 'tt_content:' . $topwireArguments['uid']),
             'typoScript' => $contextFactory->forPath($topwireArguments['typoScriptPath'], $contextRecordId, $contextPageId),
