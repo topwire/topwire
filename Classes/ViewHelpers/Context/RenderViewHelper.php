@@ -55,7 +55,6 @@ class RenderViewHelper extends AbstractViewHelper
         $contentObjectRenderer->start(
             $contentData,
             $context->contextRecord->tableName,
-            $actionRequest
         );
         $contentObjectRenderer->currentRecord = $context->contextRecord->tableName . ':' . $context->contextRecord->id;
         return $contentObjectRenderer
@@ -81,8 +80,12 @@ class RenderViewHelper extends AbstractViewHelper
         }
 
         $routeArguments = $pageArguments->getRouteArguments();
-        $routeArguments[$plugin->pluginNamespace] ??= [];
-        $routeArguments[$plugin->pluginNamespace]['action'] = $plugin->actionName;
+        $pluginNamespace = $plugin->pluginNamespace;
+
+        if (!is_array($routeArguments[$pluginNamespace] ?? null)) {
+            $routeArguments[$pluginNamespace] = [];
+        }
+        $routeArguments[$pluginNamespace]['action'] = $plugin->actionName;
 
         $modifiedPageArguments = new PageArguments(
             $pageArguments->getPageId(),
