@@ -67,7 +67,7 @@ class FrameViewHelper extends AbstractViewHelper
             // Handle page title for frames rendered in Fluid templates
             // @see TopwireContentObject for frames rendered via TypoScript
             $frontendController = $request->getAttribute('frontend.controller');
-            $pageTitle = $frontendController?->generatePageTitle();
+            $pageTitle = $frontendController?->generatePageTitle($request);
         }
 
         return (new FrameRenderer())->render(
