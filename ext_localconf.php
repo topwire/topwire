@@ -17,7 +17,7 @@ use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
         'topwire',
         'setup',
         "
-        [request && ((traverse(request.getHeaders(), 'topwire-context') == true && request.getHeaders()['topwire-context'] !== '') || (traverse(request.getQueryParams(), 'tx_topwire') == true)  && request.getQueryParams()['tx_topwire'] !== '')]
+        [(traverse(((request ?? null)?.getHeaders() ?? []), 'topwire-context') == true && ((request ?? null)?.getHeaders() ?? [])['topwire-context'] !== '') || (traverse(((request ?? null)?.getQueryParams() ?? []), 'tx_topwire') && ((request ?? null)?.getQueryParams() ?? [])['tx_topwire'] !== '')]
             # fake condition to influence the page cache
             # the TopwireRenderContentElementByContext event listener does
             # work as expected
@@ -27,6 +27,10 @@ use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
             # To work around this the only way is to set the topwire content object manually
             # by something like this:
             #
+            #
+            # config.debug = 0
+            # config.disableAllHeaderCode = 1
+            # config.disableCharsetHeader = 1
             # page >
             # page = PAGE
             # page.10 = TOPWIRE
