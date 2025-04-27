@@ -1,0 +1,7 @@
+topwire = PAGE
+topwire.typeNum = 1745763872
+topwire.config.debug = 0
+topwire.config.disableAllHeaderCode = 1
+topwire.config.disableCharsetHeader = 0
+topwire.10 = TOPWIRE
+topwire.10.context = fromRequest
