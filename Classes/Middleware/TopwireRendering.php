@@ -27,15 +27,20 @@ class TopwireRendering implements MiddlewareInterface
             return $this->validateContentType($request, $handler->handle($request));
         }
 
-        $frontendController->config['config']['debug'] = 0;
-        $frontendController->config['config']['disableAllHeaderCode'] = 1;
-        $frontendController->config['config']['disableCharsetHeader'] = 0;
-        $frontendController->pSetup = [
+        $config = $request->getAttribute('frontend.typoscript')->getConfigArray();
+        $config = array_merge_recursive($config, [
+                'debug' => 0,
+                'disableAllHeaderCode' => 1,
+                'disableCharsetHeader' => 0,
+        ]);
+        $request->getAttribute('frontend.typoscript')->setConfigArray($config);
+
+        $request->getAttribute('frontend.typoscript')->setPageArray([
             '10' => TopwireContentObject::NAME,
             '10.' => [
                 'context' => $context,
             ],
-        ];
+        ]);
 
         return $this->validateContentType($request, $handler->handle($request));
     }
