@@ -7,6 +7,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Topwire\ContentObject\TopwireContentObject;
 use Topwire\Context\ContextDenormalizer;
 use Topwire\Context\TopwireContext;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
@@ -34,6 +35,7 @@ class TopwireContextResolver implements MiddlewareInterface
         }
         $cacheId = $context->cacheId;
         $frame = $context->getAttribute('frame');
+        $pageType = TopwireContentObject::PAGE_TYPE;
         if ($context->contextRecord->pageId !== $pageArguments->getPageId()) {
             // Crossing page boundaries happen, when the controller returns a redirect response
             // In this case, the context is invalid, needs to be reset and a full page render must happen
@@ -48,6 +50,7 @@ class TopwireContextResolver implements MiddlewareInterface
             // around, to allow elements on the target page with the same id show up, while keep them
             // hidden on a regular request.
             $context = null;
+            $pageType = '0';
         }
         $newStaticArguments = array_merge(
             $pageArguments->getStaticArguments(),
@@ -57,7 +60,7 @@ class TopwireContextResolver implements MiddlewareInterface
         );
         $modifiedPageArguments = new PageArguments(
             $pageArguments->getPageId(),
-            $pageArguments->getPageType(),
+            $pageType,
             $pageArguments->getRouteArguments(),
             $newStaticArguments,
             $pageArguments->getDynamicArguments()

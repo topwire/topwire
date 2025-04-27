@@ -11,6 +11,7 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 class TopwireContentObject extends AbstractContentObject
 {
     public const NAME = 'TOPWIRE';
+    public const PAGE_TYPE = '1745763872';
 
     /**
      * @param array<mixed> $conf
@@ -18,6 +19,9 @@ class TopwireContentObject extends AbstractContentObject
     public function render($conf = []): string
     {
         $context = $conf['context'];
+        if ($context === 'fromRequest') {
+            $context = $this->request->getAttribute('topwire');
+        }
         assert($context instanceof TopwireContext);
         $content = $this->renderContentWithoutRecursion($context);
         $frame = $context->getAttribute('frame');
