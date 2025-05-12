@@ -83,6 +83,7 @@ class RenderViewHelper extends AbstractViewHelper
 
         $routeArguments = $pageArguments->getRouteArguments();
         $routeArguments[$plugin->pluginNamespace] ??= [];
+        assert(is_array($routeArguments[$plugin->pluginNamespace]));
         $routeArguments[$plugin->pluginNamespace]['action'] = $plugin->actionName;
 
         $modifiedPageArguments = new PageArguments(
