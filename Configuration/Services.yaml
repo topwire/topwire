@@ -27,9 +27,3 @@ services:
         tags:
             - name: 'frontend.contentobject'
               identifier: 'USER'
-
-    Topwire\Typolink\TopwirePageLinkModifier:
-        tags:
-            - name: 'event.listener'
-              method: 'modifyQueryParameters'
-              identifier: 'TopwirePageLinkModifier'

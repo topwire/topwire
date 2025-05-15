@@ -10,7 +10,6 @@ use Topwire\Context\Exception\InvalidTopwireContext;
 use Topwire\Context\TopwireContext;
 use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -56,7 +55,6 @@ class RenderViewHelper extends AbstractViewHelper
         $contentObjectRenderer->start(
             $contentData,
             $context->contextRecord->tableName,
-            $actionRequest
         );
         $contentObjectRenderer->currentRecord = $context->contextRecord->tableName . ':' . $context->contextRecord->id;
         return $contentObjectRenderer

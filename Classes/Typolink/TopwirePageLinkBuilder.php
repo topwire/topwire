@@ -17,7 +17,7 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
 
     public function __construct(
         ContentObjectRenderer $contentObjectRenderer,
-        TypoScriptFrontendController $typoScriptFrontendController = null
+        ?TypoScriptFrontendController $typoScriptFrontendController = null
     ) {
         parent::__construct($contentObjectRenderer, $typoScriptFrontendController);
         $defaultLinkBuilderClass = $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['overriddenDefault'] ?? null;
@@ -32,7 +32,7 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
         } else {
             $this->originalPageLinkBuilder = null;
         }
-        $this->pageLinkContext = new TopwirePageLinkContext($contentObjectRenderer, $this->getTypoScriptFrontendController());
+        $this->pageLinkContext = new TopwirePageLinkContext($contentObjectRenderer);
     }
 
     /**
