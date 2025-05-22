@@ -2,10 +2,10 @@
 declare(strict_types=1);
 namespace Topwire\ViewHelpers;
 
+use Psr\Http\Message\ServerRequestInterface;
 use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContextFactory;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -36,14 +36,13 @@ class ContextViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ): string {
         assert($renderingContext instanceof RenderingContext);
-        $frontendController = $renderingContext->getRequest()?->getAttribute('frontend.controller');
-        assert($frontendController instanceof TypoScriptFrontendController);
-        $contextFactory = new TopwireContextFactory(
-            $frontendController
-        );
+        $request = $renderingContext->getRequest();
+        assert($request instanceof ServerRequestInterface);
+        $contextFactory = new TopwireContextFactory($request);
         $context = $contextFactory->forPath(
             renderingPath: $arguments['typoScriptPath'],
             contextRecordId: $arguments['tableName'] . ':' . $arguments['recordUid'],
+            contextPageId: $arguments['pageUid'] ?? null,
         );
         $contextStack = new ContextStack($renderingContext->getViewHelperVariableContainer());
         $contextStack->push($context);

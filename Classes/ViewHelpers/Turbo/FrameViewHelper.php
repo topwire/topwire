@@ -61,13 +61,12 @@ class FrameViewHelper extends AbstractViewHelper
             return $frame->id;
         }
         $pageTitle = null;
-        $request = $renderingContext->getRequest();
-        assert($request instanceof ServerRequestInterface);
+        $request = $renderingContext->getAttribute(ServerRequestInterface::class);
         if ((bool)$arguments['propagateUrl'] && TopwireContext::isRequestSubmitted($request)) {
             // Handle page title for frames rendered in Fluid templates
             // @see TopwireContentObject for frames rendered via TypoScript
             $frontendController = $request->getAttribute('frontend.controller');
-            $pageTitle = $frontendController?->generatePageTitle();
+            $pageTitle = $frontendController?->generatePageTitle($request);
         }
 
         return (new FrameRenderer())->render(
