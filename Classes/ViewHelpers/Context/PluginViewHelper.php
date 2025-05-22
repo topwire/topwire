@@ -39,7 +39,7 @@ class PluginViewHelper extends AbstractViewHelper
         $contextFactory = new TopwireContextFactory(
             $request
         );
-        $context = $contextFactory->forRequest($arguments);
+        $context = $contextFactory->forArguments($arguments);
         if (isset($arguments['section'])) {
             $context = $context->withAttribute('section', new Section($arguments['section']));
         }
