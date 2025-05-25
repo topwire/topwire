@@ -1,0 +1,25 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-doctrine/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/saschaegerer/phpstan-typo3/extension.neon
+    - phpstan-baseline.neon
+parameters:
+    tmpDir: var/phpstan
+    level: 8
+    strictRules:
+        allRules: true
+    reportMaybesInPropertyPhpDocTypes: false
+    paths:
+         - ./Classes
+         - ./Tests
+    ignoreErrors: []
+    excludePaths: []
+    typo3:
+        requestGetAttributeMapping:
+            extbase: TYPO3\CMS\Extbase\Mvc\ExtbaseRequestParameters
+            frontend.controller: TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
+            topwire: Topwire\Context\TopwireContext
+            topwireFrame: Topwire\Turbo\Frame
