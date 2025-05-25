@@ -5,6 +5,7 @@ namespace Topwire\Context;
 use Psr\Http\Message\ServerRequestInterface;
 use Topwire\Context\Attribute\Plugin;
 use Topwire\TopwireException;
+use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Service\ExtensionService;
@@ -29,9 +30,7 @@ class TopwireContextFactory
         // @todo: decide whether this needs to be changed, or set via argument, or maybe even removed completely
         $isOverride = isset($arguments['extensionName']);
         $contentRecordId = $isOverride ? null : $this->request->getAttribute('currentContentObject')->currentRecord ?? null;
-        if ($contentRecordId !== null) {
-            $contentRecordId = (string)$contentRecordId;
-        }
+
         $plugin = new Plugin(
             extensionName: $extensionName,
             pluginName: $pluginName,
@@ -66,7 +65,7 @@ class TopwireContextFactory
 
     private function resolveRenderingPath(string $extensionName, string $pluginName, ?string $pluginSignature): RenderingPath
     {
-        $contentRenderingConfig = $this->request->getAttribute('frontend.typoscript')->getSetupArray()['tt_content.'] ?? [];
+        $contentRenderingConfig = $this->request->getAttribute('frontend.typoscript')?->getSetupArray()['tt_content.'] ?? [];
 
         $pluginSignature ??= strtolower(str_replace(' ', '', ucwords(str_replace('_', ' ', $extensionName))) . '_' . $pluginName);
         if (isset($contentRenderingConfig[$pluginSignature . '.']['20'])) {
@@ -85,10 +84,11 @@ class TopwireContextFactory
      */
     private function resolveContextRecord(?string $contextRecordId, ?int $contextPageId = null): ContextRecord
     {
-        $currentPageId = $this->request->getAttribute('routing')?->getPageId();
-        if ($currentPageId === null) {
+        $pageArguments = $this->request->getAttribute('routing');
+        if (!$pageArguments instanceof PageArguments) {
             throw new TopwireException('No page uid available', 1738873179);
         }
+        $currentPageId = $pageArguments->getPageId();
         if ($contextRecordId === null
             || $contextRecordId === 'currentPage'
             || substr_count($contextRecordId, ':') !== 1

@@ -32,4 +32,13 @@ class ServerRequestFromRenderingContext
         assert($request instanceof ServerRequestInterface);
         return $request;
     }
+
+    public function setRequest(ServerRequestInterface $request): void
+    {
+        if ((new Typo3Version())->getMajorVersion() < 13) {
+            $this->renderingContext->setRequest($request);
+        } else {
+            $this->renderingContext->setAttribute(ServerRequestInterface::class, $request);
+        }
+    }
 }
