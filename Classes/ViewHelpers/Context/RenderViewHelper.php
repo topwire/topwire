@@ -55,8 +55,8 @@ class RenderViewHelper extends AbstractViewHelper
         $contentObjectRenderer->start(
             $contentData,
             $context->contextRecord->tableName,
-            $actionRequest
         );
+        $contentObjectRenderer->setRequest($actionRequest);
         $contentObjectRenderer->currentRecord = $context->contextRecord->tableName . ':' . $context->contextRecord->id;
         return $contentObjectRenderer
             ->cObjGetSingle(

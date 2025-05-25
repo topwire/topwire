@@ -71,7 +71,7 @@ jobs:
 
 
     analyse:
-        name: PHPStan - ${{ matrix.typo3 }}
+        name: PHPStan ${{ matrix.typo3 }}
 
         needs: [ compute, lint ]
 
@@ -125,13 +125,8 @@ jobs:
                     path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ steps.restore-composer-cache.outputs.cache-primary-key }}
 
-            -   name: Run PHPStan TYPO3 v11
-                if: matrix.typo3 == '^11.5'
-                run: php vendor/bin/phpstan analyse -c phpstan-v11.neon --no-interaction --no-progress
-
-            -   name: Run PHPStan TYPO3 v12
-                if: matrix.typo3 == '^12.4'
-                run: php vendor/bin/phpstan analyse -c phpstan.neon --no-interaction --no-progress
+            -   name: Run PHPStan
+                run: php vendor/bin/phpstan --error-format=github --no-interaction --no-progress
 
     fix:
         name: PHP CS Fixer

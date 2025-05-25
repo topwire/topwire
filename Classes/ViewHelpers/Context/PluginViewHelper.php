@@ -34,7 +34,8 @@ class PluginViewHelper extends AbstractViewHelper
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
-        $request = (new ServerRequestFromRenderingContext($renderingContext))->getRequest();
+        $requestFromRenderingContext = new ServerRequestFromRenderingContext($renderingContext);
+        $request = $requestFromRenderingContext->getRequest();
 
         $contextFactory = new TopwireContextFactory(
             $request
@@ -50,11 +51,11 @@ class PluginViewHelper extends AbstractViewHelper
         $contentObject = $request->getAttribute('currentContentObject');
 
         $topwireRequest = $request->withAttribute('topwire', $context);
-        $contentObject->setRequest($topwireRequest);
-        $renderingContext->setAttribute(ServerRequestInterface::class, $topwireRequest);
+        $contentObject?->setRequest($topwireRequest);
+        $requestFromRenderingContext->setRequest($topwireRequest);
         $renderedChildren = $renderChildrenClosure();
-        $renderingContext->setAttribute(ServerRequestInterface::class, $request);
-        $contentObject->setRequest($request);
+        $requestFromRenderingContext->setRequest($request);
+        $contentObject?->setRequest($request);
         $contextStack->pop();
 
         return (string)$renderedChildren;
