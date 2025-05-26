@@ -1,6 +1,16 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Call to function assert\\(\\) with true will always evaluate to true\\.$#"
+			count: 1
+			path: Classes/Compatibility/ServerRequestFromRenderingContext.php
+
+		-
+			message: "#^Instanceof between Psr\\\\Http\\\\Message\\\\ServerRequestInterface and Psr\\\\Http\\\\Message\\\\ServerRequestInterface will always evaluate to true\\.$#"
+			count: 1
+			path: Classes/Compatibility/ServerRequestFromRenderingContext.php
+
+		-
 			message: "#^Call to method getSetupArray\\(\\) on an unknown class TYPO3\\\\CMS\\\\Core\\\\TypoScript\\\\FrontendTypoScript\\.$#"
 			count: 1
 			path: Classes/ContentObject/ContentElementWrap.php
@@ -34,11 +44,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$pageId of class Topwire\\\\Context\\\\ContextRecord constructor expects int, int\\|string given\\.$#"
 			count: 3
 			path: Classes/Context/TopwireContextFactory.php
-
-		-
-			message: "#^Using nullsafe method call on non\\-nullable type TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\Request\\. Use \\-\\> instead\\.$#"
-			count: 1
-			path: Classes/Fluid/View/TopwireTemplateView.php
 
 		-
 			message: "#^Method Topwire\\\\Typolink\\\\TopwirePageLinkBuilder\\:\\:build\\(\\) should return TYPO3\\\\CMS\\\\Frontend\\\\Typolink\\\\LinkResultInterface but returns array\\|TYPO3\\\\CMS\\\\Frontend\\\\Typolink\\\\LinkResultInterface\\.$#"
@@ -76,41 +81,6 @@ parameters:
 			path: Classes/ViewHelpers/Context/ContentElementViewHelper.php
 
 		-
-			message: "#^Call to function assert\\(\\) with true will always evaluate to true\\.$#"
-			count: 1
+			message: "#^Parameter \\#1 \\$request of method TYPO3\\\\CMS\\\\Fluid\\\\Core\\\\Rendering\\\\RenderingContext\\:\\:setRequest\\(\\) expects TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\Request, Psr\\\\Http\\\\Message\\\\ServerRequestInterface given\\.$#"
+			count: 2
 			path: Classes/ViewHelpers/Context/PluginViewHelper.php
-
-		-
-			message: "#^Instanceof between TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\Request and Psr\\\\Http\\\\Message\\\\ServerRequestInterface will always evaluate to true\\.$#"
-			count: 1
-			path: Classes/ViewHelpers/Context/PluginViewHelper.php
-
-		-
-			message: "#^Call to function assert\\(\\) with true will always evaluate to true\\.$#"
-			count: 1
-			path: Classes/ViewHelpers/Context/RenderViewHelper.php
-
-		-
-			message: "#^Instanceof between TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\Request and Psr\\\\Http\\\\Message\\\\ServerRequestInterface will always evaluate to true\\.$#"
-			count: 1
-			path: Classes/ViewHelpers/Context/RenderViewHelper.php
-
-		-
-			message: "#^Using nullsafe method call on non\\-nullable type TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\Request\\. Use \\-\\> instead\\.$#"
-			count: 1
-			path: Classes/ViewHelpers/Context/RenderViewHelper.php
-
-		-
-			message: "#^Using nullsafe method call on non\\-nullable type TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\Request\\. Use \\-\\> instead\\.$#"
-			count: 1
-			path: Classes/ViewHelpers/ContextViewHelper.php
-
-		-
-			message: "#^Call to function assert\\(\\) with true will always evaluate to true\\.$#"
-			count: 1
-			path: Classes/ViewHelpers/Turbo/FrameViewHelper.php
-
-		-
-			message: "#^Instanceof between TYPO3\\\\CMS\\\\Extbase\\\\Mvc\\\\Request and Psr\\\\Http\\\\Message\\\\ServerRequestInterface will always evaluate to true\\.$#"
-			count: 1
-			path: Classes/ViewHelpers/Turbo/FrameViewHelper.php

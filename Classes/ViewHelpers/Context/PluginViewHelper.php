@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Topwire\ViewHelpers\Context;
 
-use Psr\Http\Message\ServerRequestInterface;
+use Topwire\Compatibility\ServerRequestFromRenderingContext;
 use Topwire\Context\Attribute\Section;
 use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContextFactory;
@@ -39,8 +39,7 @@ class PluginViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ): string {
         assert($renderingContext instanceof RenderingContext);
-        $request = $renderingContext->getRequest();
-        assert($request instanceof ServerRequestInterface);
+        $request = (new ServerRequestFromRenderingContext($renderingContext))->getRequest();
         $frontendController = $request->getAttribute('frontend.controller');
         assert($frontendController instanceof TypoScriptFrontendController);
         $contextFactory = new TopwireContextFactory(

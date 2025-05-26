@@ -2,6 +2,7 @@
 
 namespace Topwire\Fluid\View;
 
+use Topwire\Compatibility\ServerRequestFromRenderingContext;
 use Topwire\Context\Attribute\Section;
 use Topwire\Context\TopwireContext;
 use Topwire\Turbo\Frame;
@@ -15,7 +16,7 @@ class TopwireTemplateView extends AbstractTemplateView
     {
         $renderingContext = $this->getCurrentRenderingContext();
         assert($renderingContext instanceof RenderingContext);
-        $context = $renderingContext->getRequest()?->getAttribute('topwire');
+        $context = (new ServerRequestFromRenderingContext($renderingContext))->getRequest()->getAttribute('topwire');
         if (!$context instanceof TopwireContext) {
             return parent::render($actionName);
         }
