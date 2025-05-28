@@ -74,10 +74,12 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
         $context = $contextFactory->forPath($path, $record);
         $scopeFrame = (bool)$parentObject->stdWrapValue('scopeFrame', $configuration['turboFrameWrap.'] ?? [], 1);
         $frameId = $parentObject->stdWrapValue('frameId', $configuration['turboFrameWrap.'] ?? [], null);
+        $propagateUrl = (bool)$parentObject->stdWrapValue('propagateUrl', $configuration['turboFrameWrap.'] ?? [], 0);
         $frame = new Frame(
             baseId: (string)($frameId ?? $parentObject->currentRecord),
             wrapResponse: true,
             scope: $scopeFrame ? $context->scope : null,
+            renderFullDocument: $propagateUrl,
         );
         $showWhenFrameMatches = (bool)$parentObject->stdWrapValue('showWhenFrameMatches', $configuration['turboFrameWrap.'] ?? [], false);
         $requestedFrame = $parentObject->getRequest()->getAttribute('topwireFrame');
@@ -95,7 +97,7 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
             frame: $frame,
             content: $content,
             options: new FrameOptions(
-                propagateUrl: (bool)$parentObject->stdWrapValue('propagateUrl', $configuration['turboFrameWrap.'] ?? [], 0),
+                propagateUrl: $propagateUrl,
                 morph: (bool)$parentObject->stdWrapValue('morph', $configuration['turboFrameWrap.'] ?? [], 0),
             ),
             context: $scopeFrame ? $context : null,

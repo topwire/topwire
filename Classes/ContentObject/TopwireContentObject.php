@@ -3,7 +3,6 @@ namespace Topwire\ContentObject;
 
 use Topwire\Context\TopwireContext;
 use Topwire\Turbo\Frame;
-use Topwire\Turbo\FrameOptions;
 use Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -34,15 +33,9 @@ class TopwireContentObject extends AbstractContentObject
             return $content;
         }
 
-        $frameOptions = new FrameOptions();
-        $pageTitle = $this->getTypoScriptFrontendController()->generatePageTitle();
-        if ($pageTitle !== '') {
-            $frameOptions = new FrameOptions(pageTitle: $pageTitle);
-        }
         return (new FrameRenderer())->render(
             frame: $frame,
             content: $content,
-            options: $frameOptions,
             context: $context,
         );
     }

@@ -8,6 +8,7 @@ class TopwireContext implements \JsonSerializable
 {
     public const headerName = 'Topwire-Context';
     public const argumentName = 'tx_topwire';
+    public const argumentNameDocument = 'tx_topwire_document';
 
     public readonly string $scope;
     public readonly string $cacheId;

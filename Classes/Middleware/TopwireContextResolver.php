@@ -58,12 +58,16 @@ class TopwireContextResolver implements MiddlewareInterface
                 TopwireContext::argumentName => $cacheId,
             ]
         );
+        $newDynamicArguments = $pageArguments->getDynamicArguments();
+        if ($context?->getAttribute('frame')->renderFullDocument ?? false) {
+            $newDynamicArguments[TopwireContext::argumentNameDocument] = 'true';
+        }
         $modifiedPageArguments = new PageArguments(
             $pageArguments->getPageId(),
             $pageType,
             $pageArguments->getRouteArguments(),
             $newStaticArguments,
-            $pageArguments->getDynamicArguments()
+            $newDynamicArguments
         );
         $request = $request
             ->withAttribute('routing', $modifiedPageArguments)

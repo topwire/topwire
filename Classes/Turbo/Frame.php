@@ -13,6 +13,7 @@ class Frame implements Attribute
         public readonly string $baseId,
         public readonly bool $wrapResponse,
         public readonly ?string $scope,
+        public readonly bool $renderFullDocument = false,
     ) {
         $this->id = $baseId
             . ($scope === null ? '' : self::idSeparatorToken . $scope)
@@ -26,9 +27,10 @@ class Frame implements Attribute
     public static function denormalize(array $data, array $context = []): self
     {
         return new Frame(
-            $data['baseId'],
-            $data['wrapResponse'] ?? false,
-            array_key_exists('scope', $data) ? $data['scope'] : $context['context']?->scope,
+            baseId: $data['baseId'],
+            wrapResponse: $data['wrapResponse'] ?? false,
+            scope: array_key_exists('scope', $data) ? $data['scope'] : $context['context']?->scope,
+            renderFullDocument: $data['renderFullDocument'] ?? false,
         );
     }
 
@@ -45,6 +47,9 @@ class Frame implements Attribute
         if ($this->wrapResponse) {
             $data['wrapResponse'] = $this->wrapResponse;
             $data['scope'] = $this->scope;
+        }
+        if ($this->renderFullDocument) {
+            $data['renderFullDocument'] = $this->renderFullDocument;
         }
         return $data;
     }

@@ -5,3 +5,9 @@ topwire.config.disableAllHeaderCode = 1
 topwire.config.disableCharsetHeader = 0
 topwire.10 = TOPWIRE
 topwire.10.context = fromRequest
+
+[request && request.getPageArguments()?.get('tx_topwire_document') === 'true']
+    topwire.config.disableAllHeaderCode = 0
+    topwire.config.disableCanonical = 1
+    topwire.meta.robots = noindex, follow
+[global]
