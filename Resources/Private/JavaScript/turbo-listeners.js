@@ -30,8 +30,5 @@ document.addEventListener('turbo:before-frame-render', async (event) => {
             }
         }
         render(currentElement, newElement)
-        if (newElement.dataset?.topwirePageTitle && (currentElement.dataset?.turboAction === 'advance' || currentElement.dataset?.turboAction === 'replace')) {
-            document.querySelector('title').innerText = newElement.dataset?.topwirePageTitle
-        }
     }
 })

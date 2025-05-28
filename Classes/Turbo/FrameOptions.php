@@ -13,7 +13,6 @@ class FrameOptions
         public readonly ?string $target = null,
         public readonly bool $propagateUrl = false,
         public readonly bool $morph = false,
-        public readonly ?string $pageTitle = null,
         public readonly array $additionalAttributes = [],
     ) {
     }
