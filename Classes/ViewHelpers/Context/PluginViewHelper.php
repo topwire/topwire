@@ -6,10 +6,6 @@ use Topwire\Compatibility\ServerRequestFromRenderingContext;
 use Topwire\Context\Attribute\Section;
 use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContextFactory;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -38,25 +34,28 @@ class PluginViewHelper extends AbstractViewHelper
         \Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
-        assert($renderingContext instanceof RenderingContext);
-        $request = (new ServerRequestFromRenderingContext($renderingContext))->getRequest();
-        $frontendController = $request->getAttribute('frontend.controller');
-        assert($frontendController instanceof TypoScriptFrontendController);
+        $requestFromRenderingContext = new ServerRequestFromRenderingContext($renderingContext);
+        $request = $requestFromRenderingContext->getRequest();
+
         $contextFactory = new TopwireContextFactory(
-            $frontendController
+            $request
         );
-        $context = $contextFactory->forRequest($request, $arguments);
+        $context = $contextFactory->forArguments($arguments);
         if (isset($arguments['section'])) {
             $context = $context->withAttribute('section', new Section($arguments['section']));
         }
+
         $contextStack = new ContextStack($renderingContext->getViewHelperVariableContainer());
         $contextStack->push($context);
-        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
-        $configurationManager->getContentObject()?->setRequest($request->withAttribute('topwire', $context));
-        $renderingContext->setRequest($request->withAttribute('topwire', $context));
+
+        $contentObject = $request->getAttribute('currentContentObject');
+
+        $topwireRequest = $request->withAttribute('topwire', $context);
+        $contentObject?->setRequest($topwireRequest);
+        $requestFromRenderingContext->setRequest($topwireRequest);
         $renderedChildren = $renderChildrenClosure();
-        $renderingContext->setRequest($request);
-        $configurationManager->getContentObject()?->setRequest($request);
+        $requestFromRenderingContext->setRequest($request);
+        $contentObject?->setRequest($request);
         $contextStack->pop();
 
         return (string)$renderedChildren;

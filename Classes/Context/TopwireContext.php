@@ -3,6 +3,9 @@ declare(strict_types=1);
 namespace Topwire\Context;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Topwire\Context\Attribute\Plugin;
+use Topwire\Context\Attribute\Section;
+use Topwire\Turbo\Frame;
 
 class TopwireContext implements \JsonSerializable
 {
@@ -74,6 +77,10 @@ class TopwireContext implements \JsonSerializable
         return $newContext;
     }
 
+    /**
+     * @param 'plugin'|'frame'|'section' $name
+     * @return ($name is 'plugin' ? Plugin|null : ($name is 'section' ? Section|null : ($name is 'frame' ? Frame|null : Attribute|null)))
+     */
     public function getAttribute(string $name): ?Attribute
     {
         return $this->attributes[$name] ?? null;

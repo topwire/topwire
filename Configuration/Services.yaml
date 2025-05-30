@@ -28,8 +28,9 @@ services:
             - name: 'frontend.contentobject'
               identifier: 'USER'
 
-    Topwire\Typolink\TopwirePageLinkModifier:
+    Topwire\EventListener\TopwirePageLinkModifier:
         tags:
             - name: 'event.listener'
               method: 'modifyQueryParameters'
               identifier: 'TopwirePageLinkModifier'
+              event: 'TYPO3\CMS\Frontend\Event\ModifyPageLinkConfigurationEvent'
