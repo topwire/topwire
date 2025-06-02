@@ -42,7 +42,7 @@ class TopwireContentObject extends AbstractContentObject
 
     private function renderContentWithoutRecursion(TopwireContext $context): string
     {
-        $actionRecursionPrefix = $context->getAttribute('plugin')?->actionName ?? null;
+        $actionRecursionPrefix = $context->getAttribute('plugin')->actionName ?? null;
         $frontendController = $this->request->getAttribute('frontend.controller');
         if (!isset($actionRecursionPrefix)
             || !$frontendController instanceof TypoScriptFrontendController

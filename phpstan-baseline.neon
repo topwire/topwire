@@ -1,2 +1,12 @@
 parameters:
-	ignoreErrors: []
+	reportUnmatchedIgnoredErrors: false
+	ignoreErrors:
+		-
+			message: "#^Method TYPO3\\\\CMS\\\\Frontend\\\\Controller\\\\TypoScriptFrontendController\\:\\:generatePageTitle\\(\\) invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: Classes/ContentObject/TopwireContentObject.php
+
+		-
+			message: "#^Method TYPO3\\\\CMS\\\\Frontend\\\\Controller\\\\TypoScriptFrontendController\\:\\:generatePageTitle\\(\\) invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: Classes/ViewHelpers/Turbo/FrameViewHelper.php
