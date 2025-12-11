@@ -1,0 +1,137 @@
+<?php
+namespace Topwire\ContentObject;
+
+use Topwire\ContentObject\Exception\InvalidTableContext;
+use Topwire\Context\TopwireContext;
+use Topwire\Context\TopwireContextFactory;
+use Topwire\Turbo\Frame;
+use Topwire\Turbo\FrameOptions;
+use Topwire\Turbo\FrameRenderer;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectStdWrapHookInterface;
+use TYPO3\CMS\Frontend\ContentObject\Exception\ContentRenderingException;
+
+class ContentElementWrap implements ContentObjectStdWrapHookInterface
+{
+    /**
+     * @param string $content
+     * @param array<mixed> $configuration
+     * @return string
+     */
+    public function stdWrapPreProcess($content, array $configuration, ContentObjectRenderer &$parentObject)
+    {
+        return $content;
+    }
+
+    /**
+     * @param string $content
+     * @param array<mixed> $configuration
+     * @return string
+     */
+    public function stdWrapOverride($content, array $configuration, ContentObjectRenderer &$parentObject)
+    {
+        return $content;
+    }
+
+    /**
+     * @param string $content
+     * @param array<mixed> $configuration
+     * @return string
+     */
+    public function stdWrapProcess($content, array $configuration, ContentObjectRenderer &$parentObject)
+    {
+        return $content;
+    }
+
+    /**
+     * @param string $content
+     * @param array<mixed> $configuration
+     * @return string
+     */
+    public function stdWrapPostProcess($content, array $configuration, ContentObjectRenderer &$parentObject)
+    {
+        if ((int)$parentObject->stdWrapValue('turboFrameWrap', $configuration, 0) === 0) {
+            return $content;
+        }
+        if ($parentObject->getRequest()->getAttribute('topwire') instanceof TopwireContext) {
+            // Frame wrap is done by TOPWIRE content object automatically
+            return $content;
+        }
+        if ($parentObject->getCurrentTable() !== 'tt_content') {
+            throw new InvalidTableContext('"stdWrap.turboFrameWrap" can only be used for table "tt_content"', 1671124640);
+        }
+
+        $path = $configuration['turboFrameWrap.']['path'] ?? $this->determineRenderingPath($parentObject, $configuration);
+        $record = $parentObject->currentRecord;
+
+        $contextFactory = new TopwireContextFactory($parentObject->getRequest());
+        $context = $contextFactory->forPath($path, $record);
+        $scopeFrame = (bool)$parentObject->stdWrapValue('scopeFrame', $configuration['turboFrameWrap.'] ?? [], 1);
+        $frameId = $parentObject->stdWrapValue('frameId', $configuration['turboFrameWrap.'] ?? [], null);
+        $propagateUrl = (bool)$parentObject->stdWrapValue('propagateUrl', $configuration['turboFrameWrap.'] ?? [], 0);
+        $frame = new Frame(
+            baseId: (string)($frameId ?? $parentObject->currentRecord),
+            wrapResponse: true,
+            scope: $scopeFrame ? $context->scope : null,
+            renderFullDocument: $propagateUrl,
+        );
+        $showWhenFrameMatches = (bool)$parentObject->stdWrapValue('showWhenFrameMatches', $configuration['turboFrameWrap.'] ?? [], false);
+        $requestedFrame = $parentObject->getRequest()->getAttribute('topwireFrame');
+        if ($scopeFrame
+            && $showWhenFrameMatches
+            && (
+                !$requestedFrame instanceof Frame
+                || $requestedFrame->id !== $frame->id
+            )
+        ) {
+            return '';
+        }
+        $context = $context->withAttribute('frame', $frame);
+        return (new FrameRenderer())->render(
+            frame: $frame,
+            content: $content,
+            options: new FrameOptions(
+                propagateUrl: $propagateUrl,
+                morph: (bool)$parentObject->stdWrapValue('morph', $configuration['turboFrameWrap.'] ?? [], 0),
+            ),
+            context: $scopeFrame ? $context : null,
+        );
+    }
+
+    /**
+     * @param array<mixed> $configuration
+     * @throws InvalidTableContext
+     * @throws ContentRenderingException
+     */
+    private function determineRenderingPath(ContentObjectRenderer $cObj, array $configuration): string
+    {
+        $frontendTypoScript = $cObj->getRequest()->getAttribute('frontend.typoscript');
+        $setup = $frontendTypoScript?->getSetupArray() ?? [];
+
+        if (!isset($setup['tt_content'], $configuration['turboFrameWrap.'])) {
+            throw new InvalidTableContext('"stdWrap.turboFrameWrap" can only be used for table "tt_content", typoscript setup missing!', 1687873940);
+        }
+        $frameWrapConfig = $configuration['turboFrameWrap.'];
+        $paths = [
+            'tt_content.',
+            'tt_content./' . $cObj->data['CType'] . '.',
+            'tt_content./' . $cObj->data['CType'] . './20.',
+        ];
+        if ($cObj->data['CType'] === 'list') {
+            $paths[] = 'tt_content./' . $cObj->data['CType'] . './20./' . $cObj->data['list_type'] . '.';
+        }
+        foreach ($paths as $path) {
+            try {
+                $potentialWrapConfig = ArrayUtility::getValueByPath($setup, $path . '/stdWrap./turboFrameWrap.');
+                if ($potentialWrapConfig === $frameWrapConfig) {
+                    return rtrim(str_replace('./', '.', $path), '.');
+                }
+            } catch (MissingArrayPathException $e) {
+                $potentialWrapConfig = [];
+            }
+        }
+        return 'tt_content';
+    }
+}
