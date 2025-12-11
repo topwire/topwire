@@ -5,7 +5,6 @@ use Topwire\Context\TopwireContext;
 use Topwire\Turbo\Frame;
 use Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class TopwireContentObject extends AbstractContentObject
 {
@@ -43,9 +42,9 @@ class TopwireContentObject extends AbstractContentObject
     private function renderContentWithoutRecursion(TopwireContext $context): string
     {
         $actionRecursionPrefix = $context->getAttribute('plugin')->actionName ?? null;
-        $frontendController = $this->request->getAttribute('frontend.controller');
+        $currentContentObject = $this->request->getAttribute('currentContentObject');
         if (!isset($actionRecursionPrefix)
-            || !$frontendController instanceof TypoScriptFrontendController
+            || !$currentContentObject
         ) {
             // Use default recursion handling of TYPO3
             return $this->getContentObjectRenderer()->cObjGetSingle(
@@ -55,17 +54,17 @@ class TopwireContentObject extends AbstractContentObject
         }
         // Prevent recursion, but allow rendering of the same plugin with a different action
         // @see CONTENT and RECORDS content objects
-        $currentlyRenderingRecordId = $frontendController->currentRecord;
+        $currentlyRenderingRecordId = $currentContentObject->currentRecord;
         $requestedRenderingRecordId = $actionRecursionPrefix . $context->contextRecord->tableName . ':' . $context->contextRecord->id;
-        if (isset($frontendController->recordRegister[$requestedRenderingRecordId])) {
+        if (isset($currentContentObject->recordRegister[$requestedRenderingRecordId])) {
             return '';
         }
-        $frontendController->currentRecord = $requestedRenderingRecordId;
+        $currentContentObject->currentRecord = $requestedRenderingRecordId;
         $content = $this->getContentObjectRenderer()->cObjGetSingle(
             'RECORDS',
             $this->transformToRecordsConfiguration($context)
         );
-        $frontendController->currentRecord = $currentlyRenderingRecordId;
+        $currentContentObject->currentRecord = $currentlyRenderingRecordId;
 
         return $content;
     }
