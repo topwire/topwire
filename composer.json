@@ -32,7 +32,7 @@
     },
     "require": {
         "php": ">=8.2",
-        "typo3/cms-core": "^12.4.5 || ^13.4 || ^14.0"
+        "typo3/cms-core": "^14.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.2",
@@ -49,7 +49,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "1.1.x-dev"
+            "dev-main": "2.0.x-dev"
         },
         "typo3/cms": {
             "extension-key": "topwire"
