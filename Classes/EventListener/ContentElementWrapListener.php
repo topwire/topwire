@@ -12,13 +12,15 @@ use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\Event\AfterStdWrapFunctionsExecutedEvent;
+use TYPO3\CMS\Frontend\ContentObject\Exception\ContentRenderingException;
 
 #[AsEventListener('topwire.contentElementWrap')]
 class ContentElementWrapListener
 {
     public function __invoke(AfterStdWrapFunctionsExecutedEvent $event): void
     {
-        if (!$event->getContentObjectRenderer()->stdWrapValue('turboFrameWrap', $event->getConfiguration(), 0)) {
+        $configuration = $event->getConfiguration();
+        if ((int) $event->getContentObjectRenderer()->stdWrapValue('turboFrameWrap', $configuration, 0) === 0) {
             return;
         }
         if ($event->getContentObjectRenderer()->getRequest()->getAttribute('topwire') instanceof TopwireContext) {
@@ -29,7 +31,7 @@ class ContentElementWrapListener
             throw new InvalidTableContext('"stdWrap.turboFrameWrap" can only be used for table "tt_content"', 1671124640);
         }
 
-        $path = $event->getConfiguration()['turboFrameWrap.']['path'] ?? $this->determineRenderingPath($event->getContentObjectRenderer(), $event->getConfiguration());
+        $path = $event->getConfiguration()['turboFrameWrap.']['path'] ?? $this->determineRenderingPath($event->getContentObjectRenderer(), $configuration);
 
         $contextFactory = new TopwireContextFactory($event->getContentObjectRenderer()->getRequest());
         $context = $contextFactory->forPath($path, $event->getContentObjectRenderer()->currentRecord);
@@ -56,7 +58,7 @@ class ContentElementWrapListener
         $context = $context->withAttribute('frame', $frame);
         $event->setContent((new FrameRenderer())->render(
             frame: $frame,
-            content: $event->getContent(),
+            content: $event->getContent() ?? '',
             options: new FrameOptions(
                 propagateUrl: $propagateUrl,
                 morph: (bool)$event->getContentObjectRenderer()->stdWrapValue('morph', $configuration['turboFrameWrap.'] ?? [], 0),
