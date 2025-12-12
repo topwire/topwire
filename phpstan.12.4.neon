@@ -1,0 +1,5 @@
+includes:
+    - phpstan.base.neon
+parameters:
+    excludePaths:
+        - Classes/EventListener/ContentElementWrapListener.php
