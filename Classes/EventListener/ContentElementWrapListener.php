@@ -20,7 +20,7 @@ class ContentElementWrapListener
     public function __invoke(AfterStdWrapFunctionsExecutedEvent $event): void
     {
         $configuration = $event->getConfiguration();
-        if ((int) $event->getContentObjectRenderer()->stdWrapValue('turboFrameWrap', $configuration, 0) === 0) {
+        if ((int)$event->getContentObjectRenderer()->stdWrapValue('turboFrameWrap', $configuration, 0) === 0) {
             return;
         }
         if ($event->getContentObjectRenderer()->getRequest()->getAttribute('topwire') instanceof TopwireContext) {
