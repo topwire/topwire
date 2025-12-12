@@ -117,7 +117,7 @@ jobs:
                     composer --version
 
             -   name: Composer install
-                run: composer update --with "typo3/cms-core:${{ matrix.typo3 }}" --no-interaction
+                run: composer update --with "typo3/cms-core:^${{ matrix.typo3 }}" --no-interaction
 
             -   name: Save composer cache
                 uses: actions/cache/save@v4
@@ -126,7 +126,7 @@ jobs:
                     key: ${{ steps.restore-composer-cache.outputs.cache-primary-key }}
 
             -   name: Run PHPStan
-                run: php vendor/bin/phpstan --error-format=github --no-interaction --no-progress
+                run: php vendor/bin/phpstan analyze --error-format=github --no-interaction --no-progress -c phpstan.${{ matrix.typo3 }}.neon
 
     fix:
         name: PHP CS Fixer
