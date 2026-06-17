@@ -39,7 +39,7 @@ class ContentElementWrapListener
         $frameId = $event->getContentObjectRenderer()->stdWrapValue('frameId', $configuration['turboFrameWrap.'] ?? [], null);
         $propagateUrl = (bool)$event->getContentObjectRenderer()->stdWrapValue('propagateUrl', $configuration['turboFrameWrap.'] ?? [], 0);
         $frame = new Frame(
-            baseId: (string)($frameId ?? $event->getContentObjectRenderer()->currentRecord),
+            baseId: (string)($frameId ?? str_replace(':', '_', $event->getContentObjectRenderer()->currentRecord)),
             wrapResponse: true,
             scope: $scopeFrame ? $context->scope : null,
             renderFullDocument: $propagateUrl,

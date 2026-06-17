@@ -72,7 +72,7 @@ class ContentElementWrap implements ContentObjectStdWrapHookInterface
         $frameId = $parentObject->stdWrapValue('frameId', $configuration['turboFrameWrap.'] ?? [], null);
         $propagateUrl = (bool)$parentObject->stdWrapValue('propagateUrl', $configuration['turboFrameWrap.'] ?? [], 0);
         $frame = new Frame(
-            baseId: (string)($frameId ?? $parentObject->currentRecord),
+            baseId: (string)($frameId ?? str_replace(':', '_', $parentObject->currentRecord)),
             wrapResponse: true,
             scope: $scopeFrame ? $context->scope : null,
             renderFullDocument: $propagateUrl,
