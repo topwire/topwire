@@ -6,14 +6,10 @@ use Topwire\Compatibility\ServerRequestFromRenderingContext;
 use Topwire\Context\Attribute\Section;
 use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContextFactory;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 class PluginViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
-
     protected $escapeOutput = false;
     protected $escapeChildren = true;
 
@@ -26,26 +22,20 @@ class PluginViewHelper extends AbstractViewHelper
         $this->registerArgument('pageUid', 'int', 'Uid of the page, on which the plugin will be rendered. If empty, the current page uid is used');
     }
 
-    /**
-     * @param array<mixed> $arguments
-     */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): string {
-        $requestFromRenderingContext = new ServerRequestFromRenderingContext($renderingContext);
+    public function render(): string
+    {
+        $requestFromRenderingContext = new ServerRequestFromRenderingContext($this->renderingContext);
         $request = $requestFromRenderingContext->getRequest();
 
         $contextFactory = new TopwireContextFactory(
             $request
         );
-        $context = $contextFactory->forArguments($arguments);
-        if (isset($arguments['section'])) {
-            $context = $context->withAttribute('section', new Section($arguments['section']));
+        $context = $contextFactory->forArguments($this->arguments);
+        if (isset($this->arguments['section'])) {
+            $context = $context->withAttribute('section', new Section($this->arguments['section']));
         }
 
-        $contextStack = new ContextStack($renderingContext->getViewHelperVariableContainer());
+        $contextStack = new ContextStack($this->renderingContext->getViewHelperVariableContainer());
         $contextStack->push($context);
 
         $contentObject = $request->getAttribute('currentContentObject');
@@ -53,7 +43,7 @@ class PluginViewHelper extends AbstractViewHelper
         $topwireRequest = $request->withAttribute('topwire', $context);
         $contentObject?->setRequest($topwireRequest);
         $requestFromRenderingContext->setRequest($topwireRequest);
-        $renderedChildren = $renderChildrenClosure();
+        $renderedChildren = $this->renderChildren();
         $requestFromRenderingContext->setRequest($request);
         $contentObject?->setRequest($request);
         $contextStack->pop();
