@@ -12,14 +12,10 @@ use Topwire\Turbo\FrameOptions;
 use Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 class FrameViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
-
     protected $escapeOutput = false;
 
     public function initializeArguments(): void
@@ -33,46 +29,39 @@ class FrameViewHelper extends AbstractViewHelper
         $this->registerArgument('additionalAttributes', 'array', 'Additional attributes for the turbo-frame tag', false, []);
     }
 
-    /**
-     * @param array<mixed> $arguments
-     * @throws \JsonException
-     */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): string {
-        assert($renderingContext instanceof RenderingContext);
-        $stack = new ContextStack($renderingContext->getViewHelperVariableContainer());
+    public function render(): string
+    {
+        assert($this->renderingContext instanceof RenderingContext);
+        $stack = new ContextStack($this->renderingContext->getViewHelperVariableContainer());
         $context = $stack->current();
         $frame = new Frame(
-            baseId: $arguments['id'],
-            wrapResponse: $arguments['wrapResponse'],
+            baseId: $this->arguments['id'],
+            wrapResponse: $this->arguments['wrapResponse'],
             scope: $context?->scope,
-            renderFullDocument: $arguments['propagateUrl'],
+            renderFullDocument: $this->arguments['propagateUrl'],
         );
         if (isset($context)) {
             $context = $context->withAttribute('frame', $frame);
             $stack->push($context);
         }
-        $content = $renderChildrenClosure();
+        $content = $this->renderChildren();
         if (isset($context)) {
             $stack->pop();
         }
         if ($content === null) {
             return $frame->id;
         }
-        $request = (new ServerRequestFromRenderingContext($renderingContext))->getRequest();
+        $request = (new ServerRequestFromRenderingContext($this->renderingContext))->getRequest();
 
         return (new FrameRenderer())->render(
             frame: $frame,
             content: $content,
             options: new FrameOptions(
-                src: self::extractSourceUrl($arguments, $request, $context),
-                target: $arguments['target'],
-                propagateUrl: $arguments['propagateUrl'],
-                morph: $arguments['morph'],
-                additionalAttributes: $arguments['additionalAttributes'],
+                src: $this->extractSourceUrl($this->arguments, $request, $context),
+                target: $this->arguments['target'],
+                propagateUrl: $this->arguments['propagateUrl'],
+                morph: $this->arguments['morph'],
+                additionalAttributes: $this->arguments['additionalAttributes'],
             ),
             context: $context,
         );
@@ -81,7 +70,7 @@ class FrameViewHelper extends AbstractViewHelper
     /**
      * @param array<mixed> $arguments
      */
-    private static function extractSourceUrl(array $arguments, ServerRequestInterface $request, ?TopwireContext $context): ?string
+    private function extractSourceUrl(array $arguments, ServerRequestInterface $request, ?TopwireContext $context): ?string
     {
         if (!isset($context, $arguments['src'])) {
             return null;

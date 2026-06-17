@@ -13,31 +13,23 @@ use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 class RenderViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
-
     protected $escapeOutput = false;
 
     /**
-     * @param array<mixed> $arguments
-     * @throws \JsonException
+     * @throws InvalidTopwireContext
      */
-    public static function renderStatic(
-        array $arguments,
-        \Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): string {
-        $context = (new ContextStack($renderingContext->getViewHelperVariableContainer()))->current();
+    public function render(): string
+    {
+        $context = (new ContextStack($this->renderingContext->getViewHelperVariableContainer()))->current();
         if (!$context instanceof TopwireContext) {
             throw new InvalidTopwireContext('Can only render as child of a Topwire context view helper', 1671623956);
         }
-        assert($renderingContext instanceof RenderingContext);
-        $request = (new ServerRequestFromRenderingContext($renderingContext))->getRequest()->withAttribute('topwire', $context);
+        assert($this->renderingContext instanceof RenderingContext);
+        $request = (new ServerRequestFromRenderingContext($this->renderingContext))->getRequest()->withAttribute('topwire', $context);
         $actionRequest = self::addActionNameToRequest(
             $request,
             $context,
