@@ -28,7 +28,7 @@ class ContentElementViewHelper extends AbstractViewHelper
         $context = $contextFactory->forPath(
             renderingPath: 'tt_content',
             contextRecordId: 'tt_content:' . $this->arguments['uid'],
-            contextPageId: $this->arguments['pageUid'] ?? null,
+            contextPageId: $this->arguments['pageUid'] === null ? null : (int)$this->arguments['pageUid'],
         );
         $contextStack = new ContextStack($this->renderingContext->getViewHelperVariableContainer());
         $contextStack->push($context);
