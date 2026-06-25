@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Topwire\ViewHelpers\Context;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Topwire\Compatibility\ServerRequestFromRenderingContext;
 use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContextFactory;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
@@ -22,7 +23,9 @@ class ContentElementViewHelper extends AbstractViewHelper
     public function render(): string
     {
         assert($this->renderingContext instanceof RenderingContext);
-        $request = $this->renderingContext->getRequest();
+
+        $requestFromRenderingContext = new ServerRequestFromRenderingContext($this->renderingContext);
+        $request = $requestFromRenderingContext->getRequest();
         assert($request instanceof ServerRequestInterface);
         $contextFactory = new TopwireContextFactory($request);
         $context = $contextFactory->forPath(
