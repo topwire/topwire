@@ -7,7 +7,7 @@ use Topwire\Context\Attribute\Section;
 use Topwire\Context\TopwireContext;
 use Topwire\Turbo\Frame;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
-use TYPO3\CMS\Fluid\View\AbstractTemplateView;
+use TYPO3Fluid\Fluid\View\AbstractTemplateView;
 use TYPO3Fluid\Fluid\View\Exception\InvalidSectionException;
 
 class TopwireTemplateView extends AbstractTemplateView

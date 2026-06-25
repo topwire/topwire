@@ -28,6 +28,7 @@ class PluginViewHelper extends AbstractViewHelper
 
     public function render(): string
     {
+        assert($this->renderingContext !== null);
         $requestFromRenderingContext = new ServerRequestFromRenderingContext($this->renderingContext);
         $request = $requestFromRenderingContext->getRequest();
 

@@ -13,7 +13,7 @@ class TopwireContentObject extends AbstractContentObject
     public const PAGE_TYPE = '1745763872';
 
     /**
-     * @param array<mixed> $conf
+     * @param mixed $conf
      */
     public function render($conf = []): string
     {

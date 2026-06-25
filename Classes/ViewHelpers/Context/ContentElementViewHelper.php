@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace Topwire\ViewHelpers\Context;
 
-use Psr\Http\Message\ServerRequestInterface;
 use Topwire\Compatibility\ServerRequestFromRenderingContext;
 use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContextFactory;
@@ -30,7 +29,6 @@ class ContentElementViewHelper extends AbstractViewHelper
 
         $requestFromRenderingContext = new ServerRequestFromRenderingContext($this->renderingContext);
         $request = $requestFromRenderingContext->getRequest();
-        assert($request instanceof ServerRequestInterface);
         $contextFactory = new TopwireContextFactory($request);
         $context = $contextFactory->forPath(
             renderingPath: 'tt_content',

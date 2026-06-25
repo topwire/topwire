@@ -5,9 +5,10 @@ namespace Topwire\Typolink;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Typolink\AbstractTypolinkBuilder;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Typolink\LinkResultInterface;
 use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
+use TYPO3\CMS\Frontend\Typolink\TypolinkBuilderInterface;
 use TYPO3\CMS\Frontend\Typolink\UnableToLinkException;
 
 #[Autoconfigure(public: true)]
@@ -22,13 +23,15 @@ class TopwirePageLinkBuilder extends PageLinkBuilder
     {
         $defaultLinkBuilderClass = $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['overriddenDefault'] ?? null;
         if (is_string($defaultLinkBuilderClass)
-            && is_subclass_of($defaultLinkBuilderClass, AbstractTypolinkBuilder::class)
+            && is_subclass_of($defaultLinkBuilderClass, TypolinkBuilderInterface::class)
         ) {
             $originalPageLinkBuilder = GeneralUtility::makeInstance($defaultLinkBuilderClass);
         } else {
             $originalPageLinkBuilder = null;
         }
-        $pageLinkContext = new TopwirePageLinkContext($request->getAttribute('currentContentObject'));
+        $contentObject = $request->getAttribute('currentContentObject');
+        assert($contentObject instanceof ContentObjectRenderer);
+        $pageLinkContext = new TopwirePageLinkContext($contentObject);
 
         $linkDetails['topwirePageLinkContext'] = $pageLinkContext;
         if (isset($originalPageLinkBuilder)) {

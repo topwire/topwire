@@ -47,7 +47,7 @@
         "phpstan/phpstan-doctrine": "^1.0 || ^2",
         "phpstan/phpstan-phpunit": "^1.0 || ^2",
         "phpstan/phpstan-strict-rules": "^1.0 || ^2",
-        "saschaegerer/phpstan-typo3": "^1.1.2 || ^2",
+        "saschaegerer/phpstan-typo3": "^1.1.2 || ^2 || ^3",
         "typo3/cms-form": "*",
         "typo3/minimal": "*"
     },
