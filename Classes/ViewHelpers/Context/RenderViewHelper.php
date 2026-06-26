@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Topwire\ViewHelpers\Context;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Topwire\Compatibility\ServerRequestFromRenderingContext;
 use Topwire\ContentObject\TopwireContentObject;
 use Topwire\Context\Attribute\Plugin;
 use Topwire\Context\ContextStack;
@@ -19,17 +18,21 @@ class RenderViewHelper extends AbstractViewHelper
 {
     protected $escapeOutput = false;
 
+    public function __construct(private readonly ContextStack $contextStack)
+    {
+    }
+
     /**
      * @throws InvalidTopwireContext
      */
     public function render(): string
     {
-        $context = (new ContextStack($this->renderingContext->getViewHelperVariableContainer()))->current();
+        $context = $this->contextStack->current();
         if (!$context instanceof TopwireContext) {
             throw new InvalidTopwireContext('Can only render as child of a Topwire context view helper', 1671623956);
         }
         assert($this->renderingContext instanceof RenderingContext);
-        $request = (new ServerRequestFromRenderingContext($this->renderingContext))->getRequest()->withAttribute('topwire', $context);
+        $request = $this->renderingContext->getAttribute(ServerRequestInterface::class)->withAttribute('topwire', $context);
         $actionRequest = self::addActionNameToRequest(
             $request,
             $context,

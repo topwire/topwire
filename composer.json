@@ -37,7 +37,7 @@
     },
     "require": {
         "php": ">=8.2",
-        "typo3/cms-core": "^12.4.5 || ^13.4"
+        "typo3/cms-core": "^14.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.2",
@@ -47,7 +47,7 @@
         "phpstan/phpstan-doctrine": "^1.0 || ^2",
         "phpstan/phpstan-phpunit": "^1.0 || ^2",
         "phpstan/phpstan-strict-rules": "^1.0 || ^2",
-        "saschaegerer/phpstan-typo3": "^1.1.2 || ^2",
+        "saschaegerer/phpstan-typo3": "^1.1.2 || ^2 || ^3",
         "typo3/cms-form": "*",
         "typo3/minimal": "*"
     },

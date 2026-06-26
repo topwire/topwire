@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Topwire\ViewHelpers;
 
-use Topwire\Compatibility\ServerRequestFromRenderingContext;
+use Psr\Http\Message\ServerRequestInterface;
 use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContextFactory;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
@@ -15,6 +15,10 @@ class ContextViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
     protected $escapeChildren = true;
 
+    public function __construct(private readonly ContextStack $contextStack)
+    {
+    }
+
     public function initializeArguments(): void
     {
         $this->registerArgument('typoScriptPath', 'string', 'Target Extension Name (without `tx_` prefix and no underscores). If NULL the current extension name is used', true);
@@ -26,17 +30,16 @@ class ContextViewHelper extends AbstractViewHelper
     public function render(): string
     {
         assert($this->renderingContext instanceof RenderingContext);
-        $request = (new ServerRequestFromRenderingContext($this->renderingContext))->getRequest();
+        $request = $this->renderingContext->getAttribute(ServerRequestInterface::class);
         $contextFactory = new TopwireContextFactory($request);
         $context = $contextFactory->forPath(
             renderingPath: $this->arguments['typoScriptPath'],
             contextRecordId: $this->arguments['tableName'] . ':' . $this->arguments['recordUid'],
             contextPageId: $this->arguments['pageUid'] ?? null,
         );
-        $contextStack = new ContextStack($this->renderingContext->getViewHelperVariableContainer());
-        $contextStack->push($context);
+        $this->contextStack->push($context);
         $renderedChildren = $this->renderChildren();
-        $contextStack->pop();
+        $this->contextStack->pop();
 
         return (string)$renderedChildren;
     }

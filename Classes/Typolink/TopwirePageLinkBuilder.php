@@ -2,50 +2,41 @@
 declare(strict_types=1);
 namespace Topwire\Typolink;
 
+use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-use TYPO3\CMS\Frontend\Typolink\AbstractTypolinkBuilder;
 use TYPO3\CMS\Frontend\Typolink\LinkResultInterface;
 use TYPO3\CMS\Frontend\Typolink\PageLinkBuilder;
+use TYPO3\CMS\Frontend\Typolink\TypolinkBuilderInterface;
 use TYPO3\CMS\Frontend\Typolink\UnableToLinkException;
 
+#[Autoconfigure(public: true)]
 class TopwirePageLinkBuilder extends PageLinkBuilder
 {
-    private readonly ?AbstractTypolinkBuilder $originalPageLinkBuilder;
-    private readonly TopwirePageLinkContext $pageLinkContext;
-
-    public function __construct(
-        ContentObjectRenderer $contentObjectRenderer,
-        ?TypoScriptFrontendController $typoScriptFrontendController = null
-    ) {
-        parent::__construct($contentObjectRenderer, $typoScriptFrontendController);
-        $defaultLinkBuilderClass = $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['overriddenDefault'] ?? null;
-        if (is_string($defaultLinkBuilderClass)
-            && is_subclass_of($defaultLinkBuilderClass, AbstractTypolinkBuilder::class)
-        ) {
-            $this->originalPageLinkBuilder = GeneralUtility::makeInstance(
-                $defaultLinkBuilderClass,
-                $contentObjectRenderer,
-                $typoScriptFrontendController
-            );
-        } else {
-            $this->originalPageLinkBuilder = null;
-        }
-        $this->pageLinkContext = new TopwirePageLinkContext($contentObjectRenderer);
-    }
-
     /**
      * @param array<mixed> $linkDetails
-     * @param array<mixed> $conf
+     * @param array<mixed> $configuration
      * @throws UnableToLinkException
      */
-    public function build(array &$linkDetails, string $linkText, string $target, array $conf): LinkResultInterface
+    public function buildLink(array $linkDetails, array $configuration, ServerRequestInterface $request, string $linkText = ''): LinkResultInterface
     {
-        $linkDetails['topwirePageLinkContext'] = $this->pageLinkContext;
-        if (isset($this->originalPageLinkBuilder)) {
-            return $this->originalPageLinkBuilder->build($linkDetails, $linkText, $target, $conf);
+        $defaultLinkBuilderClass = $GLOBALS['TYPO3_CONF_VARS']['FE']['typolinkBuilder']['overriddenDefault'] ?? null;
+        if (is_string($defaultLinkBuilderClass)
+            && is_subclass_of($defaultLinkBuilderClass, TypolinkBuilderInterface::class)
+        ) {
+            $originalPageLinkBuilder = GeneralUtility::makeInstance($defaultLinkBuilderClass);
+        } else {
+            $originalPageLinkBuilder = null;
         }
-        return parent::build($linkDetails, $linkText, $target, $conf);
+        $contentObject = $request->getAttribute('currentContentObject');
+        assert($contentObject instanceof ContentObjectRenderer);
+        $pageLinkContext = new TopwirePageLinkContext($contentObject);
+
+        $linkDetails['topwirePageLinkContext'] = $pageLinkContext;
+        if (isset($originalPageLinkBuilder)) {
+            return $originalPageLinkBuilder->buildLink($linkDetails, $configuration, $request, $linkText);
+        }
+        return parent::buildLink($linkDetails, $configuration, $request, $linkText);
     }
 }

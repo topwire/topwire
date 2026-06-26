@@ -1,11 +1,11 @@
 <?php
 namespace Topwire\ContentObject;
 
+use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContext;
 use Topwire\Turbo\Frame;
 use Topwire\Turbo\FrameRenderer;
 use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class TopwireContentObject extends AbstractContentObject
 {
@@ -13,7 +13,7 @@ class TopwireContentObject extends AbstractContentObject
     public const PAGE_TYPE = '1745763872';
 
     /**
-     * @param array<mixed> $conf
+     * @param mixed $conf
      */
     public function render($conf = []): string
     {
@@ -22,7 +22,7 @@ class TopwireContentObject extends AbstractContentObject
             $context = $this->request->getAttribute('topwire');
         }
         assert($context instanceof TopwireContext);
-        $content = $this->renderContentWithoutRecursion($context);
+        $content = $this->renderContent($context);
         $frame = $context->getAttribute('frame');
         if (!$frame instanceof Frame
             || !$frame->wrapResponse
@@ -40,34 +40,12 @@ class TopwireContentObject extends AbstractContentObject
         );
     }
 
-    private function renderContentWithoutRecursion(TopwireContext $context): string
+    private function renderContent(TopwireContext $context): string
     {
-        $actionRecursionPrefix = $context->getAttribute('plugin')->actionName ?? null;
-        $frontendController = $this->request->getAttribute('frontend.controller');
-        if (!isset($actionRecursionPrefix)
-            || !$frontendController instanceof TypoScriptFrontendController
-        ) {
-            // Use default recursion handling of TYPO3
-            return $this->getContentObjectRenderer()->cObjGetSingle(
-                'RECORDS',
-                $this->transformToRecordsConfiguration($context)
-            );
-        }
-        // Prevent recursion, but allow rendering of the same plugin with a different action
-        // @see CONTENT and RECORDS content objects
-        $currentlyRenderingRecordId = $frontendController->currentRecord;
-        $requestedRenderingRecordId = $actionRecursionPrefix . $context->contextRecord->tableName . ':' . $context->contextRecord->id;
-        if (isset($frontendController->recordRegister[$requestedRenderingRecordId])) {
-            return '';
-        }
-        $frontendController->currentRecord = $requestedRenderingRecordId;
-        $content = $this->getContentObjectRenderer()->cObjGetSingle(
+        return $this->getContentObjectRenderer()->cObjGetSingle(
             'RECORDS',
             $this->transformToRecordsConfiguration($context)
         );
-        $frontendController->currentRecord = $currentlyRenderingRecordId;
-
-        return $content;
     }
 
     /**

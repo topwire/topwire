@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Topwire\ViewHelpers\Turbo;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Topwire\Compatibility\ServerRequestFromRenderingContext;
 use Topwire\Context\Attribute\Plugin;
 use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContext;
@@ -17,6 +16,10 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 class FrameViewHelper extends AbstractViewHelper
 {
     protected $escapeOutput = false;
+
+    public function __construct(private readonly ContextStack $contextStack)
+    {
+    }
 
     public function initializeArguments(): void
     {
@@ -32,8 +35,7 @@ class FrameViewHelper extends AbstractViewHelper
     public function render(): string
     {
         assert($this->renderingContext instanceof RenderingContext);
-        $stack = new ContextStack($this->renderingContext->getViewHelperVariableContainer());
-        $context = $stack->current();
+        $context = $this->contextStack->current();
         $frame = new Frame(
             baseId: $this->arguments['id'],
             wrapResponse: $this->arguments['wrapResponse'],
@@ -42,16 +44,16 @@ class FrameViewHelper extends AbstractViewHelper
         );
         if (isset($context)) {
             $context = $context->withAttribute('frame', $frame);
-            $stack->push($context);
+            $this->contextStack->push($context);
         }
         $content = $this->renderChildren();
         if (isset($context)) {
-            $stack->pop();
+            $this->contextStack->pop();
         }
         if ($content === null) {
             return $frame->id;
         }
-        $request = (new ServerRequestFromRenderingContext($this->renderingContext))->getRequest();
+        $request = $this->renderingContext->getAttribute(ServerRequestInterface::class);
 
         return (new FrameRenderer())->render(
             frame: $frame,
