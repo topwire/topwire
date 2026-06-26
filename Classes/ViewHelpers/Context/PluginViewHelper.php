@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace Topwire\ViewHelpers\Context;
 
-use Topwire\Compatibility\ServerRequestFromRenderingContext;
+use Psr\Http\Message\ServerRequestInterface;
 use Topwire\Context\Attribute\Section;
 use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContextFactory;
@@ -29,8 +29,7 @@ class PluginViewHelper extends AbstractViewHelper
     public function render(): string
     {
         assert($this->renderingContext !== null);
-        $requestFromRenderingContext = new ServerRequestFromRenderingContext($this->renderingContext);
-        $request = $requestFromRenderingContext->getRequest();
+        $request = $this->renderingContext->getAttribute(ServerRequestInterface::class);
 
         $contextFactory = new TopwireContextFactory(
             $request
@@ -43,9 +42,9 @@ class PluginViewHelper extends AbstractViewHelper
         $contentObject = $request->getAttribute('currentContentObject');
         $topwireRequest = $request->withAttribute('topwire', $context);
         $contentObject?->setRequest($topwireRequest);
-        $requestFromRenderingContext->setRequest($topwireRequest);
+        $this->renderingContext->setAttribute(ServerRequestInterface::class, $topwireRequest);
         $renderedChildren = $this->renderChildren();
-        $requestFromRenderingContext->setRequest($request);
+        $this->renderingContext->setAttribute(ServerRequestInterface::class, $request);
         $contentObject?->setRequest($request);
         $this->contextStack->pop();
 

@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace Topwire\ViewHelpers\Turbo;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Topwire\Compatibility\ServerRequestFromRenderingContext;
 use Topwire\Context\Attribute\Plugin;
 use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContext;
@@ -54,7 +53,7 @@ class FrameViewHelper extends AbstractViewHelper
         if ($content === null) {
             return $frame->id;
         }
-        $request = (new ServerRequestFromRenderingContext($this->renderingContext))->getRequest();
+        $request = $this->renderingContext->getAttribute(ServerRequestInterface::class);
 
         return (new FrameRenderer())->render(
             frame: $frame,
