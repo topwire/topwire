@@ -35,8 +35,11 @@ class ContentElementViewHelper extends AbstractViewHelper
             contextPageId: $this->arguments['pageUid'] === null ? null : (int)$this->arguments['pageUid'],
         );
         $this->contextStack->push($context);
-        $renderedChildren = $this->renderChildren();
-        $this->contextStack->pop();
+        try {
+            $renderedChildren = $this->renderChildren();
+        } finally {
+            $this->contextStack->pop();
+        }
 
         return (string)$renderedChildren;
     }

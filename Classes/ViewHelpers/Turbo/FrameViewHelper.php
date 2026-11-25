@@ -46,9 +46,12 @@ class FrameViewHelper extends AbstractViewHelper
             $context = $context->withAttribute('frame', $frame);
             $this->contextStack->push($context);
         }
-        $content = $this->renderChildren();
-        if (isset($context)) {
-            $this->contextStack->pop();
+        try {
+            $content = $this->renderChildren();
+        } finally {
+            if (isset($context)) {
+                $this->contextStack->pop();
+            }
         }
         if ($content === null) {
             return $frame->id;

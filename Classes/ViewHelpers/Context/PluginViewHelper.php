@@ -43,10 +43,13 @@ class PluginViewHelper extends AbstractViewHelper
         $topwireRequest = $request->withAttribute('topwire', $context);
         $contentObject?->setRequest($topwireRequest);
         $this->renderingContext->setAttribute(ServerRequestInterface::class, $topwireRequest);
-        $renderedChildren = $this->renderChildren();
-        $this->renderingContext->setAttribute(ServerRequestInterface::class, $request);
-        $contentObject?->setRequest($request);
-        $this->contextStack->pop();
+        try {
+            $renderedChildren = $this->renderChildren();
+        } finally {
+            $this->renderingContext->setAttribute(ServerRequestInterface::class, $request);
+            $contentObject?->setRequest($request);
+            $this->contextStack->pop();
+        }
 
         return (string)$renderedChildren;
     }

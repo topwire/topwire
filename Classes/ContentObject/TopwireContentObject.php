@@ -1,7 +1,6 @@
 <?php
 namespace Topwire\ContentObject;
 
-use Topwire\Context\ContextStack;
 use Topwire\Context\TopwireContext;
 use Topwire\Turbo\Frame;
 use Topwire\Turbo\FrameRenderer;

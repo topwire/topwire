@@ -38,8 +38,11 @@ class ContextViewHelper extends AbstractViewHelper
             contextPageId: $this->arguments['pageUid'] ?? null,
         );
         $this->contextStack->push($context);
-        $renderedChildren = $this->renderChildren();
-        $this->contextStack->pop();
+        try {
+            $renderedChildren = $this->renderChildren();
+        } finally {
+            $this->contextStack->pop();
+        }
 
         return (string)$renderedChildren;
     }
