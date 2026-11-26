@@ -1,7 +1,7 @@
 {
     "name": "topwire/topwire",
     "type": "typo3-cms-extension",
-    "description": "Turbo for TYPO3",
+    "description": "Topwire - Turbo for TYPO3",
     "homepage": "https://topwire.dev",
     "license": [
         "GPL-2.0-or-later"
@@ -37,18 +37,18 @@
     },
     "require": {
         "php": ">=8.2",
-        "typo3/cms-core": "^14.0"
+        "typo3/cms-core": "^14.3.12"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.2",
         "php-parallel-lint/php-parallel-lint": "^1.4",
-        "phpstan/phpstan": "^1.0 || ^2.1",
-        "phpstan/phpstan-deprecation-rules": "^1.0 || ^2",
-        "phpstan/phpstan-doctrine": "^1.0 || ^2",
-        "phpstan/phpstan-phpunit": "^1.0 || ^2",
-        "phpstan/phpstan-strict-rules": "^1.0 || ^2",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2",
+        "phpstan/phpstan-doctrine": "^2",
+        "phpstan/phpstan-phpunit": "^2",
+        "phpstan/phpstan-strict-rules": "^2",
         "phpunit/phpunit": "^11.5",
-        "saschaegerer/phpstan-typo3": "^1.1.2 || ^2 || ^3",
+        "saschaegerer/phpstan-typo3": "^3",
         "typo3/cms-form": "*",
         "typo3/minimal": "*"
     },
@@ -57,7 +57,11 @@
             "dev-main": "2.0.x-dev"
         },
         "typo3/cms": {
-            "extension-key": "topwire"
+            "extension-key": "topwire",
+            "version": "2.0.0",
+            "Package": {
+                "providesPackages": {}
+            }
         }
     },
     "scripts": {
