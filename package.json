@@ -1,5 +1,5 @@
 {
-    "name": "topwire-website",
+    "name": "topwire-extension",
     "private": true,
     "version": "1.0.0",
     "type": "module",
@@ -7,8 +7,11 @@
         "build": "vite build --emptyOutDir && cp public/_assets/vite/assets/topwire/topwire-*.js Resources/Public/JavaScript/topwire.js"
     },
     "devDependencies": {
-        "@alpinejs/morph": "^3.11.1",
-        "@hotwired/turbo": "^8.0.13",
-        "vite": "^6.0.0"
+        "@alpinejs/morph": "^3.17.5",
+        "@hotwired/turbo": "^8.0.23",
+        "vite": "^8.3.8"
+    },
+    "engines": {
+        "node": "^26.0.0"
     }
 }
