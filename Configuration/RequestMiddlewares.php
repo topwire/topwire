@@ -20,7 +20,7 @@ return [
                 'typo3/cms-frontend/page-resolver',
             ],
             'before' => [
-                'typo3/cms-frontend/tsfe',
+                'typo3/cms-frontend/prepare-tsfe-rendering',
             ],
         ],
         'topwire/rendering' => [

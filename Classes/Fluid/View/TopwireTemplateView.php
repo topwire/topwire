@@ -2,12 +2,12 @@
 
 namespace Topwire\Fluid\View;
 
-use Topwire\Compatibility\ServerRequestFromRenderingContext;
+use Psr\Http\Message\ServerRequestInterface;
 use Topwire\Context\Attribute\Section;
 use Topwire\Context\TopwireContext;
 use Topwire\Turbo\Frame;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
-use TYPO3\CMS\Fluid\View\AbstractTemplateView;
+use TYPO3Fluid\Fluid\View\AbstractTemplateView;
 use TYPO3Fluid\Fluid\View\Exception\InvalidSectionException;
 
 class TopwireTemplateView extends AbstractTemplateView
@@ -16,7 +16,7 @@ class TopwireTemplateView extends AbstractTemplateView
     {
         $renderingContext = $this->getCurrentRenderingContext();
         assert($renderingContext instanceof RenderingContext);
-        $context = (new ServerRequestFromRenderingContext($renderingContext))->getRequest()->getAttribute('topwire');
+        $context = $renderingContext->getAttribute(ServerRequestInterface::class)->getAttribute('topwire');
         if (!$context instanceof TopwireContext) {
             return parent::render($actionName);
         }

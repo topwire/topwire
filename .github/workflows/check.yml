@@ -69,6 +69,9 @@ jobs:
             -   name: Lint PHP
                 run: php vendor/bin/parallel-lint --exclude .git --exclude var --exclude vendor .
 
+            -   name: Unit tests
+                run: composer test:unit
+
 
     analyse:
         name: PHPStan ${{ matrix.typo3 }}
