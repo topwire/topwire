@@ -1,4 +1,10 @@
-import { morph } from '@alpinejs/morph'
+import registerMorph from '@alpinejs/morph'
+
+// Since 3.13.4, the named morph export also points to the plugin initializer.
+// Initialize it once on a plain object to access the morph function without loading Alpine.
+const morphApi = {}
+registerMorph(morphApi)
+const { morph } = morphApi
 
 document.addEventListener('turbo:before-fetch-request', async (event) => {
     event.preventDefault()
