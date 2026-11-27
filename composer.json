@@ -58,7 +58,7 @@
         },
         "typo3/cms": {
             "extension-key": "topwire",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "Package": {
                 "providesPackages": {}
             }
