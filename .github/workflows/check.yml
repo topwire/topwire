@@ -45,7 +45,7 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
-                    extensions: xdebug, mbstring, posix
+                    extensions: xdebug, mbstring, posix, pdo_sqlite
                     tools: composer:v2
 
             -   name: Environment Check
@@ -71,6 +71,9 @@ jobs:
 
             -   name: Unit tests
                 run: composer test:unit
+
+            -   name: Functional tests (SQLite)
+                run: composer test:functional
 
 
     analyse:

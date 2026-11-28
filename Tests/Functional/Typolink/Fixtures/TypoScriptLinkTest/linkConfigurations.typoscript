@@ -1,0 +1,122 @@
+tt_content = TEXT
+tt_content {
+    field = bodytext
+    htmlSpecialChars = 1
+    wrap = <p>|</p>
+    topwirefixture_target.20 = TEXT
+    topwirefixture_target.20.value = <em>Plugin target</em>
+}
+
+page.24 = TEXT
+page.24 {
+    value = Link configurations
+    typolink {
+        parameter.data = page:uid
+        forceAbsoluteUrl = 1
+        ATagParams = id="topwire-configuration-links"
+        topwire {
+            type = typoScript
+            typoScriptPath = lib.configurationLinks
+        }
+    }
+}
+
+lib.configurationLinks = COA
+lib.configurationLinks {
+    10 = TEXT
+    10 {
+        value = Select target
+        typolink {
+            parameter.data = page:uid
+            forceAbsoluteUrl = 1
+            ATagParams = id="plugin-configured"
+            topwire {
+                type = plugin
+                extensionName = TopwireFixture
+                pluginName = Target
+            }
+        }
+    }
+    11 < .10
+    11.typolink {
+        ATagParams = id="plugin-combined"
+        additionalParams = &topwire[type]=context
+    }
+    12 < .10
+    12.typolink {
+        topwire >
+        ATagParams = id="plugin-query"
+        additionalParams = &topwire[type]=context
+    }
+    20 = TEXT
+    20 {
+        value = Select target
+        typolink {
+            parameter.data = page:uid
+            forceAbsoluteUrl = 1
+            ATagParams = id="contentElement-configured"
+            topwire {
+                type = contentElement
+                uid = 42
+            }
+        }
+    }
+    21 < .20
+    21.typolink {
+        ATagParams = id="contentElement-combined"
+        additionalParams = &topwire[type]=plugin&topwire[extensionName]=TopwireFixture&topwire[pluginName]=Target
+    }
+    22 < .20
+    22.typolink {
+        topwire >
+        ATagParams = id="contentElement-query"
+        additionalParams = &topwire[type]=plugin&topwire[extensionName]=TopwireFixture&topwire[pluginName]=Target
+    }
+    30 = TEXT
+    30 {
+        value = Select target
+        typolink {
+            parameter.data = page:uid
+            forceAbsoluteUrl = 1
+            ATagParams = id="typoScript-configured"
+            topwire {
+                type = typoScript
+                typoScriptPath = lib.fragment
+            }
+        }
+    }
+    31 < .30
+    31.typolink {
+        ATagParams = id="typoScript-combined"
+        additionalParams = &topwire[type]=contentElement&topwire[uid]=42
+    }
+    32 < .30
+    32.typolink {
+        topwire >
+        ATagParams = id="typoScript-query"
+        additionalParams = &topwire[type]=contentElement&topwire[uid]=42
+    }
+    40 = TEXT
+    40 {
+        value = Select target
+        typolink {
+            parameter.data = page:uid
+            forceAbsoluteUrl = 1
+            ATagParams = id="context-configured"
+            topwire {
+                type = context
+            }
+        }
+    }
+    41 < .40
+    41.typolink {
+        ATagParams = id="context-combined"
+        additionalParams = &topwire[type]=typoScript&topwire[typoScriptPath]=lib.fragment
+    }
+    42 < .40
+    42.typolink {
+        topwire >
+        ATagParams = id="context-query"
+        additionalParams = &topwire[type]=typoScript&topwire[typoScriptPath]=lib.fragment
+    }
+}
