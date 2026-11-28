@@ -9,6 +9,7 @@ use Topwire\Context\TopwireContextFactory;
 use Topwire\Exception\InvalidConfiguration;
 use Topwire\Turbo\Frame;
 use Topwire\Typolink\TopwirePageLinkContext;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Event\ModifyPageLinkConfigurationEvent;
 
 class TopwirePageLinkModifier
@@ -22,8 +23,8 @@ class TopwirePageLinkModifier
         $linkDetails = $linkConfigurationEvent->getLinkDetails();
         $linkConfiguration = $linkConfigurationEvent->getConfiguration();
         $queryParameters = $linkConfigurationEvent->getQueryParameters();
-        $pageLinkContext = $this->extractTopwireLinkContext($linkConfiguration, $queryParameters, $linkDetails);
-        if (!$pageLinkContext instanceof TopwirePageLinkContext) {
+        $pageLinkContext = $this->extractTopwireLinkContext($linkConfigurationEvent);
+        if ($pageLinkContext === null) {
             return;
         }
         $queryParameters = $this->buildQueryParameters(
@@ -35,19 +36,19 @@ class TopwirePageLinkModifier
         $linkConfigurationEvent->setQueryParameters($queryParameters);
     }
 
-    /**
-     * @param array<mixed> $linkConfiguration
-     * @param array<mixed> $queryParameters
-     * @param array<mixed> $linkDetails
-     */
-    private function extractTopwireLinkContext(array $linkConfiguration, array $queryParameters, array $linkDetails): ?TopwirePageLinkContext
+    private function extractTopwireLinkContext(ModifyPageLinkConfigurationEvent $linkConfigurationEvent): ?TopwirePageLinkContext
     {
-        if (!isset($queryParameters[self::virtualLinkNamespace])
-            && !isset($linkConfiguration[self::configNamespace])
+        if (!isset($linkConfigurationEvent->getQueryParameters()[self::virtualLinkNamespace])
+            && !isset($linkConfigurationEvent->getConfiguration()[self::configNamespace])
         ) {
             return null;
         }
-        return ($linkDetails['topwirePageLinkContext'] ?? null) instanceof TopwirePageLinkContext ? $linkDetails['topwirePageLinkContext'] : null;
+        $request = $linkConfigurationEvent->getRequest();
+        $contentObject = $request->getAttribute('currentContentObject');
+        if ($contentObject instanceof ContentObjectRenderer) {
+            return new TopwirePageLinkContext($contentObject, $request);
+        }
+        return null;
     }
 
     /**
@@ -78,9 +79,9 @@ class TopwirePageLinkModifier
         if (isset($topwireArguments['tableName'], $topwireArguments['recordUid'])) {
             $contextRecordId = $topwireArguments['tableName'] . ':' . $topwireArguments['recordUid'];
         }
-        $contextFactory = new TopwireContextFactory($pageLinkContext->contentObjectRenderer->getRequest());
+        $contextFactory = new TopwireContextFactory($pageLinkContext->request);
         $context = match ($topwireArguments['type']) {
-            'context' => $this->resolveFromRequest($pageLinkContext->contentObjectRenderer->getRequest(), $contextPageId),
+            'context' => $this->resolveFromRequest($pageLinkContext->request, $contextPageId),
             'plugin' => $contextFactory->forPlugin($topwireArguments['extensionName'], $topwireArguments['pluginName'], $contextRecordId, $contextPageId),
             'contentElement' => $contextFactory->forPath('tt_content', 'tt_content:' . $topwireArguments['uid']),
             'typoScript' => $contextFactory->forPath($topwireArguments['typoScriptPath'], $contextRecordId, $contextPageId),
