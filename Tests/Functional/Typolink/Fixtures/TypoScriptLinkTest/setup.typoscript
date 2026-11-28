@@ -1,0 +1,52 @@
+@import 'EXT:topwire/Configuration/TypoScript/setup.typoscript'
+
+lib.fragment = TEXT
+lib.fragment {
+    value = Topwire TEXT & content
+    htmlSpecialChars = 1
+    wrap = <strong>|</strong>
+}
+
+page = PAGE
+page {
+    config {
+        debug = 0
+        no_cache = 1
+    }
+    10 = TEXT
+    10.value = <h1>Full page</h1>
+    20 = TEXT
+    20 {
+        value = Load TEXT object
+        typolink {
+            parameter.data = page:uid
+            forceAbsoluteUrl = 1
+            ATagParams = id="topwire-link"
+            topwire {
+                type = typoScript
+                typoScriptPath = lib.fragment
+            }
+        }
+    }
+    22 = TEXT
+    22 {
+        value = Load TEXT object
+        typolink {
+            parameter.data = page:uid
+            forceAbsoluteUrl = 1
+            ATagParams = id="topwire-query-link"
+            additionalParams = &topwire[type]=typoScript&topwire[typoScriptPath]=lib.fragment
+        }
+    }
+    25 = TEXT
+    25 {
+        value = Visit page
+        typolink {
+            parameter.data = page:uid
+            forceAbsoluteUrl = 1
+            ATagParams = id="page-link"
+        }
+    }
+    30 = TEXT
+    30.value = <div>Full page footer</div>
+}

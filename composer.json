@@ -50,7 +50,8 @@
         "phpunit/phpunit": "^11.5",
         "saschaegerer/phpstan-typo3": "^3",
         "typo3/cms-form": "*",
-        "typo3/minimal": "*"
+        "typo3/minimal": "*",
+        "typo3/testing-framework": "^9.7"
     },
     "extra": {
         "branch-alias": {
@@ -65,7 +66,11 @@
         }
     },
     "scripts": {
+        "check:cs-fixer": "php-cs-fixer fix --dry-run --diff",
+        "check:phpstan": "phpstan analyse -c phpstan.14.3.neon",
+        "fix:cs-fixer": "php-cs-fixer fix",
         "test:unit": "phpunit -c .Build/UnitTests.xml",
+        "test:functional": "phpunit -c .Build/FunctionalTests.xml",
         "build": [
             "npm ci",
             "npm run build"
