@@ -1,0 +1,9 @@
+{
+    "name": "topwire/view-factory-fixture",
+    "type": "typo3-cms-extension",
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "topwire_view_factory_fixture"
+        }
+    }
+}

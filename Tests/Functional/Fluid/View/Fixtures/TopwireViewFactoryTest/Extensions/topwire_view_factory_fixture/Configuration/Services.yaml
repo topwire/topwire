@@ -1,0 +1,7 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Topwire\Tests\Functional\Fluid\View\Fixtures\TopwireViewFactoryTest\Controller\TemplateController: ~
+    Topwire\Tests\Functional\Fluid\View\Fixtures\TopwireViewFactoryTest\Controller\TaggedController: ~
